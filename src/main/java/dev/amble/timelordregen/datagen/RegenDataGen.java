@@ -115,6 +115,9 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
 			provider.addTranslation("achievement.timelordregen.title.watch", "More than just a fobwatch!");
 			provider.addTranslation("achievement.timelordregen.description.watch", "Obtain a Chameleon Arch - a container for regeneration essence.");
 
+			provider.addTranslation("achievement.timelordregen.title.delay", "I don't want to go..");
+			provider.addTranslation("achievement.timelordregen.description.delay", "Delay your regeneration");
+
 			// Origins
 
 			provider.addTranslation("origin.timelordregen.timelord.name", "Timelord");

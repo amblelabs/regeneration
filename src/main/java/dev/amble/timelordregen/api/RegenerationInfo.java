@@ -2,6 +2,7 @@ package dev.amble.timelordregen.api;
 
 import dev.amble.lib.client.bedrock.BedrockAnimationReference;
 import dev.amble.timelordregen.RegenerationMod;
+import dev.amble.timelordregen.advancement.RegenerationCriterions;
 import dev.amble.timelordregen.animation.AnimationSet;
 import dev.amble.timelordregen.animation.AnimationTemplate;
 import dev.amble.timelordregen.animation.RegenAnimRegistry;
@@ -38,6 +39,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +99,7 @@ public class RegenerationInfo {
 				// check if snow
 				if (!world.getBlockState(pos).isIn(BlockTags.SNOW)) return ActionResult.PASS;
 
-				info.getDelay().stopEvent();
-				info.markDirty();
+				info.tryStopDelayEvent(player);
 				world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, player.getSoundCategory(), 0.25F, 1.0F);
 
 				return ActionResult.SUCCESS;
@@ -273,6 +274,17 @@ public class RegenerationInfo {
 		this.setRegenerating(false);
 		this.delay.stop();
 		this.markDirty();
+	}
+
+	public boolean tryStopDelayEvent(@Nullable LivingEntity entity) {
+		if (!this.delay.hasEvent()) return false;
+
+		this.delay.stopEvent();
+		this.markDirty();
+
+		RegenerationEvents.DELAY_FURTHER.invoker().onEvent(entity, this);
+
+		return true;
 	}
 
 	/**

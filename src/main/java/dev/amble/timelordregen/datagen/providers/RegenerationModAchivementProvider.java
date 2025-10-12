@@ -30,6 +30,14 @@ public class RegenerationModAchivementProvider extends FabricAdvancementProvider
 				.criterion("first_regeneration", RegenerationCriterions.FIRST_REGENERATION.conditions())
 				.build(consumer, RegenerationMod.MOD_ID + "/first_regeneration");
 
+
+	    Advancement delay = Advancement.Builder.create()
+			    .display(RegenerationModItems.ELIXIR_OF_LIFE, Text.translatable("achievement.timelordregen.title.delay"),
+					    Text.translatable("achievement.timelordregen.description.delay"),
+					    null, AdvancementFrame.GOAL, true, true, false)
+			    .criterion("delay_regeneration", RegenerationCriterions.DELAY_REGENERATION.conditions())
+			    .build(consumer, RegenerationMod.MOD_ID + "/delay_regeneration");
+
 		Advancement watch = Advancement.Builder.create()
 				.parent(regeneration)
 				.display(RegenerationModItems.POCKET_WATCH, Text.translatable("achievement.timelordregen.title.watch"),

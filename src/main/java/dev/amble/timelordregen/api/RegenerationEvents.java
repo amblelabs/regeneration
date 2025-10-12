@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 public final class RegenerationEvents {
 	/**
@@ -48,8 +49,17 @@ public final class RegenerationEvents {
 	 * Called when a regeneration delay event triggers
 	 * @see RegenerationInfo.Delay.Result
 	 */
-	public static final Event<DelayEvent> DELAY_EVENT = EventFactory.createArrayBacked(DelayEvent.class, callbacks -> (entity, data) -> {
-		for (DelayEvent callback : callbacks) {
+	public static final Event<DelayFurther> DELAY_EVENT = EventFactory.createArrayBacked(DelayFurther.class, callbacks -> (entity, data) -> {
+		for (DelayFurther callback : callbacks) {
+			callback.onEvent(entity, data);
+		}
+	});
+
+	/**
+	 * Called when a regeneration is delayed
+	 */
+	public static final Event<DelayFurther> DELAY_FURTHER = EventFactory.createArrayBacked(DelayFurther.class, callbacks -> (entity, data) -> {
+		for (DelayFurther callback : callbacks) {
 			callback.onEvent(entity, data);
 		}
 	});
@@ -76,7 +86,7 @@ public final class RegenerationEvents {
 	}
 
 	@FunctionalInterface
-	public interface DelayEvent {
-		void onEvent(LivingEntity entity, RegenerationInfo data);
+	public interface DelayFurther {
+		void onEvent(@Nullable LivingEntity entity, RegenerationInfo data);
 	}
 }
