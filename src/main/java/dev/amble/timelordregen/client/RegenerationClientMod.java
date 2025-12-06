@@ -6,6 +6,7 @@ import dev.amble.timelordregen.client.gui.DelayOverlay;
 import dev.amble.timelordregen.client.gui.RegenerationSettingsScreen;
 import dev.amble.timelordregen.client.particle.RegenHeadParticle;
 import dev.amble.timelordregen.client.particle.RightRegenParticle;
+import dev.amble.timelordregen.client.util.ClientColors;
 import dev.amble.timelordregen.core.RegenerationModBlocks;
 import dev.amble.timelordregen.core.RegenerationModItems;
 import dev.amble.timelordregen.core.item.PocketWatchItem;
@@ -45,6 +46,12 @@ public class RegenerationClientMod implements ClientModInitializer {
         // Register particles on client side
         registerParticles();
 
+        // Register Grass ColorMap (yes ik i did it awkward- addie)
+        ClientColors.registerGallifreyGrassColor();
+
+
+        BlockRenderLayerMapRegister();
+
 	    HudRenderCallback.EVENT.register(new DelayOverlay());
 	    ModelPredicateProviderRegistry.register(RegenerationModItems.POCKET_WATCH, id("open"), (stack, world, entity, seed) -> PocketWatchItem.isOpened(stack) ? 1.0f : 0.0f);
 
@@ -55,6 +62,10 @@ public class RegenerationClientMod implements ClientModInitializer {
                 }
             });
         });
+    }
+
+    public static void BlockRenderLayerMapRegister() {
+        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK, RenderLayer.getCutout());
     }
 
     public static class Animations {

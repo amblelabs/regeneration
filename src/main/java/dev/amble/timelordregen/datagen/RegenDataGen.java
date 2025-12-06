@@ -106,6 +106,7 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
             provider.addTranslation(RegenerationModBlocks.CADON_TRAPDOOR, "Cadon Trapdoor");
             provider.addTranslation(RegenerationModBlocks.CADON_PRESSURE_PLATE, "Cadon Pressure Plate");
             provider.addTranslation(RegenerationModBlocks.CADON_BUTTON, "Cadon Button");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK, "Gallifrey Grass Block");
 
 			// Advancements
 			provider.addTranslation("achievement.timelordregen.title.regeneration", "Change, my dear.");
