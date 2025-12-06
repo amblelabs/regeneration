@@ -15,19 +15,15 @@ import net.minecraft.sound.BlockSoundGroup;
 public class RegenerationModBlocks extends BlockContainer {
 
     // Cadon Wood
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_LOG = new PillarBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_LOG));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block STRIPPED_CADON_LOG = new PillarBlock(ABlockSettings.copyOf(Blocks.STRIPPED_DARK_OAK_LOG));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_WOOD = new PillarBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_WOOD));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block STRIPPED_CADON_WOOD = new PillarBlock(ABlockSettings.copyOf(Blocks.STRIPPED_DARK_OAK_WOOD));
 
@@ -35,49 +31,38 @@ public class RegenerationModBlocks extends BlockContainer {
     @NoBlockDrop
     public static final Block CADON_LEAVES = new LeavesBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_LEAVES));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_PLANKS = new Block(ABlockSettings.copyOf(Blocks.DARK_OAK_PLANKS));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_SLAB = new SlabBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_SLAB));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_STAIRS = new StairsBlock(CADON_PLANKS.getDefaultState(), ABlockSettings.copyOf(Blocks.DARK_OAK_STAIRS));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_BUTTON = new ButtonBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_BUTTON), BlockSetType.DARK_OAK, 10, true);
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_DOOR = new DoorBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK);
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_TRAPDOOR = new TrapdoorBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_TRAPDOOR), BlockSetType.DARK_OAK);
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_PRESSURE_PLATE = new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING,
             ABlockSettings.copyOf(Blocks.DARK_OAK_PRESSURE_PLATE), BlockSetType.DARK_OAK);
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_FENCE = new FenceBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_FENCE));
 
-    @AxeMineable(tool = AxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CADON_FENCE_GATE = new FenceGateBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_FENCE_GATE), WoodType.DARK_OAK);
 
     @NoEnglish
     @NoBlockDrop
     @ShovelMineable(tool = ShovelMineable.Tool.STONE)
-    public static final Block GALLIFREY_GRASS_BLOCK = new Block(ABlockSettings.create()
-            .sounds(BlockSoundGroup.GRASS)
-            );
+    public static final Block GALLIFREY_GRASS_BLOCK = new GrassBlock(ABlockSettings.copy(Blocks.GRASS_BLOCK));
 
     @NoEnglish
     public static final Block CADON_SAPLING = new SaplingBlock(new CadonSaplingGenerator(),ABlockSettings.copyOf(Blocks.OAK_SAPLING));

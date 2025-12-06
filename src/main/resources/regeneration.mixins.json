@@ -11,6 +11,7 @@
   ],
   "client": [
     "ait.ControlEntityRendererMixin",
+    "client.GallifreySkyboxMixin",
     "client.LivingEntityRendererMixin",
     "client.PlayerEntityRendererMixin"
   ],
