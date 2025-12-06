@@ -10,6 +10,8 @@ import dev.amble.lib.datagen.loot.AmbleBlockLootTable;
 import dev.amble.lib.datagen.sound.AmbleSoundProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.registry.RegistryKeys;
 
 public class RegenDataGen implements DataGeneratorEntrypoint {
 	@Override
@@ -23,11 +25,13 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
         generateAchievement(pack);
         genTags(pack);
         genLoot(pack);
+        pack.addProvider(RegenerationWorldGenerator::new);
 	}
 
     private void generateAchievement(FabricDataGenerator.Pack pack) {
         pack.addProvider(RegenerationModAchivementProvider::new);
     }
+
 
     public void generateSoundData(FabricDataGenerator.Pack pack) {
         pack.addProvider((((output, registriesFuture) -> new AmbleSoundProvider(output))));

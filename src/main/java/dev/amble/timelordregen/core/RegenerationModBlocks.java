@@ -7,6 +7,7 @@ import dev.amble.lib.datagen.util.NoBlockDrop;
 import dev.amble.lib.datagen.util.NoEnglish;
 import dev.amble.lib.datagen.util.ShovelMineable;
 import dev.amble.lib.item.AItemSettings;
+import dev.amble.timelordregen.world.tree.CadonSaplingGenerator;
 import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
@@ -77,6 +78,9 @@ public class RegenerationModBlocks extends BlockContainer {
     public static final Block GALLIFREY_GRASS_BLOCK = new Block(ABlockSettings.create()
             .sounds(BlockSoundGroup.GRASS)
             );
+
+    @NoEnglish
+    public static final Block CADON_SAPLING = new SaplingBlock(new CadonSaplingGenerator(),ABlockSettings.copyOf(Blocks.OAK_SAPLING));
 
     @Override
     public Item.Settings createBlockItemSettings(Block block) {

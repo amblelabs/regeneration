@@ -87,6 +87,7 @@ public class RegenerationClientMod implements ClientModInitializer {
         map.putBlock(RegenerationModBlocks.CADON_LEAVES, RenderLayer.getCutout());
         map.putBlock(RegenerationModBlocks.CADON_TRAPDOOR, RenderLayer.getCutout());
         map.putBlock(RegenerationModBlocks.CADON_DOOR, RenderLayer.getCutout());
+        map.putBlock(RegenerationModBlocks.CADON_SAPLING, RenderLayer.getCutout());
     }
 
     public void registerParticles() {
