@@ -14,7 +14,6 @@ public class RegenerationBlockTagProvider extends AmbleBlockTagProvider {
         super(output, registriesFuture);
     }
 
-    @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
         super.configure(wrapperLookup);
 
