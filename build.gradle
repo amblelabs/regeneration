@@ -13,22 +13,30 @@ base {
 }
 
 repositories {
-	// Prioritize JitPack for GitHub dependencies
-	maven {
-		name = "JitPack"
-		url = "https://jitpack.io"
-		content {
-			includeGroup "com.github.amblelabs"
-		}
-	}
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
+	// amblekit
+    maven {
+        url "https://amblelabs.github.io/maven"
+
+        content {
+            includeGroup "dev.amble"
+        }
+    }
+    maven {
+        url "https://theo.is-a.dev/maven/"
+
+        content {
+            includeGroup "dev.drtheo"
+        }
+    }
 
 	maven { url = "https://maven.fabricmc.net/" }
 
 	mavenCentral()
 
-
-	// theo
-	maven { url "https://theo.is-a.dev/maven/" }
 
 	// YACL
 	maven { url 'https://maven.isxander.dev/releases' }
@@ -64,8 +72,10 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// amblekit
-	modImplementation "com.github.amblelabs:modkit:${project.use_amblekit_dev ? project.amblekit_dev_version : project.amblekit_version}"
+    //amblekit
+    modApi("dev.amble:lib:${project.amblekit_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
 	// ait compat
 	modCompileOnlyApi "com.github.amblelabs:ait:${project.ait_version}"
@@ -75,11 +85,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 	testCompileOnly 'org.projectlombok:lombok:1.18.34'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
-
-	// theo
-	modImplementation "dev.drtheo:multidim:${project.multidim_version}"
-	modImplementation "dev.drtheo:scheduler:${project.scheduler_version}"
-	modImplementation "dev.drtheo:queue:${project.queue_version}"
 
 	// yacl
 	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
@@ -101,9 +106,29 @@ dependencies {
 	include(implementation "net.objecthunter:exp4j:0.4.8")
 }
 
+processResources {
+    inputs.property "version", project.version
+    inputs.property "amblekit_version", project.amblekit_version
+
+    exclude '.cache'
+
+    def expansionVars = [
+            "version": project.version,
+            "amblekit_version": project.amblekit_version
+    ]
+
+    filesMatching("fabric.mod.json") {
+        expand "version": inputs.properties.version
+
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
 configurations.all {
     resolutionStrategy {
-        force "com.github.amblelabs:modkit:${project.use_amblekit_dev ? project.amblekit_dev_version : project.amblekit_version}"
     }
 }
 
