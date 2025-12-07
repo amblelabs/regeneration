@@ -1,6 +1,7 @@
 package dev.amble.timelordregen.mixin.client;
 
 import dev.amble.timelordregen.RegenerationMod;
+import dev.amble.timelordregen.core.RegenerationModDimensions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.Camera;
@@ -51,7 +52,7 @@ public class GallifreySkyboxMixin {
         if (this.world == null)
             return;
 
-        if (this.world.getRegistryKey() == ClientWorld.OVERWORLD/*RegenerationModDimensions.GALLIFREY*/) {
+        if (this.world.getRegistryKey() == RegenerationModDimensions.GALLIFREY) {
             GallifreyanSkybox.renderSky(client, starsBuffer, lightSkyBuffer, darkSkyBuffer, world, SUN, MOON_PHASES, matrices, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
         }

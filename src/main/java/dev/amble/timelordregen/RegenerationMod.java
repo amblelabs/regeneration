@@ -69,6 +69,7 @@ public class RegenerationMod implements ModInitializer {
 	    RegenerationCriterions.init();
 	}
 
+
 	public static Identifier id(String path) {
 		return Identifier.of(MOD_ID, path);
 	}
