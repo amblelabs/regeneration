@@ -16,15 +16,13 @@ public class ClientColors {
                 (state, world, pos, tintIndex) -> {
                     if (world != null && pos != null) {
                         int biomeColor = BiomeColors.getGrassColor(world, pos);
-                        float factor = getColorBrightnessFactor(biomeColor);
-
-                        // Blend biome grass color with your red color
+                        float factor = getColorBrightnessFactor(biomeColor) * 0.1f;
                         return blendColors(RED, biomeColor, factor);
                     } else {
                         return RED;
                     }
-                },
-                RegenerationModBlocks.GALLIFREY_GRASS_BLOCK
+                }
+               // RegenerationModBlocks.GALLIFREY_GRASS_BLOCK
         );
     }
 

@@ -432,7 +432,7 @@
                           "then_run": {
                             "type": "minecraft:block",
                             "result_state": {
-                              "Name": "minecraft:grass_block",
+                              "Name": "timelordregen:gallifrey_grass_block",
                               "Properties": {
                                 "snowy": "false"
                               }
@@ -442,7 +442,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:red_sand"
+                            "Name": "minecraft:sand"
                           }
                         }
                       ]

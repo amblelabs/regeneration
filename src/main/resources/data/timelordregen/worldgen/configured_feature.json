@@ -1,6 +1,0 @@
-{
-  "configured_feature": {
-    "timelordregen:big_cadon_tree": "timelordregen:worldgen/configured_feature/big_cadon_tree",
-    "timelordregen:small_cadon_tree": "timelordregen:worldgen/configured_feature/small_cadon_tree"
-  }
-}
