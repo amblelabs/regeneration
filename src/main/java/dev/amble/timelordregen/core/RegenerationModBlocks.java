@@ -62,7 +62,9 @@ public class RegenerationModBlocks extends BlockContainer {
     @NoEnglish
     @NoBlockDrop
     @ShovelMineable(tool = ShovelMineable.Tool.STONE)
-    public static final Block GALLIFREY_GRASS_BLOCK = new GrassBlock(ABlockSettings.copy(Blocks.GRASS_BLOCK));
+    public static final Block GALLIFREY_GRASS_BLOCK =
+            new GrassBlock(AbstractBlock.Settings.copy(Blocks.GRASS_BLOCK));
+
 
     @NoEnglish
     public static final Block CADON_SAPLING = new SaplingBlock(new CadonSaplingGenerator(),ABlockSettings.copyOf(Blocks.OAK_SAPLING));

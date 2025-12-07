@@ -8,10 +8,13 @@
   },
   "downfall": 0.8,
   "effects": {
-    "fog_color": 12638463,
+    "sky_color": 12546119,
+    "fog_color": 12546119,
+    "grass_color": 10820909,
+    "foliage_color": 12631996,
     "mood_sound": {
       "block_search_extent": 8,
-      "offset": 2.0,
+      "offset": 2,
       "sound": "minecraft:ambient.cave",
       "tick_delay": 6000
     },
@@ -21,7 +24,6 @@
       "replace_current_music": false,
       "sound": "minecraft:music.overworld.forest"
     },
-    "sky_color": 7972607,
     "water_color": 4159204,
     "water_fog_color": 329011
   },
@@ -78,7 +80,8 @@
     [
       "minecraft:glow_lichen",
       "minecraft:forest_flowers",
-      "timelordregen:cadon",
+      "timelordregen:cadon_tree",
+      "timelordregen:fancy_cadon_tree",
       "minecraft:flower_default",
       "minecraft:patch_grass_forest",
       "minecraft:brown_mushroom_normal",
