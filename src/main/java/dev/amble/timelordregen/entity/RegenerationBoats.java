@@ -15,6 +15,7 @@ public class RegenerationBoats {
     public static final Identifier CADON_CHEST_BOAT_ID = new Identifier(RegenerationMod.MOD_ID,"cadon_chest_boat");
 
     public static final RegistryKey<TerraformBoatType> CADON_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CADON_BOAT_ID);
+    public static final RegistryKey<TerraformBoatType> CADON_CHEST_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CADON_CHEST_BOAT_ID);
 
     public static void registerBoats() {
         TerraformBoatType cadonBoat = new TerraformBoatType.Builder()
