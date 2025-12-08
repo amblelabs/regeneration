@@ -95,8 +95,8 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
 			// Items
             provider.addTranslation(RegenerationModItems.ELIXIR_OF_LIFE,"Elixir of Life");
             provider.addTranslation(RegenerationModItems.POCKET_WATCH,"Chameleon Arch");
-            provider.addTranslation(RegenerationModItems.CADON_BOAT,"Cadon Boat");
-            provider.addTranslation(RegenerationModItems.CADON_CHEST_BOAT,"Cadon Chest Boat");
+            //provider.addTranslation(RegenerationModItems.CADON_BOAT,"Cadon Boat");
+            //provider.addTranslation(RegenerationModItems.CADON_CHEST_BOAT,"Cadon Chest Boat");
 
             // Blocks
             provider.addTranslation(RegenerationModBlocks.CADON_LOG, "Cadon Log");

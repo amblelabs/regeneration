@@ -7,7 +7,6 @@ import dev.amble.timelordregen.core.*;
 import dev.amble.timelordregen.core.particle_effects.RegenParticleEffect;
 import dev.amble.timelordregen.data.Attachments;
 import dev.amble.timelordregen.api.RegenerationInfo;
-import dev.amble.timelordregen.entity.RegenerationBoats;
 import dev.amble.timelordregen.network.Networking;
 import dev.amble.timelordregen.animation.RegenAnimRegistry;
 import dev.amble.lib.container.RegistryContainer;
@@ -70,7 +69,7 @@ public class RegenerationMod implements ModInitializer {
 	    Compat.init();
 	    RegenerationCriterions.init();
 
-        RegenerationBoats.registerBoats();
+        //RegenerationBoats.registerBoats();
 	}
 
 

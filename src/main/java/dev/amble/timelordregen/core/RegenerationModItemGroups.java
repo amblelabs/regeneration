@@ -11,8 +11,8 @@ public class RegenerationModItemGroups implements ItemGroupContainer {
             .icon(() -> new ItemStack(RegenerationModItems.ELIXIR_OF_LIFE))
             .entries(
                     (displayContext, entries) -> {
-                        entries.add(RegenerationModItems.CADON_BOAT);
-                        entries.add(RegenerationModItems.CADON_CHEST_BOAT);
+                       // entries.add(RegenerationModItems.CADON_BOAT);
+                       // entries.add(RegenerationModItems.CADON_CHEST_BOAT);
                     }
             )
 

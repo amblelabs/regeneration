@@ -8,7 +8,6 @@ import dev.amble.lib.datagen.util.NoEnglish;
 import dev.amble.lib.item.AItemSettings;
 import dev.amble.timelordregen.core.item.ElixirOfLifeItem;
 import dev.amble.timelordregen.core.item.PocketWatchItem;
-import dev.amble.timelordregen.entity.RegenerationBoats;
 import net.minecraft.item.Item;
 
 public class RegenerationModItems extends ItemContainer {
@@ -22,13 +21,13 @@ public class RegenerationModItems extends ItemContainer {
 
 
 
-    @NoEnglish
-   @AutomaticModel
-    public static final Item CADON_BOAT = TerraformBoatItemHelper.registerBoatItem(RegenerationBoats.CADON_BOAT_ID, RegenerationBoats.CADON_BOAT_KEY, false);
+  // @NoEnglish
+  //@AutomaticModel
+  // public static final Item CADON_BOAT = TerraformBoatItemHelper.registerBoatItem(RegenerationBoats.CADON_BOAT_ID, RegenerationBoats.CADON_BOAT_KEY, false);
 
-    @NoEnglish
-    @AutomaticModel
-    public static final Item CADON_CHEST_BOAT = TerraformBoatItemHelper.registerBoatItem(RegenerationBoats.CADON_CHEST_BOAT_ID, RegenerationBoats.CADON_CHEST_BOAT_KEY, true);
+  // @NoEnglish
+  // @AutomaticModel
+  // public static final Item CADON_CHEST_BOAT = TerraformBoatItemHelper.registerBoatItem(RegenerationBoats.CADON_CHEST_BOAT_ID, RegenerationBoats.CADON_CHEST_BOAT_KEY, true);
 
 
 
