@@ -7,6 +7,7 @@ import dev.amble.timelordregen.core.*;
 import dev.amble.timelordregen.core.particle_effects.RegenParticleEffect;
 import dev.amble.timelordregen.data.Attachments;
 import dev.amble.timelordregen.api.RegenerationInfo;
+import dev.amble.timelordregen.entity.RegenerationBoats;
 import dev.amble.timelordregen.network.Networking;
 import dev.amble.timelordregen.animation.RegenAnimRegistry;
 import dev.amble.lib.container.RegistryContainer;
@@ -36,6 +37,7 @@ public class RegenerationMod implements ModInitializer {
             REGEN_SOUND_ID,
             SoundEvent.of(REGEN_SOUND_ID)
     );*/
+
 
 	public static final ParticleType<RegenParticleEffect> RIGHT_REGEN_PARTICLE = FabricParticleTypes.complex(true, RegenParticleEffect.PARAMETERS_FACTORY);
 
@@ -67,6 +69,8 @@ public class RegenerationMod implements ModInitializer {
 		RegenerationInfo.init();
 	    Compat.init();
 	    RegenerationCriterions.init();
+
+        RegenerationBoats.registerBoats();
 	}
 
 

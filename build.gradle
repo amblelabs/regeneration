@@ -61,9 +61,10 @@ repositories {
 	maven {
 		url "https://maven.shedaniel.me/"
 	}
-	maven {
-		url "https://maven.terraformersmc.com/"
-	}
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/'
+    }
 }
 
 dependencies {
@@ -79,6 +80,10 @@ dependencies {
 
 	// ait compat
 	modCompileOnlyApi "com.github.amblelabs:ait:${project.ait_version}"
+
+    // terraform api
+    modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:7.0.1"
+    include "com.terraformersmc.terraform-api:terraform-wood-api-v1:7.0.1"
 
 	// getter setter
 	compileOnly 'org.projectlombok:lombok:1.18.34'

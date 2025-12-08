@@ -1,6 +1,7 @@
 package dev.amble.timelordregen.client;
 
 import com.google.gson.JsonObject;
+import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
 import dev.amble.ait.client.renderers.sky.MarsSkyProperties;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.timelordregen.RegenerationMod;
@@ -14,6 +15,7 @@ import dev.amble.timelordregen.core.RegenerationDimensions;
 import dev.amble.timelordregen.core.RegenerationModBlocks;
 import dev.amble.timelordregen.core.RegenerationModItems;
 import dev.amble.timelordregen.core.item.PocketWatchItem;
+import dev.amble.timelordregen.entity.RegenerationBoats;
 import dev.amble.timelordregen.network.Networking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -45,6 +47,7 @@ public class RegenerationClientMod implements ClientModInitializer {
         Animations.init();
         resourcepackRegister();
 
+        TerraformBoatClientHelper.registerModelLayers(RegenerationBoats.CADON_BOAT_ID, false);
 
         DimensionRenderingRegistry.registerDimensionEffects(RegenerationDimensions.GALLIFREY.getValue(), new GallifreySkyProperties());
 
