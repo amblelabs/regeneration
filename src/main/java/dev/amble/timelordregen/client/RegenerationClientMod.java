@@ -1,12 +1,16 @@
 package dev.amble.timelordregen.client;
 
 import com.google.gson.JsonObject;
+import dev.amble.ait.client.renderers.sky.MarsSkyProperties;
+import dev.amble.ait.core.AITDimensions;
 import dev.amble.timelordregen.RegenerationMod;
 import dev.amble.timelordregen.client.gui.DelayOverlay;
 import dev.amble.timelordregen.client.gui.RegenerationSettingsScreen;
 import dev.amble.timelordregen.client.particle.RegenHeadParticle;
 import dev.amble.timelordregen.client.particle.RightRegenParticle;
+import dev.amble.timelordregen.client.renderers.sky.GallifreySkyProperties;
 import dev.amble.timelordregen.client.util.ClientColors;
+import dev.amble.timelordregen.core.RegenerationDimensions;
 import dev.amble.timelordregen.core.RegenerationModBlocks;
 import dev.amble.timelordregen.core.RegenerationModItems;
 import dev.amble.timelordregen.core.item.PocketWatchItem;
@@ -16,6 +20,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.DimensionRenderingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -39,6 +44,9 @@ public class RegenerationClientMod implements ClientModInitializer {
 
         Animations.init();
         resourcepackRegister();
+
+
+        DimensionRenderingRegistry.registerDimensionEffects(RegenerationDimensions.GALLIFREY.getValue(), new GallifreySkyProperties());
 
         // Block render stuff
         blockRenderLayers();

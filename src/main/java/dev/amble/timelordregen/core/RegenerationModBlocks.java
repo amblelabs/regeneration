@@ -2,10 +2,7 @@ package dev.amble.timelordregen.core;
 
 import dev.amble.lib.block.ABlockSettings;
 import dev.amble.lib.container.impl.BlockContainer;
-import dev.amble.lib.datagen.util.AxeMineable;
-import dev.amble.lib.datagen.util.NoBlockDrop;
-import dev.amble.lib.datagen.util.NoEnglish;
-import dev.amble.lib.datagen.util.ShovelMineable;
+import dev.amble.lib.datagen.util.*;
 import dev.amble.lib.item.AItemSettings;
 import dev.amble.timelordregen.world.tree.CadonSaplingGenerator;
 import net.minecraft.block.*;
@@ -64,6 +61,12 @@ public class RegenerationModBlocks extends BlockContainer {
     @ShovelMineable(tool = ShovelMineable.Tool.STONE)
     public static final Block GALLIFREY_GRASS_BLOCK =
             new GrassBlock(AbstractBlock.Settings.copy(Blocks.GRASS_BLOCK));
+
+    @NoEnglish
+    @AutomaticModel
+    @ShovelMineable(tool = ShovelMineable.Tool.STONE)
+    public static final Block GALLIFREY_SAND =
+            new GrassBlock(AbstractBlock.Settings.copy(Blocks.SAND));
 
 
     @NoEnglish
