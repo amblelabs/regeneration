@@ -59,6 +59,9 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 - Rhyno (Textures & Initial Ideas)
 </div>
 
+### Thankyou's:
+- Matt (DidgeridooMan): permition to use old DM gallifrey stone texture
+
 ---
 
 <h2>
