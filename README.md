@@ -60,7 +60,7 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 </div>
 
 ### Thankyou's:
-- Matt (Didgeridoomen): permission to use old DM gallifrey stone texture
+- Matt (Digeridoomen): permission to use old DM gallifrey stone texture
 
 ---
 
