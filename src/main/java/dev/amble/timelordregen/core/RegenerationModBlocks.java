@@ -73,6 +73,7 @@ public class RegenerationModBlocks extends BlockContainer {
 
 
     @NoEnglish
+    @NoBlockDrop
     public static final Block FLOWER_OF_REMEMBRANCE = new FlowerBlock(StatusEffects.NIGHT_VISION, 5,
             ABlockSettings.create()
                     .mapColor(MapColor.DARK_GREEN).noCollision()
@@ -80,6 +81,7 @@ public class RegenerationModBlocks extends BlockContainer {
                     .pistonBehavior(PistonBehavior.DESTROY));
 
 
+    @NoBlockDrop
     public static final Block POTTED_FLOWER_OF_REMEMBRANCER = new FlowerPotBlock(FLOWER_OF_REMEMBRANCE, FabricBlockSettings
             .copyOf(Blocks.POTTED_POPPY)
             .nonOpaque()
@@ -87,6 +89,7 @@ public class RegenerationModBlocks extends BlockContainer {
 
 
     @NoEnglish
+    @NoBlockDrop
     public static final Block MOONLIGHT_BLOOM = new FlowerBlock(StatusEffects.JUMP_BOOST, 5,
             ABlockSettings.create()
                     .mapColor(MapColor.DARK_GREEN).noCollision()
@@ -95,6 +98,7 @@ public class RegenerationModBlocks extends BlockContainer {
 
 
     @NoEnglish
+    @NoBlockDrop
     public static final Block TYPHA_POD = new FernBlock(ABlockSettings.create()
             .replaceable()
             .noCollision()

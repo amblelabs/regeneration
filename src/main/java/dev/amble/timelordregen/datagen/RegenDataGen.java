@@ -113,6 +113,10 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
             provider.addTranslation(RegenerationModBlocks.CADON_PRESSURE_PLATE, "Cadon Pressure Plate");
             provider.addTranslation(RegenerationModBlocks.CADON_BUTTON, "Cadon Button");
             provider.addTranslation(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK, "Gallifrey Grass Block");
+            provider.addTranslation(RegenerationModBlocks.CADON_SAPLING, "Cadon Sapling");
+            provider.addTranslation(RegenerationModBlocks.MOONLIGHT_BLOOM, "Moonlight Bloom");
+            provider.addTranslation(RegenerationModBlocks.FLOWER_OF_REMEMBRANCE, "Flower Of Remembrance");
+            provider.addTranslation(RegenerationModBlocks.TYPHA_POD, "Typha Pod");
 
 			// Advancements
 			provider.addTranslation("achievement.timelordregen.title.regeneration", "Change, my dear.");
