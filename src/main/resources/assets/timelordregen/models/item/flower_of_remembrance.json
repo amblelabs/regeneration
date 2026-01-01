@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "timelordregen:block/flower_of_remembrance"
+	}
+}

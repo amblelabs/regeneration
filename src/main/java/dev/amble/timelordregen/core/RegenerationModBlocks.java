@@ -5,9 +5,14 @@ import dev.amble.lib.container.impl.BlockContainer;
 import dev.amble.lib.datagen.util.*;
 import dev.amble.lib.item.AItemSettings;
 import dev.amble.timelordregen.world.tree.CadonSaplingGenerator;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
+
+import javax.print.DocFlavor;
 
 public class RegenerationModBlocks extends BlockContainer {
 
@@ -58,22 +63,56 @@ public class RegenerationModBlocks extends BlockContainer {
 
     @NoEnglish
     @NoBlockDrop
-    @ShovelMineable(tool = ShovelMineable.Tool.STONE)
+    @ShovelMineable
     public static final Block GALLIFREY_GRASS_BLOCK =
             new GrassBlock(AbstractBlock.Settings.copy(Blocks.GRASS_BLOCK));
-
-    @NoEnglish
-    @AutomaticModel
-    @ShovelMineable(tool = ShovelMineable.Tool.STONE)
-    public static final Block GALLIFREY_SAND =
-            new GrassBlock(AbstractBlock.Settings.copy(Blocks.SAND));
 
 
     @NoEnglish
     public static final Block CADON_SAPLING = new SaplingBlock(new CadonSaplingGenerator(),ABlockSettings.copyOf(Blocks.OAK_SAPLING));
 
+
+    @NoEnglish
+    public static final Block FLOWER_OF_REMEMBRANCE = new FlowerBlock(StatusEffects.NIGHT_VISION, 5,
+            ABlockSettings.create()
+                    .mapColor(MapColor.DARK_GREEN).noCollision()
+                    .breakInstantly().sounds(BlockSoundGroup.GRASS).offset(AbstractBlock.OffsetType.XZ)
+                    .pistonBehavior(PistonBehavior.DESTROY));
+
+
+    public static final Block POTTED_FLOWER_OF_REMEMBRANCER = new FlowerPotBlock(FLOWER_OF_REMEMBRANCE, FabricBlockSettings
+            .copyOf(Blocks.POTTED_POPPY)
+            .nonOpaque()
+    );
+
+
+    @NoEnglish
+    public static final Block MOONLIGHT_BLOOM = new FlowerBlock(StatusEffects.JUMP_BOOST, 5,
+            ABlockSettings.create()
+                    .mapColor(MapColor.DARK_GREEN).noCollision()
+                    .breakInstantly().sounds(BlockSoundGroup.GRASS).offset(AbstractBlock.OffsetType.XZ)
+                    .pistonBehavior(PistonBehavior.DESTROY));
+
+
+    @NoEnglish
+    public static final Block TYPHA_POD = new FernBlock(ABlockSettings.create()
+            .replaceable()
+            .noCollision()
+            .breakInstantly()
+            .sounds(BlockSoundGroup.GRASS)
+            .offset(AbstractBlock.OffsetType.XZ)
+            .pistonBehavior(PistonBehavior.DESTROY)
+            .mapColor(MapColor.DARK_GREEN)
+    );
+
     @Override
     public Item.Settings createBlockItemSettings(Block block) {
+        if (block == RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCER) {
+            return new AItemSettings();
+        }
         return new AItemSettings().group(RegenerationModItemGroups.REGEN);
     }
+
+
+
 }

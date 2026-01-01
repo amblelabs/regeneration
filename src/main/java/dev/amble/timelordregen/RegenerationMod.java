@@ -69,7 +69,6 @@ public class RegenerationMod implements ModInitializer {
 	    Compat.init();
 	    RegenerationCriterions.init();
 
-        //RegenerationBoats.registerBoats();
 	}
 
 

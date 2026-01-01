@@ -18,7 +18,6 @@ import dev.amble.timelordregen.core.item.PocketWatchItem;
 import dev.amble.timelordregen.network.Networking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.DimensionRenderingRegistry;
@@ -46,7 +45,6 @@ public class RegenerationClientMod implements ClientModInitializer {
         Animations.init();
         resourcepackRegister();
 
-        //TerraformBoatClientHelper.registerModelLayers(RegenerationBoats.CADON_BOAT_ID, false);
 
         DimensionRenderingRegistry.registerDimensionEffects(RegenerationDimensions.GALLIFREY.getValue(), new GallifreySkyProperties());
 
@@ -76,6 +74,10 @@ public class RegenerationClientMod implements ClientModInitializer {
 
     public static void BlockRenderLayerMapRegister() {
         BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.FLOWER_OF_REMEMBRANCE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCER, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.MOONLIGHT_BLOOM, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.TYPHA_POD, RenderLayer.getCutout());
     }
 
     public static class Animations {

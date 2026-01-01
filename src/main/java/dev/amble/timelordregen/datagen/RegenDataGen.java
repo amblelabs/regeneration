@@ -65,7 +65,6 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
                     RegenerationModBlocks.CADON_BUTTON
             ));
             provider.registerSimpleBlock(RegenerationModBlocks.CADON_LEAVES);
-            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_SAND);
 
             return provider;
         }));
@@ -114,7 +113,6 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
             provider.addTranslation(RegenerationModBlocks.CADON_PRESSURE_PLATE, "Cadon Pressure Plate");
             provider.addTranslation(RegenerationModBlocks.CADON_BUTTON, "Cadon Button");
             provider.addTranslation(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK, "Gallifrey Grass Block");
-            provider.addTranslation(RegenerationModBlocks.GALLIFREY_SAND, "Gallifrey Sand");
 
 			// Advancements
 			provider.addTranslation("achievement.timelordregen.title.regeneration", "Change, my dear.");

@@ -442,7 +442,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "timelordregen:gallifrey_sand"
+                            "Name": "minecraft:red_sand"
                           }
                         }
                       ]
