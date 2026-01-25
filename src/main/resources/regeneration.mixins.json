@@ -7,7 +7,10 @@
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "origin.PlayerOriginComponentMixin"
+    "origin.PlayerOriginComponentMixin",
+    "boat.BoatEntityMixin",
+    "boat.BoatEntityTypeMixin",
+    "boat.ChestBoatEntityMixin"
   ],
   "client": [
     "ait.ControlEntityRendererMixin",

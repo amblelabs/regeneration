@@ -10,8 +10,13 @@ import dev.amble.lib.datagen.loot.AmbleBlockLootTable;
 import dev.amble.lib.datagen.sound.AmbleSoundProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryKeys;
+
+import static net.minecraft.data.server.recipe.RecipeProvider.conditionsFromItem;
+import static net.minecraft.data.server.recipe.RecipeProvider.hasItem;
 
 public class RegenDataGen implements DataGeneratorEntrypoint {
 	@Override
@@ -144,6 +149,14 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
     public void generateRecipes(FabricDataGenerator.Pack pack) {
         pack.addProvider((((output, registriesFuture) -> {
             RegenerationRecipeProvider provider = new RegenerationRecipeProvider(output);
+
+            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, RegenerationModItems.CADON_BOAT, 1)
+                    .group("iris")
+                    .pattern("P P")
+                    .pattern("PPP")
+                    .input('P', RegenerationModBlocks.CADON_PLANKS)
+                    .criterion(hasItem(RegenerationModBlocks.CADON_PLANKS), conditionsFromItem(RegenerationModBlocks.CADON_PLANKS)));
+
             return provider;
 
         })));
