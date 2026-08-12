@@ -154,10 +154,10 @@ public class RegenerationSettingsScreen extends Screen {
             return Text.translatable("gui.regen.settings.status.regenerating").formatted(Formatting.GOLD);
         } else if (info.getDelay().isRunning()) {
             return Text.translatable("gui.regen.settings.status.delay");
-        } else if (info.isInvulnerable()) {
-            return Text.translatable("gui.regen.settings.status.invulnerable");
         } else if (info.isConfused()) {
             return Text.translatable("gui.regen.settings.status.confused");
+        } else if (info.isInvulnerable()) {
+            return Text.translatable("gui.regen.settings.status.invulnerable");
         } else if (info.getUsesLeft() <= 0) {
             return Text.translatable("gui.regen.settings.status.exhausted").formatted(Formatting.RED);
         }
@@ -167,8 +167,8 @@ public class RegenerationSettingsScreen extends Screen {
     private int getStatusColor() {
         if (info.isRegenerating()) return COLOR_GLOW;
         if (info.getDelay().isRunning()) return COLOR_GOLD;
-        if (info.isInvulnerable()) return 0xFF55FF55;
         if (info.isConfused()) return 0xFFFF55FF;
+        if (info.isInvulnerable()) return 0xFF55FF55;
         if (info.getUsesLeft() <= 0) return COLOR_GOLD_DIM;
         return COLOR_TEXT_DIM;
     }

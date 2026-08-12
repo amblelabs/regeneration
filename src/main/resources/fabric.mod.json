@@ -18,7 +18,7 @@
       "ars.client.RegenerationClientMod"
     ],
     "fabric-datagen": [
-      "ars.datagen.RegenDataGen"
+      "ars.data.RegenDataGen"
     ]
   },
   "mixins": [

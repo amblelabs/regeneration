@@ -1,6 +1,6 @@
 package ars.client.particle;
 
-import ars.particle_effects.RegenParticleEffect;
+import ars.core.particle_effects.RegenParticleEffect;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;

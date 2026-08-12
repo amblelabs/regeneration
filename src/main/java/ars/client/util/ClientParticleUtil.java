@@ -1,6 +1,6 @@
 package ars.client.util;
 
-import ars.particle_effects.RegenParticleEffect;
+import ars.core.particle_effects.RegenParticleEffect;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;

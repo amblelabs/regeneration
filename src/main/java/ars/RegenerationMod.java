@@ -1,5 +1,6 @@
 package ars;
 
+import ars.core.dimensions.RegenerationDimensions;
 import ars.data.tree.RegenerationSounds;
 import ars.data.datagen.RegenerationCriterions;
 import ars.api.RegenerationEvents;
@@ -9,7 +10,7 @@ import ars.compat.Compat;
 import ars.core.*;
 import ars.item.RegenerationItemGroups;
 import ars.item.RegenerationItems;
-import ars.particle_effects.RegenParticleEffect;
+import ars.core.particle_effects.RegenParticleEffect;
 import ars.data.Attachments;
 import ars.network.RegenerationUINetworking;
 import ars.core.animation.RegenAnimRegistry;
@@ -22,6 +23,7 @@ import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import org.slf4j.Logger;
@@ -34,12 +36,12 @@ public class RegenerationMod implements ModInitializer {
 
 	public static final Random RANDOM = Random.create();
 
-    /*public static final Identifier REGEN_SOUND_ID = new Identifier(MOD_ID, "regeneration");
+    public static final Identifier REGEN_SOUND_ID = new Identifier(MOD_ID, "regeneration");
     public static final SoundEvent REGEN_SOUND = Registry.register(
             Registries.SOUND_EVENT,
             REGEN_SOUND_ID,
             SoundEvent.of(REGEN_SOUND_ID)
-    );*/
+    );
 
 
 	public static final ParticleType<RegenParticleEffect> RIGHT_REGEN_PARTICLE = FabricParticleTypes.complex(true, RegenParticleEffect.PARAMETERS_FACTORY);
@@ -48,10 +50,10 @@ public class RegenerationMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-	    LOGGER.info("E Cineribus Resurgam.");
+	    LOGGER.info("ARS Loading");
 
 	    Attachments.init();
-        RegenerationModDimensions.init();
+        RegenerationDimensions.init();
         RegenerationUINetworking.registerServerReceivers();
         RegistryContainer.register(RegenerationItemGroups.class, MOD_ID);
         RegistryContainer.register(RegenerationModBlocks.class, MOD_ID);
@@ -74,6 +76,7 @@ public class RegenerationMod implements ModInitializer {
 	    Compat.init();
 	    RegenerationCriterions.init();
 
+        LOGGER.info("ARS Loading complete");
 	}
 
 

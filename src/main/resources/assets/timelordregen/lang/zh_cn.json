@@ -49,10 +49,10 @@
   "gui.regen.settings.on": "开",
   "gui.regen.settings.off": "关",
   "gui.regen.settings.status.regenerating": "状态：正在再生",
-  "gui.regen.settings.status.delay": "状态：延缓期",
-  "gui.regen.settings.status.invulnerable": "状态：无敌中",
-  "gui.regen.settings.status.confused": "状态：混乱中",
-  "gui.regen.settings.status.exhausted": "状态：重生次数已耗尽",
+  "gui.regen.settings.status.delay": "状态：重生前奏...",
+  "gui.regen.settings.status.invulnerable": "状态：细胞能量富裕！",
+  "gui.regen.settings.status.confused": "状态：重新适应中...",
+  "gui.regen.settings.status.exhausted": "状态：重生周期已结束",
   "gui.regen.settings.status.normal": "状态：正常",
 
   "timelordregen.tardis.alarm_message": "%s 正在重生！",
@@ -63,7 +63,7 @@
   "gui.regen.settings.tardis_mode.refurbish": "仅重构",
 
   "item.timelordregen.elixir_of_life": "重生灵药",
-  "item.timelordregen.elixir_of_life.desc": "(赋予你伽理弗雷人的重生能力，蜕变为真正的时间领主)",
+  "item.timelordregen.elixir_of_life.desc": "(赋予你伽理弗雷人的重生能力与生理特性，蜕变为真正的时间领主)",
   "item.timelordregen.pocket_watch": "怀表",
   "item.timelordregen.pocket_watch.owner": "属于 %s",
   "item.timelordregen.pocket_watch.charges": "存储次数：%d/%d",

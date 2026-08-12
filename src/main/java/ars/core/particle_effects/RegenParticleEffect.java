@@ -1,4 +1,4 @@
-package ars.particle_effects;
+package ars.core.particle_effects;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

@@ -1,4 +1,4 @@
-package ars.data.datagen;
+package ars.data;
 
 import ars.block.RegenerationModBlocks;
 import ars.data.datagen.providers.*;
