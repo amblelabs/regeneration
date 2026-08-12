@@ -48,6 +48,12 @@
   "gui.regen.settings.toggle_skin_change": "重生更换皮肤：%s",
   "gui.regen.settings.on": "开",
   "gui.regen.settings.off": "关",
+  "gui.regen.settings.status.regenerating": "状态：正在再生",
+  "gui.regen.settings.status.delay": "状态：延缓期",
+  "gui.regen.settings.status.invulnerable": "状态：无敌中",
+  "gui.regen.settings.status.confused": "状态：混乱中",
+  "gui.regen.settings.status.exhausted": "状态：重生次数已耗尽",
+  "gui.regen.settings.status.normal": "状态：正常",
 
   "timelordregen.tardis.alarm_message": "%s 正在重生！",
 

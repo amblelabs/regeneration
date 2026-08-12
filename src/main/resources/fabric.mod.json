@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "id": "timelordregen",
-  "version": "1.0.0",
-  "name": "Amble Regeneration Small Moss",
+  "version": "${version}",
+  "name": "AmbleLabs Regeneration Small Moss",
   "description": "A Doctor Who regeneration mod.",
   "authors": ["AmbleLabs"],
   "contact": {

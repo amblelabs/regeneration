@@ -55,6 +55,12 @@
   "gui.regen.settings.tardis_mode.enabled": "Random",
   "gui.regen.settings.tardis_mode.disabled": "Disabled",
   "gui.regen.settings.tardis_mode.refurbish": "Refurbish Only",
+  "gui.regen.settings.status.regenerating": "Status: Regenerating",
+  "gui.regen.settings.status.delay": "Status: Delayed",
+  "gui.regen.settings.status.invulnerable": "Status: Invulnerable",
+  "gui.regen.settings.status.confused": "Status: Confused",
+  "gui.regen.settings.status.exhausted": "Status: Regenerations Exhausted",
+  "gui.regen.settings.status.normal": "Status: Normal",
 
   "item.timelordregen.elixir_of_life": "Elixir of Life",
   "item.timelordregen.elixir_of_life.desc": "(Grants you the regeneration ability of a Gallifreyan, transforming you into a true Time Lord)",
