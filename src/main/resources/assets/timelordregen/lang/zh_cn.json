@@ -62,12 +62,16 @@
   "gui.regen.settings.tardis_mode.disabled": "关闭",
   "gui.regen.settings.tardis_mode.refurbish": "仅重构",
 
+  "tooltip.ars.hold_shift": "按住 Shift 查看更多",
+
   "item.timelordregen.elixir_of_life": "重生灵药",
-  "item.timelordregen.elixir_of_life.desc": "(赋予你伽理弗雷人的重生能力与生理特性，蜕变为真正的时间领主)",
+  "item.timelordregen.elixir_of_life.desc.short": "§7饮下灵药，你的身体将会发生一些变化...",
+  "item.timelordregen.elixir_of_life.desc.long": "§7§o赋予伽理弗雷人的重生能力与生理特性*使其蜕变为真正的时间领主*若已经是时间领主，则§c赐予你新的重生周期",
   "item.timelordregen.pocket_watch": "怀表",
-  "item.timelordregen.pocket_watch.owner": "属于 %s",
-  "item.timelordregen.pocket_watch.charges": "存储次数：%d/%d",
-  "item.timelordregen.pocket_watch.desc": "时间领主的重生容器，首次使用绑定主人，可在玩家与怀表间传输重生次数",
+  "item.timelordregen.pocket_watch.owner": "§7§o它属于 %s",
+  "item.timelordregen.pocket_watch.charges": "§7§o存储重生次数：%d/%d",
+  "item.timelordregen.pocket_watch.desc.short": "§7§o时间领主的重生容器",
+  "item.timelordregen.pocket_watch.desc.long": "§7§o首次使用绑定主人，可在玩家与怀表间传输重生次数",
   "itemGroup.timelordregen.item_group": "重生",
 
   "origin.timelordregen.regeneration.description": "你的周围不再会生成幻翼，你的皮肤下会生长出一层透明硬化膜，你能在水下与真空生存更长时间，对食物的消耗更低，同时，你的身体有一种通过再生全身细胞来欺骗死亡的方式，但只有有限的十二次",

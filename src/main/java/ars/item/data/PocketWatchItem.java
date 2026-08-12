@@ -1,6 +1,7 @@
 package ars.item.data;
 
 import ars.api.RegenerationCapable;
+import ars.client.util.ShiftTooltipHelper;  // 导入潜行工具类
 import ars.core.RegenerationCore;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class PocketWatchItem extends Item {
-    private static final int COOLDOWN_TICKS = 100; // 5 seconds
+    private static final int COOLDOWN_TICKS = 100;
     private static final String OWNER_KEY = "MarkedOwner";
     private static final String CHARGES_KEY = "Charges";
 
@@ -36,14 +37,12 @@ public class PocketWatchItem extends Item {
             return TypedActionResult.success(stack);
         }
 
-        // 检查是否为时间领主
         if (!(user instanceof RegenerationCapable capable) || !capable.isTimelord()) {
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     SoundEvents.ENTITY_WITHER_SPAWN, user.getSoundCategory(), 1.0F, 1.0F);
             return TypedActionResult.fail(stack);
         }
 
-        // 检查所有权
         UUID ownerId = getOwner(stack);
         if (ownerId != null && !ownerId.equals(user.getUuid())) {
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
@@ -51,7 +50,6 @@ public class PocketWatchItem extends Item {
             return TypedActionResult.fail(stack);
         }
 
-        // 首次使用标记主人
         if (ownerId == null) {
             markOwner(stack, user);
         }
@@ -64,26 +62,21 @@ public class PocketWatchItem extends Item {
         int charges = getCharges(stack);
         int usesLeft = info.getUsesLeft();
 
-        // 计算传输方向：哪边少就往哪边补
         int transferable;
         if (charges > usesLeft) {
-            // 怀表次数多 → 传给玩家
             transferable = Math.min(charges - usesLeft, RegenerationCore.MAX_REGENERATIONS - usesLeft);
             charges -= transferable;
             usesLeft += transferable;
         } else if (usesLeft > charges) {
-            // 玩家次数多 → 传给怀表
             transferable = Math.min(usesLeft - charges, RegenerationCore.MAX_REGENERATIONS - charges);
             usesLeft -= transferable;
             charges += transferable;
         } else {
-            // 两边相等，无需传输
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), user.getSoundCategory(), 0.5F, 1.0F);
             return TypedActionResult.success(stack, false);
         }
 
-        // 应用变更
         info.setUsesLeft(usesLeft);
         setCharges(stack, charges);
 
@@ -98,22 +91,27 @@ public class PocketWatchItem extends Item {
         int charges = getCharges(stack);
         UUID ownerId = getOwner(stack);
 
-        // 所有者信息
+        // 所有者信息（始终显示）
         if (ownerId != null && world != null) {
             PlayerEntity owner = world.getPlayerByUuid(ownerId);
             if (owner != null) {
                 tooltip.add(Text.translatable("item.timelordregen.pocket_watch.owner", owner.getName())
-                        .setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY).withItalic(true)));
+                        .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
             }
         }
 
-        // 存储次数
+        // 存储次数（始终显示）
         tooltip.add(Text.translatable("item.timelordregen.pocket_watch.charges", charges, RegenerationCore.MAX_REGENERATIONS)
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
 
-        // 使用说明
-        tooltip.add(Text.translatable("item.timelordregen.pocket_watch.desc")
-                .setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY).withItalic(true)));
+        // 短提示（始终显示）
+        tooltip.add(Text.translatable("item.timelordregen.pocket_watch.desc.short")
+                .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
+
+        // 长描述（按住 Shift 显示）
+        Text longDesc = Text.translatable("item.timelordregen.pocket_watch.desc.long")
+                .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true));
+        ShiftTooltipHelper.addShiftTooltip(tooltip, longDesc);
     }
 
     private static void markOwner(ItemStack stack, PlayerEntity player) {
@@ -132,7 +130,7 @@ public class PocketWatchItem extends Item {
         if (stack.getNbt() != null && stack.getNbt().contains(CHARGES_KEY)) {
             return stack.getNbt().getInt(CHARGES_KEY);
         }
-        return 0; // 新怀表默认空容器
+        return 0;
     }
 
     private static void setCharges(ItemStack stack, int charges) {

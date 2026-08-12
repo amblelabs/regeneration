@@ -62,12 +62,16 @@
   "gui.regen.settings.status.exhausted": "Status: Regeneration Cycle Ended",
   "gui.regen.settings.status.normal": "Status: Normal",
 
+  "tooltip.ars.hold_shift": "Hold Shift for more info",
+
   "item.timelordregen.elixir_of_life": "Elixir of Life",
-  "item.timelordregen.elixir_of_life.desc": "(Grants you the regenerative abilities and physiological traits of a Gallifreyan, transforming you into a true Time Lord)",
+  "item.timelordregen.elixir_of_life.desc.short": "§7Drink the elixir, and your body will undergo some changes...",
+  "item.timelordregen.elixir_of_life.desc.long": "§7§oGrants the regenerative abilities and physiological traits of a Gallifreyan*transforming them into a true Time Lord*If already a Time Lord, §cgrants a new regeneration cycle",
   "item.timelordregen.pocket_watch": "Pocket Watch",
-  "item.timelordregen.pocket_watch.owner": "Owner: %s",
-  "item.timelordregen.pocket_watch.charges": "Stored charges: %d/%d",
-  "item.timelordregen.pocket_watch.desc": "A Time Lord's regeneration vessel, bound to its owner on first use. Allows transfer of regeneration charges between player and watch.",
+  "item.timelordregen.pocket_watch.owner": "§7§oIt belongs to %s",
+  "item.timelordregen.pocket_watch.charges": "§7§oStored Regeneration Charges: %d/%d",
+  "item.timelordregen.pocket_watch.desc.short": "§7§oA Time Lord's regeneration vessel",
+  "item.timelordregen.pocket_watch.desc.long": "§7§oBinds to its first user, allowing transfer of regeneration charges between player and watch",
   "itemGroup.timelordregen.item_group": "Regeneration",
 
   "origin.timelordregen.regeneration.description": "Phantoms no longer spawn around you. A transparent hardened membrane grows beneath your skin. You can survive longer underwater and in a vacuum, and you consume less food. Additionally, your body has a way of cheating death by regenerating all its cells, but only a limited twelve times.",

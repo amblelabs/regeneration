@@ -1,6 +1,7 @@
 package ars.item.data;
 
 import ars.api.RegenerationCapable;
+import ars.client.util.ShiftTooltipHelper;  // 导入潜行工具类
 import ars.core.RegenerationCore;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
@@ -44,10 +45,14 @@ public class ElixirOfLifeItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(Text.translatable("item.timelordregen.elixir_of_life.desc")
-                .setStyle(Style.EMPTY
-                        .withColor(Formatting.GRAY)
-                        .withItalic(true)));
+        // 短提示（始终显示）
+        tooltip.add(Text.translatable("item.timelordregen.elixir_of_life.desc.short")
+                .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
+
+        // 长描述（按住 Shift 显示）
+        Text longDesc = Text.translatable("item.timelordregen.elixir_of_life.desc.long")
+                .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true));
+        ShiftTooltipHelper.addShiftTooltip(tooltip, longDesc);
     }
 
     @Override
