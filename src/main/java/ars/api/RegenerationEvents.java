@@ -1,7 +1,7 @@
 package ars.api;
 
-import ars.animation.AnimationTemplate;
-import ars.core.RegenerationModBlocks;
+import ars.core.animation.AnimationTemplate;
+import ars.block.RegenerationModBlocks;
 import ars.core.RegenerationCore;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

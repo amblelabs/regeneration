@@ -5,7 +5,7 @@ import com.mojang.serialization.DataResult;
 import dev.amble.lib.animation.AnimatedInstance;
 import dev.amble.lib.client.bedrock.BedrockAnimation;
 import ars.RegenerationMod;
-import ars.animation.AnimationTemplate;
+import ars.core.animation.AnimationTemplate;
 import ars.api.RegenerationCapable;
 import ars.core.RegenerationCore;
 import net.fabricmc.api.EnvType;

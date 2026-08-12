@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import ars.RegenerationMod;
 import ars.core.RegenerationCore;
 import ars.client.sound.PlayerFollowingLoopingSound;
-import ars.core.RegenerationSounds;
+import ars.data.tree.RegenerationSounds;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

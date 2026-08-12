@@ -1,14 +1,18 @@
 package ars;
 
-import ars.advancement.RegenerationCriterions;
+import ars.data.tree.RegenerationSounds;
+import ars.data.datagen.RegenerationCriterions;
 import ars.api.RegenerationEvents;
+import ars.block.RegenerationModBlocks;
 import ars.commands.RegenCommand;
 import ars.compat.Compat;
 import ars.core.*;
+import ars.item.RegenerationItemGroups;
+import ars.item.RegenerationItems;
 import ars.particle_effects.RegenParticleEffect;
 import ars.data.Attachments;
-import ars.network.Networking;
-import ars.animation.RegenAnimRegistry;
+import ars.network.RegenerationUINetworking;
+import ars.core.animation.RegenAnimRegistry;
 import dev.amble.lib.container.RegistryContainer;
 import dev.amble.lib.register.AmbleRegistries;
 import net.fabricmc.api.ModInitializer;
@@ -48,10 +52,10 @@ public class RegenerationMod implements ModInitializer {
 
 	    Attachments.init();
         RegenerationModDimensions.init();
-        Networking.registerServerReceivers();
-        RegistryContainer.register(RegenerationModItemGroups.class, MOD_ID);
+        RegenerationUINetworking.registerServerReceivers();
+        RegistryContainer.register(RegenerationItemGroups.class, MOD_ID);
         RegistryContainer.register(RegenerationModBlocks.class, MOD_ID);
-        RegistryContainer.register(RegenerationModItems.class, MOD_ID);
+        RegistryContainer.register(RegenerationItems.class, MOD_ID);
 	    RegenerationSounds.init();
         RegenerationEvents.registerListeners();
 

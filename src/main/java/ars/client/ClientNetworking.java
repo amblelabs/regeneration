@@ -5,7 +5,7 @@ import ars.api.RegenerationCapable;
 import ars.core.RegenerationCore;
 import ars.client.gui.RegenerationSettingsScreen;
 import ars.data.Attachments;
-import ars.network.Networking;
+import ars.network.RegenerationUINetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +14,7 @@ public class ClientNetworking {
 
     public static void registerClientReceivers() {
         // 打开 UI
-        ClientPlayNetworking.registerGlobalReceiver(Networking.OPEN_GUI_PACKET, (client, handler, buf, responseSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(RegenerationUINetworking.OPEN_GUI_PACKET, (client, handler, buf, responseSender) -> {
             client.execute(() -> {
                 var player = MinecraftClient.getInstance().player;
                 if (player == null) return;

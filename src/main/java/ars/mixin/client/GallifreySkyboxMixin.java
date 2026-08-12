@@ -1,7 +1,7 @@
 package ars.mixin.client;
 
 import ars.RegenerationMod;
-import ars.core.RegenerationModDimensions;
+import ars.core.dimensions.RegenerationDimensions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.Camera;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import util.GallifreyanSkybox;
+import ars.util.GallifreyanSkybox;
 
 @Mixin(value = WorldRenderer.class, priority = 1001)
 public class GallifreySkyboxMixin {
@@ -52,7 +52,7 @@ public class GallifreySkyboxMixin {
         if (this.world == null)
             return;
 
-        if (this.world.getRegistryKey() == RegenerationModDimensions.GALLIFREY) {
+        if (this.world.getRegistryKey() == RegenerationDimensions.GALLIFREY) {
             GallifreyanSkybox.renderSky(client, starsBuffer, lightSkyBuffer, darkSkyBuffer, world, SUN, MOON_PHASES, matrices, projectionMatrix, tickDelta, camera, thickFog, fogCallback);
             ci.cancel();
         }

@@ -1,7 +1,7 @@
 package ars.compat.ait;
 
 import ars.RegenerationMod;
-import ars.animation.AnimationTemplate;
+import ars.core.animation.AnimationTemplate;
 import ars.api.RegenerationEvents;
 import ars.core.RegenerationCore;
 import dev.amble.ait.core.tardis.ServerTardis;

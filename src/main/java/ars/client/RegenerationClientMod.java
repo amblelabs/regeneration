@@ -7,9 +7,9 @@ import ars.client.particle.RegenHeadParticle;
 import ars.client.particle.RightRegenParticle;
 import ars.client.renderers.sky.GallifreySkyProperties;
 import ars.client.util.ClientColors;
-import ars.core.RegenerationDimensions;
-import ars.core.RegenerationModBlocks;
-import ars.network.Networking;
+import ars.core.dimensions.RegenerationDimensions;
+import ars.block.RegenerationModBlocks;
+import ars.network.RegenerationUINetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -55,7 +55,7 @@ public class RegenerationClientMod implements ClientModInitializer {
 
 	    HudRenderCallback.EVENT.register(new DelayOverlay());
 
-        ClientPlayNetworking.registerGlobalReceiver(Networking.OPEN_GUI_PACKET, (client, handler, buf, responseSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(RegenerationUINetworking.OPEN_GUI_PACKET, (client, handler, buf, responseSender) -> {
             client.execute(() -> {
                 if (client.player != null) {
                     client.setScreen(new RegenerationSettingsScreen(client.player));
@@ -93,7 +93,7 @@ public class RegenerationClientMod implements ClientModInitializer {
 
             // GUI 打开（单击触发）
             if (openSettingsKey.wasPressed()) {
-                ClientPlayNetworking.send(Networking.REQUEST_OPEN_GUI, PacketByteBufs.create());
+                ClientPlayNetworking.send(RegenerationUINetworking.REQUEST_OPEN_GUI, PacketByteBufs.create());
             }
 
             // 强制重生：长按 2s（40 tick）触发
@@ -101,7 +101,7 @@ public class RegenerationClientMod implements ClientModInitializer {
                 holdTicks[0]++;
                 if (holdTicks[0] >= 40 && !triggered[0]) {
                     triggered[0] = true;
-                    ClientPlayNetworking.send(Networking.FORCE_REGEN, PacketByteBufs.empty());
+                    ClientPlayNetworking.send(RegenerationUINetworking.FORCE_REGEN, PacketByteBufs.empty());
                     client.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.4f, 1.0f);
                 }
             } else {
