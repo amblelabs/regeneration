@@ -8,23 +8,24 @@
   "contact": {
     "sources": "https://github.com/AmbleLabs/TimeLordRegeneration"
   },
-  "license": "MIT",
+  "license": "LGPL-3.0",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.amble.timelordregen.RegenerationMod"
+      "ars.RegenerationMod"
     ],
     "client": [
-      "dev.amble.timelordregen.client.RegenerationClientMod"
+      "ars.client.RegenerationClientMod"
     ],
     "fabric-datagen": [
-      "dev.amble.timelordregen.datagen.RegenDataGen"
+      "ars.datagen.RegenDataGen"
     ]
   },
   "mixins": [
     "regeneration.mixins.json"
   ],
   "depends": {
+    "minecraft": "1.20.1",
     "fabricloader": ">=0.14.22",
     "fabric-api": "*"
   }
