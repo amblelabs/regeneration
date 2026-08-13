@@ -12,13 +12,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ars.RegenerationMod"
+      "dev.amble.ars.RegenerationMod"
     ],
     "client": [
-      "ars.client.RegenerationClientMod"
+      "dev.amble.ars.client.RegenerationClientMod"
     ],
     "fabric-datagen": [
-      "ars.data.RegenDataGen"
+      "dev.amble.ars.data.RegenDataGen"
     ]
   },
   "mixins": [

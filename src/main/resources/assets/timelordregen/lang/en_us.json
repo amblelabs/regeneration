@@ -51,7 +51,7 @@
 
   "timelordregen.tardis.alarm_message": "%s is regenerating!",
 
-  "gui.regen.settings.tardis_mode": "Change TARDIS interior on regeneration: %s",
+  "gui.regen.settings.tardis_mode": "Change TARDIS interior: %s",
   "gui.regen.settings.tardis_mode.enabled": "Random",
   "gui.regen.settings.tardis_mode.disabled": "Disabled",
   "gui.regen.settings.tardis_mode.refurbish": "Refurbish Only",
