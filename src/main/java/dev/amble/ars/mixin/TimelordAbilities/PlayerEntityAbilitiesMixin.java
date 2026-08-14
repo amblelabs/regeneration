@@ -25,7 +25,7 @@ public abstract class PlayerEntityAbilitiesMixin {
         return player instanceof RegenerationCapable capable && capable.isTimelord();
     }
 
-    // ========== 饥饿消耗 -25% ==========
+    //饥饿消耗减少
     @ModifyVariable(method = "addExhaustion", at = @At("HEAD"), argsOnly = true)
     private float timelord$modifyExhaustion(float exhaustion) {
         if (timelord$isTimelord()) {
@@ -34,7 +34,7 @@ public abstract class PlayerEntityAbilitiesMixin {
         return exhaustion;
     }
 
-    // ========== 常驻 10% 抗性 ==========
+    //常驻抗性
     @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true)
     private float timelord$applyResistance(float amount, DamageSource source) {
         if (timelord$isTimelord()) {
@@ -46,7 +46,7 @@ public abstract class PlayerEntityAbilitiesMixin {
         return amount;
     }
 
-    // ========== 饥饿伤害免疫 ==========
+    //饥饿伤害免疫
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void timelord$cancelStarveDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (TimelordAbilities.isImmuneToStarvation((PlayerEntity)(Object) this, source)) {
@@ -54,7 +54,7 @@ public abstract class PlayerEntityAbilitiesMixin {
         }
     }
 
-    // ========== 生命恢复 1.5x + 氧气消耗 75% ==========
+    //生命恢复 1.5x + 氧气消耗 75%
     @Inject(method = "tick", at = @At("TAIL"))
     private void timelord$tickAbilities(CallbackInfo ci) {
         if (!timelord$isTimelord()) {

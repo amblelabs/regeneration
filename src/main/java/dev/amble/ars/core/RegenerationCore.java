@@ -57,12 +57,12 @@ public class RegenerationCore {
     public static final Identifier RESET_SKIN_PACKET = RegenerationMod.id("reset_skin");
     public static final Identifier UPDATE_TARDIS_MODE_PACKET = RegenerationMod.id("update_tardis_mode");
 
-    public static final int TARDIS_MODE_ENABLED = 0;      // 默认：随机更换内饰类型
-    public static final int TARDIS_MODE_DISABLED = 1;     // 关闭：不更改内饰
-    public static final int TARDIS_MODE_REFURBISH = 2;      // 只重构：重新生成当前内饰
+    public static final int TARDIS_MODE_ENABLED = 0;//随机
+    public static final int TARDIS_MODE_DISABLED = 1;//关闭
+    public static final int TARDIS_MODE_REFURBISH = 2;//只重构
 
     private static final String[] REGENERATION_SKINS = new String[] {
-            "duzo", "loqor", "drtheo_",
+            "duzo", "loqor", "drtheo_","Jin_Mary",
             "classic_account", "portal3i", "winndi",
             "thatrhynoguy", "djaftonrr21", "queknees2",
             "auroranyxs", "grimlyy_", "itzchipdip", "Addie_Astarr"
@@ -84,7 +84,7 @@ public class RegenerationCore {
     }
 
     public static void init() {
-        // ==================== 记录玩家皮肤/时间领主状态 ====================
+        //记录玩家皮肤/时间领主状态
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayerEntity player = handler.getPlayer();
 
@@ -94,15 +94,12 @@ public class RegenerationCore {
                     info.captureBaseSkin(player);
                     info.applySkin(player);
                     info.sync(player, player.getUuid());
-                }
-            }
 
-            if (player instanceof RegenerationCapable regen) {
-                RegenerationCore info = regen.getRegenerationInfo();
-                if (info != null && info.isRegenQueued()) {
-                    if (!info.start(player)) {
-                        info.setRegenQueued(false);
-                        info.markDirty();
+                    if (info.isRegenQueued()) {
+                        if (!info.start(player)) {
+                            info.setRegenQueued(false);
+                            info.markDirty();
+                        }
                     }
                 }
             }
@@ -140,20 +137,9 @@ public class RegenerationCore {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
             RegenerationCore info = RegenerationCore.get(entity);
             if (info == null) return true;
-            if (!info.isActive() && info.getUsesLeft() > 0) {
-                return !info.tryStart(entity);
-            }
-            return true;
-        });
 
-        ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
-            RegenerationCore info = RegenerationCore.get(entity);
-            if (info == null) return true;
-
-            // ★ /kill 直接允许死亡，不触发重生保护（包括延缓期、动画期）
             if (damageSource.isOf(DamageTypes.GENERIC_KILL)) return true;
 
-            // 已经在重生状态（延缓期/动画期），阻止普通死亡
             if (info.isActive()) return false;
 
             if (entity.isRemoved()) return true;
@@ -225,7 +211,6 @@ public class RegenerationCore {
         return REGENERATION_SKINS[(int) (Math.random() * REGENERATION_SKINS.length)];
     }
 
-    // ==================== CODEC ====================
     public static final Codec<RegenerationCore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("usesLeft").forGetter(RegenerationCore::getUsesLeft),
             Codec.BOOL.fieldOf("isRegenerating").forGetter(RegenerationCore::isRegenerating),
@@ -284,7 +269,7 @@ public class RegenerationCore {
     private boolean changeSkinOnRegen = true;
     private boolean skinReset = false;
 
-    // ==================== A/B 双层皮肤状态 ====================
+    //A/B 双层皮肤状态
     /** A层：是否已记录玩家原始皮肤（进入世界时的皮肤状态） */
     private boolean baseSkinCaptured = false;
     /** B层：重生覆盖皮肤的用户名，null 表示 B层空闲 */
@@ -384,9 +369,6 @@ public class RegenerationCore {
     public void decrement() {
         this.setUsesLeft(this.getUsesLeft() - 1);
     }
-
-    // ==================== 皮肤层核心逻辑（基于 SkinTracker 重写） ====================
-
     /**
      * 标记 A 层已捕获（玩家加入世界时的原生皮肤状态）。
      * 实际不需要保存任何数据，因为 A 层 = SkinTracker 里没有该 UUID 的条目。
@@ -458,7 +440,7 @@ public class RegenerationCore {
         }
     }
 
-    // ==================== Tick & Logic ====================
+    //Tick & Logic
 
     public void tick(LivingEntity entity) {
         if (entity.getWorld().isClient) return;
@@ -549,11 +531,9 @@ public class RegenerationCore {
         }
 
         float healthPercent = entity.getHealth() / entity.getMaxHealth();
-        float reductionFactor = 1.0f - (healthPercent * 0.9f);
-        float reducedAmount = MathHelper.lerp(reductionFactor, amount, MIN_DAMAGE_CAP);
-        reducedAmount = Math.max(reducedAmount, MIN_DAMAGE_CAP);
+        float damageMultiplier = MathHelper.lerp(healthPercent, 0.0001f, 0.2f);
 
-        return reducedAmount;
+        return amount * damageMultiplier;
     }
 
     private void tickConfusion(LivingEntity entity, long worldTime) {
@@ -627,7 +607,7 @@ public class RegenerationCore {
     }
 
     public boolean tryStart(LivingEntity entity) {
-        if (this.isActive() || this.usesLeft <= 0) return false;
+        if (this.isActive() || this.isInvulnerable() || this.usesLeft <= 0) return false;
         if (entity.isRemoved()) return false;
         this.delay.start(entity.age);
         this.markDirty();
@@ -640,7 +620,7 @@ public class RegenerationCore {
     }
 
     private boolean start(LivingEntity entity) {
-        if (this.isRegenerating() || this.usesLeft <= 0) return false;
+        if (this.isRegenerating() || this.isInvulnerable() || this.usesLeft <= 0) return false;
         if (!entity.isAlive()) return false;
 
         this.setRegenQueued(false);
@@ -653,7 +633,6 @@ public class RegenerationCore {
 
         if (entity instanceof ServerPlayerEntity player) {
             if (changeSkin) {
-                // 确保基础皮肤已捕获（加入时应该已捕获，这里作为双重保险）
                 if (!this.baseSkinCaptured) {
                     this.captureBaseSkin(player);
                 }
@@ -694,7 +673,6 @@ public class RegenerationCore {
     private void finish(LivingEntity entity) {
         RegenerationMod.LOGGER.info("finish() called for {}", entity.getUuid());
 
-        this.resetAnimationState(entity);
         this.stopRegeneration(entity);
 
         long worldTime = entity.getWorld().getTime();
@@ -723,20 +701,7 @@ public class RegenerationCore {
      * 不扣次数（已在 start() 中扣除），直接应用 finish 的所有效果。
      */
     public void forceFinish(LivingEntity entity) {
-        this.resetAnimationState(entity);
-        this.stopRegeneration(entity);
-
-        long worldTime = entity.getWorld().getTime();
-        this.invulnerableUntil = worldTime + INVULNERABLE_DURATION;
-        int confusionDuration = CONFUSION_MIN_TICKS + RegenerationMod.RANDOM.nextInt(CONFUSION_MAX_EXTRA_TICKS);
-        this.confusedUntil = worldTime + confusionDuration;
-        this.confusionEffectTimer = 0;
-        this.regenBoostTimer = 0;
-
-        RegenerationEvents.FINISH.invoker().onFinish(entity, this);
-        this.setAnimation(RegenAnimRegistry.getInstance().getRandom());
-        this.markDirty();
-
+        finish(entity);
         RegenerationMod.LOGGER.info("Forced regeneration finish for {} due to disconnect", entity.getUuid());
     }
 

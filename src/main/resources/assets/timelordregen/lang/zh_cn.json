@@ -83,5 +83,7 @@
   "key.timelordregen.force_regen": "手动强制重生(2s)",
   "category.timelordregen": "时间领主-重生",
 
+  "message.timelordregen.cannot_force_regen": "§c细胞能量富裕期间你无法强迫自己重生！",
+
   "dimension.timelordregen.gallifrey": "伽理弗雷"
 }

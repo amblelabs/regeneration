@@ -83,5 +83,7 @@
   "key.timelordregen.force_regen": "Force Regeneration(2s)",
   "category.timelordregen": "Time Lord - Regeneration",
 
+  "message.timelordregen.cannot_force_regen": "§cYou cannot force regeneration while your cells are still rich with energy!",
+
   "dimension.timelordregen.gallifrey": "Gallifrey"
 }

@@ -6,8 +6,8 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public class TimelordAbilities {
 
-    private static final float HUNGER_EXHAUSTION_MULTIPLIER = 0.75f;
-    private static final float RESISTANCE_PERCENT = 0.10f;
+    private static final float HUNGER_EXHAUSTION_MULTIPLIER = 0.5f;
+    private static final float RESISTANCE_PERCENT = 0.1f;
 
     public static float modifyExhaustion(float original) {
         return original * HUNGER_EXHAUSTION_MULTIPLIER;

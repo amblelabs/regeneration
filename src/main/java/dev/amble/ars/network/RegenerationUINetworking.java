@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class RegenerationUINetworking {
@@ -26,18 +27,21 @@ public class RegenerationUINetworking {
         RegenerationCore info = RegenerationCore.get(player);
         if (info == null || info.getUsesLeft() <= 0) return;
 
-        // 未激活：进入延缓期
-        if (!info.isActive()) {
-            info.tryStart(player);
-            syncRegenInfoToClient(player, info); // ★ 立即同步，不要等 tick
+        if (info.isInvulnerable()) {
+            player.sendMessage(Text.translatable("message.timelordregen.cannot_force_regen"), true);
             return;
         }
 
-        // 延缓期中：强制跳过，立即重生
+        if (!info.isActive()) {
+            info.tryStart(player);
+            syncRegenInfoToClient(player, info);
+            return;
+        }
+
         if (info.getDelay().isRunning()) {
             info.getDelay().stop();
             info.setRegenQueued(true);
-            syncRegenInfoToClient(player, info); // ★ 立即同步
+            syncRegenInfoToClient(player, info);
         }
     }
 

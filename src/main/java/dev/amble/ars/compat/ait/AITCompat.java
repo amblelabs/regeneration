@@ -51,7 +51,6 @@ public class AITCompat {
                 tardis.interiorChangingHandler().queueInteriorChange(DesktopRegistry.getInstance().getRandom(tardis));
             } else if (mode == RegenerationCore.TARDIS_MODE_REFURBISH) {
                 // 只重构：触发内饰重新生成，但不更换内饰类型
-                // 传 null 表示"不指定新类型"，AIT 内部会使用当前类型重新生成
                 tardis.interiorChangingHandler().queueInteriorChange(null);
             }
         });
