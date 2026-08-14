@@ -27,6 +27,11 @@
   "depends": {
     "minecraft": "1.20.1",
     "fabricloader": ">=0.14.22",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "amblekit": ">=1.1.16-dev+mc.1.20.1"
+  },
+  "suggests": {
+    "doctor_m": ">=2.1",
+    "ait": ">=1.2.0"
   }
 }
