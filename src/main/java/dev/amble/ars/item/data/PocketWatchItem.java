@@ -4,7 +4,9 @@ import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.client.util.ShiftTooltipHelper;
 import dev.amble.ars.core.RegenerationCore;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
@@ -16,13 +18,34 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class PocketWatchItem extends Item {
     private static final int COOLDOWN_TICKS = 100;
     private static final String OWNER_KEY = "MarkedOwner";
     private static final String CHARGES_KEY = "Charges";
+    private static final String OPEN_KEY = "Open";
+
+    // 记忆低语间隔（tick）
+    private static final int MESSAGE_INTERVAL_TICKS = 200;
+    private static final Map<UUID, Long> messageCooldowns = new HashMap<>();
+
+    //低语消息池
+    private static final String[] WHISPER_MESSAGES = {
+            "message.timelordregen.pocket_watch.whisper.0",
+            "message.timelordregen.pocket_watch.whisper.1",
+            "message.timelordregen.pocket_watch.whisper.2",
+            "message.timelordregen.pocket_watch.whisper.3",
+            "message.timelordregen.pocket_watch.whisper.4",
+            "message.timelordregen.pocket_watch.whisper.5",
+            "message.timelordregen.pocket_watch.whisper.6",
+            "message.timelordregen.pocket_watch.whisper.7",
+            "message.timelordregen.pocket_watch.whisper.8",
+            "message.timelordregen.pocket_watch.whisper.9",
+    };
 
     public PocketWatchItem(Settings settings) {
         super(settings.maxCount(1));
@@ -31,6 +54,19 @@ public class PocketWatchItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
+
+        //打开状态下：任何右键都关闭怀表
+        if (isOpen(stack)) {
+            setOpen(stack, false);
+            messageCooldowns.remove(user.getUuid());
+            return TypedActionResult.success(stack);
+        }
+
+        //潜行右键：打开怀表
+        if (user.isSneaking()) {
+            return openPocketWatch(world, user, stack);
+        }
+
         user.getItemCooldownManager().set(this, COOLDOWN_TICKS);
 
         if (world.isClient()) {
@@ -86,12 +122,124 @@ public class PocketWatchItem extends Item {
         return TypedActionResult.success(stack, false);
     }
 
+    /**
+     * 打开怀表逻辑
+     */
+    private TypedActionResult<ItemStack> openPocketWatch(World world, PlayerEntity user, ItemStack stack) {
+        setOpen(stack, true);
+
+        if (world.isClient()) {
+            return TypedActionResult.success(stack);
+        }
+
+        UUID ownerId = getOwner(stack);
+        // 无主人时当前玩家成为主人
+        if (ownerId == null) {
+            markOwner(stack, user);
+            ownerId = user.getUuid();
+        }
+
+        boolean isOwner = ownerId.equals(user.getUuid());
+        int charges = getCharges(stack);
+
+        //非主人：不转移重生
+        if (!isOwner) {
+            messageCooldowns.put(user.getUuid(), world.getTime());
+            return TypedActionResult.success(stack);
+        }
+
+        //主人：尝试转移怀表次数转
+        if (!(user instanceof RegenerationCapable capable) || !capable.isTimelord()) {
+            if (charges > 0) {
+                messageCooldowns.put(user.getUuid(), world.getTime());
+            }
+            return TypedActionResult.success(stack);
+        }
+
+        RegenerationCore info = capable.getRegenerationInfo();
+        if (info == null) {
+            if (charges > 0) {
+                messageCooldowns.put(user.getUuid(), world.getTime());
+            }
+            return TypedActionResult.success(stack);
+        }
+
+        int usesLeft = info.getUsesLeft();
+
+        if (charges > usesLeft) {
+            int transferable = Math.min(charges - usesLeft, RegenerationCore.MAX_REGENERATIONS - usesLeft);
+            if (transferable > 0) {
+                charges -= transferable;
+                usesLeft += transferable;
+                info.setUsesLeft(usesLeft);
+                setCharges(stack, charges);
+                world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                        SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
+            }
+        } else if (charges == usesLeft || usesLeft >= RegenerationCore.MAX_REGENERATIONS) {
+            world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                    SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), user.getSoundCategory(), 0.5F, 1.0F);
+        }
+
+        // 转移后如果怀表里还有剩余次数，记忆继续低语
+        if (getCharges(stack) > 0) {
+            messageCooldowns.put(user.getUuid(), world.getTime());
+        }
+
+        return TypedActionResult.success(stack);
+    }
+
+    /**
+     * 物品栏 tick：处理打开怀表的记忆低语
+     */
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (world.isClient()) return;
+        if (!isOpen(stack)) return;
+        if (!(entity instanceof PlayerEntity player)) return;
+
+        boolean inMainHand = slot == player.getInventory().selectedSlot;
+        boolean inOffHand = slot == PlayerInventory.OFF_HAND_SLOT;
+        if (!inMainHand && !inOffHand) return;
+
+        int charges = getCharges(stack);
+
+        if (charges <= 0) return;
+
+        long currentTime = world.getTime();
+        Long lastMessageTime = messageCooldowns.get(player.getUuid());
+        if (lastMessageTime == null || currentTime - lastMessageTime >= MESSAGE_INTERVAL_TICKS) {
+            sendMemoryWhisper(player);
+            messageCooldowns.put(player.getUuid(), currentTime);
+        }
+    }
+
+    /**
+     * 发送时间领主记忆的低语（随机挑选一条，仅该玩家可见）
+     */
+    private static void sendMemoryWhisper(PlayerEntity player) {
+        String key = WHISPER_MESSAGES[player.getWorld().random.nextInt(WHISPER_MESSAGES.length)];
+        player.sendMessage(
+                Text.translatable(key)
+                        .setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE).withItalic(true)),
+                true
+        );
+    }
+
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         int charges = getCharges(stack);
         UUID ownerId = getOwner(stack);
+        boolean open = isOpen(stack);
 
-        // 所有者信息（始终显示）
+        if (open) {
+            tooltip.add(Text.translatable("item.timelordregen.pocket_watch.state.open")
+                    .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        } else {
+            tooltip.add(Text.translatable("item.timelordregen.pocket_watch.state.closed")
+                    .setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        }
+
         if (ownerId != null && world != null) {
             PlayerEntity owner = world.getPlayerByUuid(ownerId);
             if (owner != null) {
@@ -99,16 +247,10 @@ public class PocketWatchItem extends Item {
                         .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
             }
         }
-
-        // 存储次数（始终显示）
         tooltip.add(Text.translatable("item.timelordregen.pocket_watch.charges", charges, RegenerationCore.MAX_REGENERATIONS)
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
-
-        // 短提示（始终显示）
         tooltip.add(Text.translatable("item.timelordregen.pocket_watch.desc.short")
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
-
-        // 长描述（按住 Shift 显示）
         Text longDesc = Text.translatable("item.timelordregen.pocket_watch.desc.long")
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true));
         ShiftTooltipHelper.addShiftTooltip(tooltip, longDesc);
@@ -119,7 +261,7 @@ public class PocketWatchItem extends Item {
     }
 
     @Nullable
-    private static UUID getOwner(ItemStack stack) {
+    public static UUID getOwner(ItemStack stack) {
         if (stack.getNbt() != null && stack.getNbt().contains(OWNER_KEY)) {
             return stack.getNbt().getUuid(OWNER_KEY);
         }
@@ -135,5 +277,16 @@ public class PocketWatchItem extends Item {
 
     private static void setCharges(ItemStack stack, int charges) {
         stack.getOrCreateNbt().putInt(CHARGES_KEY, charges);
+    }
+
+    public static boolean isOpen(ItemStack stack) {
+        if (stack.getNbt() != null && stack.getNbt().contains(OPEN_KEY)) {
+            return stack.getNbt().getBoolean(OPEN_KEY);
+        }
+        return false;
+    }
+
+    private static void setOpen(ItemStack stack, boolean open) {
+        stack.getOrCreateNbt().putBoolean(OPEN_KEY, open);
     }
 }

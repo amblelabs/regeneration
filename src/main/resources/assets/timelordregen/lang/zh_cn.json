@@ -76,6 +76,8 @@
   "item.timelordregen.pocket_watch.charges": "§7§o存储重生次数：%d/%d",
   "item.timelordregen.pocket_watch.desc.short": "§7§o时间领主的重生容器",
   "item.timelordregen.pocket_watch.desc.long": "§7§o首次使用绑定主人，可在玩家与怀表间传输重生次数",
+  "item.timelordregen.pocket_watch.state.open": "§7[已打开]",
+  "item.timelordregen.pocket_watch.state.closed": "§7[已关闭]",
   "itemGroup.timelordregen.item_group": "重生",
 
   "origin.timelordregen.regeneration.description": "你的周围不再会生成幻翼，你的皮肤下会生长出一层透明硬化膜，你能在水下与真空生存更长时间，对食物的消耗更低，同时，你的身体有一种通过再生全身细胞来欺骗死亡的方式，但只有有限的十二次",
@@ -88,6 +90,19 @@
   "category.timelordregen": "时间领主-重生",
 
   "message.timelordregen.cannot_force_regen": "§c细胞能量富裕期间你无法强迫自己重生！",
+  "message.timelordregen.pocket_watch.time.morning": "早晨",
+  "message.timelordregen.pocket_watch.time.noon": "中午",
+  "message.timelordregen.pocket_watch.time.evening": "晚上",
+  "message.timelordregen.pocket_watch.whisper.0": "找到它的主人……",
+  "message.timelordregen.pocket_watch.whisper.1": "你听到了吗？那古老的心跳……",
+  "message.timelordregen.pocket_watch.whisper.2": "时间……在倒流……",
+  "message.timelordregen.pocket_watch.whisper.3": "让它的主人打开它……",
+  "message.timelordregen.pocket_watch.whisper.4": "我们曾经如此强大……",
+  "message.timelordregen.pocket_watch.whisper.5": "记忆……被锁住了……",
+  "message.timelordregen.pocket_watch.whisper.6": "伽理弗雷的天空……还在燃烧……",
+  "message.timelordregen.pocket_watch.whisper.7": "十二次……还远远不够……",
+  "message.timelordregen.pocket_watch.whisper.8": "放我出去……",
+  "message.timelordregen.pocket_watch.whisper.9": "把它还给它的主人……",
 
   "dimension.timelordregen.gallifrey": "伽理弗雷"
 }

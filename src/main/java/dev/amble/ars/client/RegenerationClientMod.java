@@ -3,6 +3,7 @@ package dev.amble.ars.client;
 import dev.amble.ars.RegenerationMod;
 import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.client.gui.DelayOverlay;
+import dev.amble.ars.client.gui.PocketWatchHudOverlay;
 import dev.amble.ars.client.gui.RegenerationSettingsScreen;
 import dev.amble.ars.client.particle.RegenHeadParticle;
 import dev.amble.ars.client.particle.RightRegenParticle;
@@ -10,6 +11,8 @@ import dev.amble.ars.client.renderers.sky.GallifreySkyProperties;
 import dev.amble.ars.client.util.ClientColors;
 import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.core.dimensions.RegenerationDimensions;
+import dev.amble.ars.item.RegenerationItems;
+import dev.amble.ars.item.data.PocketWatchItem;
 import dev.amble.ars.network.RegenerationUINetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -23,10 +26,12 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import static dev.amble.ars.RegenerationMod.id;
@@ -42,6 +47,14 @@ public class RegenerationClientMod implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(RegenerationCore.CLEAR_TIMELORD_PACKET, (client, handler, buf, responseSender) -> {
             RegenerationCore.receiveClear(buf);
         });
+
+        HudRenderCallback.EVENT.register(new PocketWatchHudOverlay());
+
+        ModelPredicateProviderRegistry.register(
+                RegenerationItems.POCKET_WATCH,
+                new Identifier("timelordregen", "open"),
+                (stack, world, entity, seed) -> PocketWatchItem.isOpen(stack) ? 1.0f : 0.0f
+        );
 
 		ClientNetworking.registerClientReceivers();
 

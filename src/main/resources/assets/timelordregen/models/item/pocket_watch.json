@@ -47,8 +47,7 @@
 		}
 	],
 	"overrides": [
-		{"predicate": {"timelordregen:open": 1}, "model": "timelordregen:item/pocket_watch_open"},
-		{"predicate": {"timelordregen:open": 0}, "model": "timelordregen:item/pocket_watch"}
+		{"predicate": {"timelordregen:open": 1}, "model": "timelordregen:item/pocket_watch_open"}
 	],
 	"display": {
 		"thirdperson_righthand": {

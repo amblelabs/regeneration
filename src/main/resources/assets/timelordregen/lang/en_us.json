@@ -76,6 +76,8 @@
   "item.timelordregen.pocket_watch.charges": "§7§oStored Regeneration Charges: %d/%d",
   "item.timelordregen.pocket_watch.desc.short": "§7§oA Time Lord's regeneration vessel",
   "item.timelordregen.pocket_watch.desc.long": "§7§oBinds to its first user, allowing transfer of regeneration charges between player and watch",
+  "item.timelordregen.pocket_watch.state.open": "§7[Open]",
+  "item.timelordregen.pocket_watch.state.closed": "§7[Closed]",
   "itemGroup.timelordregen.item_group": "Regeneration",
 
   "origin.timelordregen.regeneration.description": "Phantoms no longer spawn around you. A transparent hardened membrane grows beneath your skin. You can survive longer underwater and in a vacuum, and you consume less food. Additionally, your body has a way of cheating death by regenerating all its cells, but only a limited twelve times.",
@@ -88,6 +90,19 @@
   "category.timelordregen": "Time Lord - Regeneration",
 
   "message.timelordregen.cannot_force_regen": "§cYou cannot force regeneration while your cells are still rich with energy!",
+  "message.timelordregen.pocket_watch.time.morning": "Morning",
+  "message.timelordregen.pocket_watch.time.noon": "Noon",
+  "message.timelordregen.pocket_watch.time.evening": "Evening",
+  "message.timelordregen.pocket_watch.whisper.0": "Find its owner...",
+  "message.timelordregen.pocket_watch.whisper.1": "Can you hear it? That ancient heartbeat...",
+  "message.timelordregen.pocket_watch.whisper.2": "Time... is flowing backwards...",
+  "message.timelordregen.pocket_watch.whisper.3": "Let its owner open it...",
+  "message.timelordregen.pocket_watch.whisper.4": "We were once so powerful...",
+  "message.timelordregen.pocket_watch.whisper.5": "Memories... are locked away...",
+  "message.timelordregen.pocket_watch.whisper.6": "The skies of Gallifrey... are still burning...",
+  "message.timelordregen.pocket_watch.whisper.7": "Twelve times... is far from enough...",
+  "message.timelordregen.pocket_watch.whisper.8": "Let me out...",
+  "message.timelordregen.pocket_watch.whisper.9": "Return it to its owner...",
 
   "dimension.timelordregen.gallifrey": "Gallifrey"
 }
