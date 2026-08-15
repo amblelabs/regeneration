@@ -64,11 +64,6 @@ public class AITCompat {
             float pitch = 0.5f + world.random.nextFloat() * 1.0f;
             world.playSound(null, consolePos, net.minecraft.sound.SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 6f, pitch);
         }
-
-        TravelUtil.randomPos(tardis, 50000, IncrementManager.increment(tardis), cached -> {
-            tardis.travel().destination(cached);
-            tardis.removeFuel(0.1d * IncrementManager.increment(tardis) * tardis.travel().instability());
-        });
     }
 
     private static void spawnOverloadParticles(ServerWorld world, BlockPos pos) {
