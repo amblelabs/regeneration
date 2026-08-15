@@ -1,31 +1,35 @@
 package dev.amble.ars.compat.ait;
 
-import dev.amble.ait.core.AITSounds;
+import dev.amble.ars.core.RegenerationExplosion;
+import dev.amble.ars.RegenerationMod;
+import dev.amble.ars.api.RegenerationEvents;
+import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.core.animation.AnimationTemplate;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.handler.travel.TravelUtil;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementManager;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.registry.impl.DesktopRegistry;
-import dev.amble.ars.RegenerationMod;
-import dev.amble.ars.api.RegenerationEvents;
-import dev.amble.ars.core.RegenerationCore;
-import dev.amble.ars.core.animation.AnimationTemplate;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class AITCompat {
+public class AITCompat implements TardisCompatBridge {
+
     public static void init() {
         RegenerationMod.LOGGER.info("AIT detected, loading compatibility features.");
 
+        // 注册桥接到核心模块
+        RegenerationExplosion.setTardisBridge(new AITCompat());
+
         RegenerationEvents.START.register((entity, data) ->
-                withTardis(entity, tardis -> {
-                    triggerAlarm(tardis, entity);
-                })
+                withTardis(entity, tardis -> triggerAlarm(tardis, entity))
         );
 
         RegenerationEvents.CHANGE_STAGE.register((entity, data, stage) ->
@@ -51,7 +55,8 @@ public class AITCompat {
         );
     }
 
-    public static void tickRegenerationOverload(Entity entity, Vec3d center) {
+    @Override
+    public void tickRegenerationOverload(LivingEntity entity, Vec3d center) {
         if (!TardisServerWorld.isTardisDimension(entity.getWorld())) return;
         if (!(entity.getWorld() instanceof ServerWorld world)) return;
 
@@ -60,14 +65,22 @@ public class AITCompat {
 
         for (BlockPos consolePos : tardis.getDesktop().getConsolePos()) {
             spawnOverloadParticles(world, consolePos);
-            //音效
+
             float pitch = 0.5f + world.random.nextFloat() * 1.0f;
-            world.playSound(null, consolePos, net.minecraft.sound.SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 6f, pitch);
+            world.playSound(null, consolePos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 6f, pitch);
         }
+
+        // 50000 随机坐标 + 切回主线程防并发崩溃
+        TravelUtil.randomPos(tardis, 50000, IncrementManager.increment(tardis), cached -> {
+            world.getServer().execute(() -> {
+                tardis.travel().destination(cached);
+                tardis.removeFuel(0.1d * IncrementManager.increment(tardis) * tardis.travel().instability());
+            });
+        });
     }
 
     private static void spawnOverloadParticles(ServerWorld world, BlockPos pos) {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 80; i++) {
             double ox = (Math.random() - 0.5) * 4.0;
             double oy = Math.random() * 3.0;
             double oz = (Math.random() - 0.5) * 4.0;
