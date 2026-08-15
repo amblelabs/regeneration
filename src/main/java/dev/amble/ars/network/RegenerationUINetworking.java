@@ -1,5 +1,6 @@
 package dev.amble.ars.network;
 
+import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.core.RegenerationCore;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -15,7 +16,21 @@ public class RegenerationUINetworking {
 
     public static void registerServerReceivers() {
         ServerPlayNetworking.registerGlobalReceiver(REQUEST_OPEN_GUI, (server, player, handler, buf, responseSender) -> {
-            sendOpenGuiPacket(player);
+            server.execute(() -> {
+                // 不是时间领主直接忽略
+                if (!(player instanceof RegenerationCapable capable) || !capable.isTimelord()) {
+                    return;
+                }
+
+                // 先同步数据，确保客户端 info 不是 null
+                RegenerationCore info = capable.getRegenerationInfo();
+                if (info != null) {
+                    syncRegenInfoToClient(player, info);
+                }
+
+                // 再发打开 UI 的包
+                sendOpenGuiPacket(player);
+            });
         });
 
         ServerPlayNetworking.registerGlobalReceiver(FORCE_REGEN, (server, player, handler, buf, responseSender) -> {
@@ -45,10 +60,6 @@ public class RegenerationUINetworking {
         }
     }
 
-    /**
-     * 手动构造 SYNC_PACKET 立即推送给指定玩家
-     * 解决 markDirty() 延迟同步导致的客户端状态滞后
-     */
     private static void syncRegenInfoToClient(ServerPlayerEntity player, RegenerationCore info) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(player.getUuid());
