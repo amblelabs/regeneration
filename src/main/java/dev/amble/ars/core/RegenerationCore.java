@@ -454,6 +454,10 @@ public class RegenerationCore {
         this.tickInvulnerability(entity, worldTime);
         this.tickConfusion(entity, worldTime);
 
+        if (this.isRegenerating()) {
+            RegenerationExplosion.tick(entity);
+        }
+
         if (delay.isRunning()) {
             if (this.getUsesLeft() <= 0) {
                 delay.stop();
@@ -619,6 +623,8 @@ public class RegenerationCore {
         this.decrement();
         this.setRegenerating(true);
         entity.setHealth(entity.getMaxHealth());
+
+        RegenerationExplosion.tick(entity);
 
         boolean changeSkin = this.changeSkinOnRegen;
         String targetSkin = null;
