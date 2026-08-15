@@ -28,23 +28,6 @@ public class RegenParticleEffect implements ParticleEffect {
         this.shortLife = shortLife;
     }
 
-    // 旧构造函数兼容
-    public RegenParticleEffect(int entityId, float yawOffset, float pitchOffset, boolean shouldPitch, boolean shouldFollowPlayer, float speed) {
-        this(entityId, yawOffset, pitchOffset, shouldPitch, shouldFollowPlayer, speed, false);
-    }
-
-    public RegenParticleEffect() {
-        this.entityId = -1;
-        this.yawOffset = 0;
-        this.pitchOffset = 0;
-        this.shouldPitch = true;
-        this.shouldFollowPlayer = true;
-        this.speed = 0.4f;
-        this.shortLife = false;
-    }
-
-    // ★ 显式手写所有 getter，不依赖 Lombok
-    public int getEntityId() { return entityId; }
     public float getYawOffset() { return yawOffset; }
     public float getPitchOffset() { return pitchOffset; }
     public boolean getShouldPitch() { return shouldPitch; }

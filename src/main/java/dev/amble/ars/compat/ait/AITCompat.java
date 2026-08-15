@@ -43,15 +43,12 @@ public class AITCompat {
 
             int mode = data.getTardisInteriorMode();
 
-            // 模式 1：关闭，什么都不做
             if (mode == RegenerationCore.TARDIS_MODE_DISABLED) return;
 
             if (mode == RegenerationCore.TARDIS_MODE_ENABLED) {
-                // 默认：随机更换内饰类型
-                tardis.interiorChangingHandler().queueInteriorChange(DesktopRegistry.getInstance().getRandom(tardis));
+                tardis.interiorChanging().queueInteriorChange(DesktopRegistry.getInstance().getRandom(tardis));
             } else if (mode == RegenerationCore.TARDIS_MODE_REFURBISH) {
-                // 只重构：触发内饰重新生成，但不更换内饰类型
-                tardis.interiorChangingHandler().queueInteriorChange(null);
+                tardis.interiorChanging().queueInteriorChange(null);
             }
         });
     }

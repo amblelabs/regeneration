@@ -62,10 +62,10 @@ public class RegenerationCore {
     public static final int TARDIS_MODE_REFURBISH = 2;//只重构
 
     private static final String[] REGENERATION_SKINS = new String[] {
-            "duzo", "loqor", "drtheo_","Jin_Mary",
+            "duzo", "loqor", "drtheo_","jin_mary",
             "classic_account", "portal3i", "winndi",
             "thatrhynoguy", "djaftonrr21", "queknees2",
-            "auroranyxs", "grimlyy_", "itzchipdip", "Addie_Astarr"
+            "auroranyxs", "grimlyy_", "itzchipdip", "addie_astarr"
     };
 
     /**
@@ -124,10 +124,10 @@ public class RegenerationCore {
             if (info == null) return;
 
             if (info.isRegenerating()) {
-                // 动画期退出：强制完成重生，应用无敌/混乱/TARDIS内饰等
+                // 动画期退出
                 info.forceFinish(entity);
             } else if (info.getDelay().isRunning()) {
-                // 延缓期退出：停止 delay，标记为 queued，下次 JOIN 时重新 start
+                // 延缓期退出
                 info.stopRegeneration(entity);
                 info.setRegenQueued(true);
                 info.markDirty();
@@ -248,7 +248,6 @@ public class RegenerationCore {
     private static final int CONFUSION_MAX_EXTRA_TICKS = 3601;
     private static final int CONFUSION_EFFECT_INTERVAL_MIN = 100;
     private static final int CONFUSION_EFFECT_INTERVAL_MAX = 300;
-    private static final float MIN_DAMAGE_CAP = 0.1f;
     private static final float REGEN_BOOST_MULTIPLIER = 3.0f;
 
     private int usesLeft;
@@ -331,12 +330,6 @@ public class RegenerationCore {
     public boolean isDirty() { return dirty; }
     public void setDirty(boolean dirty) { this.dirty = dirty; }
 
-    public Vector3f getParticleColor() { return particleColor; }
-    public void setParticleColor(Vector3f color) {
-        this.particleColor.set(color);
-        this.markDirty();
-    }
-
     public long getInvulnerableUntil() { return invulnerableUntil; }
     public long getConfusedUntil() { return confusedUntil; }
 
@@ -350,10 +343,6 @@ public class RegenerationCore {
     }
 
     public boolean isSkinReset() { return skinReset; }
-    public void setSkinReset(boolean value) {
-        this.skinReset = value;
-        this.markDirty();
-    }
 
     public boolean isBaseSkinCaptured() { return baseSkinCaptured; }
     public boolean isUsingOverlaySkin() { return useOverlay; }
@@ -364,11 +353,13 @@ public class RegenerationCore {
         this.markDirty();
     }
 
+    //预留给 UI 显示当前皮肤名
     @Nullable public String getOverlaySkinId() { return overlaySkinId; }
 
     public void decrement() {
         this.setUsesLeft(this.getUsesLeft() - 1);
     }
+
     /**
      * 标记 A 层已捕获（玩家加入世界时的原生皮肤状态）。
      * 实际不需要保存任何数据，因为 A 层 = SkinTracker 里没有该 UUID 的条目。
@@ -772,6 +763,7 @@ public class RegenerationCore {
         ServerPlayNetworking.send(target, SYNC_PACKET, buf);
     }
 
+    //客户端回调
     @Environment(EnvType.CLIENT)
     public static void receive(PacketByteBuf buf) {
         UUID playerId = buf.readUuid();
@@ -823,10 +815,6 @@ public class RegenerationCore {
             this.lastEvent = lastEvent;
         }
 
-        public Delay(int start) {
-            this(start, -1);
-        }
-
         public Delay() {
             this(-1, -1);
         }
@@ -845,14 +833,6 @@ public class RegenerationCore {
             if (duration <= 0) return 0;
             if (duration >= MAX_DURATION) return 1;
             return duration / MAX_DURATION;
-        }
-
-        public float getEventProgress(float current) {
-            if (this.lastEvent < 0) return 0;
-            float duration = current - this.lastEvent;
-            if (duration <= 0) return 0;
-            if (duration >= TIME_TO_STOP) return 1;
-            return duration / TIME_TO_STOP;
         }
 
         public void stopEvent() {

@@ -7,6 +7,7 @@ import dev.amble.ars.client.particle.RegenHeadParticle;
 import dev.amble.ars.client.particle.RightRegenParticle;
 import dev.amble.ars.client.renderers.sky.GallifreySkyProperties;
 import dev.amble.ars.client.util.ClientColors;
+import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.core.dimensions.RegenerationDimensions;
 import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.network.RegenerationUINetworking;
@@ -33,6 +34,11 @@ import static dev.amble.ars.RegenerationMod.id;
 public class RegenerationClientMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+
+        ClientPlayNetworking.registerGlobalReceiver(RegenerationCore.SYNC_PACKET, (client, handler, buf, responseSender) -> {
+            RegenerationCore.receive(buf);
+        });
+
 		ClientNetworking.registerClientReceivers();
 
         Animations.init();
@@ -75,7 +81,7 @@ public class RegenerationClientMod implements ClientModInitializer {
         );
         KeyBindingHelper.registerKeyBinding(openSettingsKey);
 
-        // 强制重生键：默认未绑定，避免误触；玩家可手动在控制菜单里绑定
+        // 强制重生键：默认未绑定
         KeyBinding forceRegenKey = new KeyBinding(
                 "key.timelordregen.force_regen",
                 InputUtil.Type.KEYSYM,
@@ -96,7 +102,7 @@ public class RegenerationClientMod implements ClientModInitializer {
                 ClientPlayNetworking.send(RegenerationUINetworking.REQUEST_OPEN_GUI, PacketByteBufs.create());
             }
 
-            // 强制重生：长按 2s（40 tick）触发
+            // 强制重生：长按 2s
             if (forceRegenKey.isPressed()) {
                 holdTicks[0]++;
                 if (holdTicks[0] >= 40 && !triggered[0]) {
