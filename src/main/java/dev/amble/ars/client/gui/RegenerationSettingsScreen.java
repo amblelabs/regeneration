@@ -4,6 +4,7 @@ import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.core.RegenerationCore;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -79,21 +80,24 @@ public class RegenerationSettingsScreen extends Screen {
                 button -> ClientPlayNetworking.send(RegenerationCore.RESET_SKIN_PACKET, PacketByteBufs.empty())
         ));
 
-        int tardisMode = info.getTardisInteriorMode();
-        this.addDrawableChild(new TimeLordButton(
-                cx - 100, cy + 56, 200, 20,
-                getTardisModeText(tardisMode),
-                button -> {
-                    int newMode = (info.getTardisInteriorMode() + 1) % 3;
-                    info.setTardisInteriorMode(newMode);
+        //装了AIT才显示塔迪斯内饰选项
+        if (FabricLoader.getInstance().isModLoaded("ait")) {
+            int tardisMode = info.getTardisInteriorMode();
+            this.addDrawableChild(new TimeLordButton(
+                    cx - 100, cy + 56, 200, 20,
+                    getTardisModeText(tardisMode),
+                    button -> {
+                        int newMode = (info.getTardisInteriorMode() + 1) % 3;
+                        info.setTardisInteriorMode(newMode);
 
-                    var buf = PacketByteBufs.create();
-                    buf.writeInt(newMode);
-                    ClientPlayNetworking.send(RegenerationCore.UPDATE_TARDIS_MODE_PACKET, buf);
+                        var buf = PacketByteBufs.create();
+                        buf.writeInt(newMode);
+                        ClientPlayNetworking.send(RegenerationCore.UPDATE_TARDIS_MODE_PACKET, buf);
 
-                    button.setMessage(getTardisModeText(newMode));
-                }
-        ));
+                        button.setMessage(getTardisModeText(newMode));
+                    }
+            ));
+        }
 
         this.addDrawableChild(new TimeLordButton(
                 cx - 50, cy + 90, 100, 20,
@@ -129,7 +133,7 @@ public class RegenerationSettingsScreen extends Screen {
         int cardX = panelX + 16;
         int cardY = panelY + 42;
         int cardW = PANEL_WIDTH - 32;
-        int cardH = 40;  // 高度减小，因为不再有头像
+        int cardH = 40;
 
         ctx.fill(cardX, cardY, cardX + cardW, cardY + cardH, COLOR_CARD_BG);
         ctx.drawBorder(cardX, cardY, cardW, cardH, COLOR_CARD_BORDER);
@@ -141,7 +145,7 @@ public class RegenerationSettingsScreen extends Screen {
                 Text.literal(remainingText).formatted(Formatting.GOLD),
                 panelX + PANEL_WIDTH / 2, cardY + cardH / 2 - 4, COLOR_GOLD_DIM);
 
-        // ========== 动态状态指示（位置微调，因为卡片变矮了） ==========
+        // ========== 动态状态指示 ==========
         int statusY = cardY + cardH + 10;
         Text statusText = getStatusText();
         int statusColor = getStatusColor();
@@ -151,6 +155,7 @@ public class RegenerationSettingsScreen extends Screen {
 
         super.render(ctx, mouseX, mouseY, delta);
     }
+
     private Text getStatusText() {
         if (info.isRegenerating()) {
             return Text.translatable("gui.regen.settings.status.regenerating").formatted(Formatting.GOLD);
