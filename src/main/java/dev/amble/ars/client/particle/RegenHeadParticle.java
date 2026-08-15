@@ -30,18 +30,18 @@ public class RegenHeadParticle extends ExplosionSmokeParticle {
         this.velocityZ += velocityZ;
         this.angle = (float) Math.random() * 6.2831855F;
         this.prevAngle = this.angle;
-        this.alpha = 1f;
+
+        //粒子起始半透明度
+        this.alpha = 0.6f + (float) Math.random() * 0.1f;  // ← 80%~90%
         this.velocityY = this.random.nextFloat() * 0.2F + 0.6F;
         this.scale *= 0.5f;
         this.setColor(1f, 0.9f, 0.9f);
 
-        this.maxAge = 30;
+        //粒子消散时间
+        this.maxAge = 60;
+
         this.collidesWithWorld = true;
 
-        // ================================================================
-        // 强制初始帧为第 0 帧
-        // getSprite(0, 1000) → 0 * 6 / 1000 = 0，返回 sprites[0]
-        // ================================================================
         this.setSprite(spriteProvider.getSprite(0, 1000));
     }
 
@@ -51,27 +51,24 @@ public class RegenHeadParticle extends ExplosionSmokeParticle {
 
     @Override
     public int getBrightness(float tint) {
-        return 15728880; // 0xF000F0，全亮，不受场景光照影响
+        return 15728880;
     }
 
     public void tick() {
         super.tick();
         if (!this.dead) {
-            // ================================================================
-            // 手动顺序切帧：每 tick 严格推进一帧
-            // getSprite(frame, 6) → frame * 6 / 6 = frame，直接取 sprites[frame]
-            // ================================================================
             int frame = (this.age - 1) % TOTAL_FRAMES;
             this.setSprite(this.spriteProvider.getSprite(frame, TOTAL_FRAMES - 1));
         }
-        if (!(this.alpha <= 0.0F)) {
-            if (this.alpha > 0.01F) {
-                this.alpha -= 0.01F;
-            }
+
+        //粒子淡出时间
+        if (this.alpha > 0.015F) {
+            this.alpha -= 0.015F;
         } else {
             this.markDead();
         }
     }
+
     @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider spriteProvider;

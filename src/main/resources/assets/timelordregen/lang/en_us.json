@@ -39,6 +39,10 @@
   "command.regen.settimelord.success": "Modified %s's biological data to Time Lord.",
   "command.regen.stopped": "Regeneration stopped.",
   "command.regen.triggered": "Regenerating!",
+  "command.regen.not_timelord": "You are not a Time Lord!",
+  "command.regen.fail.invulnerable": "Your cells are still too energized to force regeneration.",
+  "command.regen.fail.active": "You are already regenerating!",
+  "command.regen.fail.no_uses": "No regenerations remaining.",
 
   "gui.regen.settings.title": "Regeneration Settings",
   "gui.regen.settings.reset_skin": "Reset Skin",

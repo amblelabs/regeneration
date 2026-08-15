@@ -66,21 +66,22 @@ public class RightRegenParticle extends ExplosionSmokeParticle {
 
         this.angle = (float) Math.random() * 6.2831855F;
         this.prevAngle = this.angle;
-        this.alpha = 0.4f + (float) Math.random() * 0.2f;
+
+        //粒子起始半透明度
+        this.alpha = 0.6f + (float) Math.random() * 0.1f;
+
         this.scale *= 0.5f;
         this.setColor(1f, 0.9f, 0.9f);
 
-        // ================================================================
-        // 确保 maxAge >= TOTAL_FRAMES，否则手动切帧会循环或跳帧
-        // ================================================================
+        //粒子消散时间
         if (shortLife) {
-            this.maxAge = this.random.nextInt(3) + 7; // 7~9
+            this.maxAge = this.random.nextInt(6) + 14;
         } else {
-            this.maxAge = this.random.nextInt(6) + 7; // 7~12
+            this.maxAge = this.random.nextInt(12) + 14;
         }
+
         this.collidesWithWorld = true;
 
-        // 强制初始帧为第 0 帧，覆盖基类随机选图
         this.setSprite(spriteProvider.getSprite(0, 1000));
     }
 
@@ -90,23 +91,19 @@ public class RightRegenParticle extends ExplosionSmokeParticle {
 
     @Override
     public int getBrightness(float tint) {
-        return 15728880; // 0xF000F0，全亮，不受场景光照影响
+        return 15728880;
     }
 
     public void tick() {
         super.tick();
         if (!this.dead) {
-            // ================================================================
-            // 手动顺序切帧，严格从 0 → 6 循环
-            // getSprite(frame, 6) → frame * 6 / 6 = frame
-            // ================================================================
             int frame = (this.age - 1) % TOTAL_FRAMES;
             this.setSprite(this.spriteProvider.getSprite(frame, TOTAL_FRAMES - 1));
         }
-        if (!(this.alpha <= 0.0F)) {
-            if (this.alpha > 0.01F) {
-                this.alpha -= 0.03F;
-            }
+
+        //粒子淡出时间
+        if (this.alpha > 0.015F) {
+            this.alpha -= 0.015F;
         } else {
             this.markDead();
         }
@@ -115,29 +112,17 @@ public class RightRegenParticle extends ExplosionSmokeParticle {
     @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleFactory<RegenParticleEffect> {
         private final SpriteProvider spriteProvider;
-        private static SpriteProvider staticSpriteProvider;
 
         public Factory(SpriteProvider spriteProvider) {
             this.spriteProvider = spriteProvider;
-            staticSpriteProvider = spriteProvider;
-        }
-
-        public static SpriteProvider getSpriteProvider() {
-            return staticSpriteProvider;
         }
 
         @Override
         public @Nullable Particle createParticle(RegenParticleEffect regenParticle, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            RightRegenParticle p = new RightRegenParticle(world, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider,
+            return new RightRegenParticle(world, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider,
                     regenParticle.getEntity(world), regenParticle.getYawOffset(), regenParticle.getPitchOffset(),
                     regenParticle.getShouldPitch(), regenParticle.getShouldFollowPlayer(), regenParticle.getSpeed(),
                     regenParticle.isShortLife());
-
-            // ================================================================
-            // 移除 p.setSprite(this.spriteProvider)，它调用的是 getSprite(Random)
-            // 构造函数里已经强制 setSprite(0, 1000) 为第 0 帧
-            // ================================================================
-            return p;
         }
     }
 }
