@@ -71,16 +71,28 @@
 				"up": {"uv": [6.5, 5.5, 6, 5], "texture": "#0"},
 				"down": {"uv": [7.5, 5, 7, 5.5], "texture": "#0"}
 			}
+		},
+		{
+			"name": "elixir",
+			"from": [5.5, 6.9, 5.5],
+			"to": [10.5, 6.9, 10.4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 5, 8.2]},
+			"faces": {
+				"north": {"uv": [0, 0.05, 2.25, 0.05], "texture": "#0"},
+				"east": {"uv": [0, 0.05, 2.1, 0.05], "texture": "#0"},
+				"south": {"uv": [0, 0.05, 2.25, 0.05], "texture": "#0"},
+				"west": {"uv": [0, 0.05, 2.1, 0.05], "texture": "#0"},
+				"up": {"uv": [11.5, 0, 14, 2.5], "texture": "#0"},
+				"down": {"uv": [3, 3, 5.25, 5.1], "texture": "#0"}
+			}
 		}
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 4.75, 0],
-			"scale": [1.25, 1.25, 1.25]
+			"translation": [0, 4.75, 0]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 4.75, 0],
-			"scale": [1.25, 1.25, 1.25]
+			"translation": [0, 4.75, 0]
 		},
 		"firstperson_righthand": {
 			"rotation": [13.19, -10.03, 14.39],
@@ -105,8 +117,16 @@
 			"translation": [0, -1.5, -6.75]
 		},
 		"fixed": {
-			"translation": [0, 4.75, -2.75],
-			"scale": [1.25, 1.25, 1.25]
+			"translation": [0, 4.75, -1.75]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "elixiroflife",
+			"origin": [7, 0, 7],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5]
+		}
+	]
 }
