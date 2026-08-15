@@ -39,6 +39,10 @@ public class RegenerationClientMod implements ClientModInitializer {
             RegenerationCore.receive(buf);
         });
 
+        ClientPlayNetworking.registerGlobalReceiver(RegenerationCore.CLEAR_TIMELORD_PACKET, (client, handler, buf, responseSender) -> {
+            RegenerationCore.receiveClear(buf);
+        });
+
 		ClientNetworking.registerClientReceivers();
 
         Animations.init();

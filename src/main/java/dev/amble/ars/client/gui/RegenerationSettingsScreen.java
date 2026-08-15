@@ -1,5 +1,6 @@
 package dev.amble.ars.client.gui;
 
+import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.core.RegenerationCore;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -42,6 +43,12 @@ public class RegenerationSettingsScreen extends Screen {
 
     @Override
     protected void init() {
+
+        if (this.info == null || !((RegenerationCapable) player).isTimelord()) {
+            this.close();
+            return;
+        }
+
         panelX = (this.width - PANEL_WIDTH) / 2;
         panelY = (this.height - PANEL_HEIGHT) / 2;
 

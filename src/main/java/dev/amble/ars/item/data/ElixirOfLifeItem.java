@@ -1,13 +1,18 @@
 package dev.amble.ars.item.data;
 
 import dev.amble.ars.api.RegenerationCapable;
-import dev.amble.ars.client.util.ShiftTooltipHelper;  // 导入潜行工具类
+import dev.amble.ars.client.util.ShiftTooltipHelper;
 import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.data.Attachments;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
@@ -33,11 +38,21 @@ public class ElixirOfLifeItem extends Item {
             }
 
             RegenerationCore info = capable.getRegenerationInfo();
-            if (info != null) {
-                info.setUsesLeft(RegenerationCore.MAX_REGENERATIONS);
-                world.playSound(null, user.getX(), user.getY(), user.getZ(),
-                        SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
+            if (info == null) {
+                info = new RegenerationCore();
+                user.setAttached(Attachments.REGENERATION, info);
             }
+            info.setUsesLeft(RegenerationCore.MAX_REGENERATIONS);
+
+            if (user instanceof ServerPlayerEntity player) {
+                PacketByteBuf buf = PacketByteBufs.create();
+                buf.writeUuid(player.getUuid());
+                buf.encodeAsJson(RegenerationCore.CODEC, info);
+                ServerPlayNetworking.send(player, RegenerationCore.SYNC_PACKET, buf);
+            }
+
+            world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                    SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
         }
 
         return super.finishUsing(stack, world, user);
@@ -45,11 +60,9 @@ public class ElixirOfLifeItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        // 短提示（始终显示）
         tooltip.add(Text.translatable("item.timelordregen.elixir_of_life.desc.short")
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
 
-        // 长描述（按住 Shift 显示）
         Text longDesc = Text.translatable("item.timelordregen.elixir_of_life.desc.long")
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true));
         ShiftTooltipHelper.addShiftTooltip(tooltip, longDesc);

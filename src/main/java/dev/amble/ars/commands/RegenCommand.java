@@ -7,8 +7,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.data.Attachments;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -16,10 +19,6 @@ import net.minecraft.text.Text;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
-/**
- * 重生指令处理器
- * 提供玩家重生状态查询、设置、触发及时间领主身份管理
- */
 public class RegenCommand {
 
     private static final int PERMISSION_SELF = 0;
@@ -57,8 +56,6 @@ public class RegenCommand {
         );
     }
 
-    // ==================== 执行逻辑 ====================
-
     private static int executeGet(CommandContext<ServerCommandSource> ctx, ServerPlayerEntity player) {
         if (player == null) return 0;
         RegenerationCore info = getInfoOrError(ctx, player);
@@ -71,6 +68,13 @@ public class RegenCommand {
 
     private static int executeSet(CommandContext<ServerCommandSource> ctx, ServerPlayerEntity player, int count) {
         if (player == null) return 0;
+
+        RegenerationCapable capable = asCapableOrError(ctx, player);
+        if (capable == null || !capable.isTimelord()) {
+            ctx.getSource().sendError(Text.translatable("command.regen.not_timelord"));
+            return 0;
+        }
+
         RegenerationCore info = getInfoOrError(ctx, player);
         if (info == null) return 0;
 
@@ -100,14 +104,15 @@ public class RegenCommand {
             capable.setTimelord(true);
         }
 
-        // 确保 RegenerationInfo attachment 存在
         RegenerationCore info = capable.getRegenerationInfo();
-        if (info != null) {
+        if (info == null) {
+            info = new RegenerationCore();
             info.setUsesLeft(RegenerationCore.MAX_REGENERATIONS);
-            info.markDirty();
+            player.setAttached(Attachments.REGENERATION, info);
+        } else {
+            info.setUsesLeft(RegenerationCore.MAX_REGENERATIONS);
         }
 
-        // 同步 isTimelord 状态到客户端
         player.setAttached(Attachments.IS_TIMELORD, true);
 
         ctx.getSource().sendFeedback(() ->
@@ -121,28 +126,20 @@ public class RegenCommand {
         RegenerationCapable capable = asCapableOrError(ctx, player);
         if (capable == null) return 0;
 
-        // 1. 停止任何正在进行的再生
         RegenerationCore info = capable.getRegenerationInfo();
         if (info != null) {
             info.stopRegeneration(player);
         }
 
-        // 2. 移除时间领主身份标记
         if (capable.isTimelord()) {
             capable.setTimelord(false);
         }
 
-        // 3. 彻底移除 RegenerationInfo attachment
-        // 这样客户端不会再收到同步数据，UI 自然显示无数据
-        player.removeAttached(Attachments.REGENERATION);
-
-        // 4. 设置 IS_TIMELORD attachment 为 false，同步到客户端
         player.setAttached(Attachments.IS_TIMELORD, false);
 
-        // 5. 广播同步包，确保所有客户端更新
-        if (info != null) {
-            info.markDirty();
-        }
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeUuid(player.getUuid());
+        ServerPlayNetworking.send(player, RegenerationCore.CLEAR_TIMELORD_PACKET, buf);
 
         ctx.getSource().sendFeedback(() ->
                 Text.translatable("command.regen.detimelord.success", player.getName().getString()), true);
@@ -151,8 +148,30 @@ public class RegenCommand {
 
     private static int executeTrigger(CommandContext<ServerCommandSource> ctx, ServerPlayerEntity player) {
         if (player == null) return 0;
+
+        RegenerationCapable capable = asCapableOrError(ctx, player);
+        if (capable == null || !capable.isTimelord()) {
+            ctx.getSource().sendError(Text.translatable("command.regen.not_timelord"));
+            return 0;
+        }
+
         RegenerationCore info = getInfoOrError(ctx, player);
         if (info == null) return 0;
+
+        if (info.isInvulnerable()) {
+            ctx.getSource().sendError(Text.translatable("command.regen.fail.invulnerable"));
+            return 0;
+        }
+
+        if (info.isActive()) {
+            ctx.getSource().sendError(Text.translatable("command.regen.fail.active"));
+            return 0;
+        }
+
+        if (info.getUsesLeft() <= 0) {
+            ctx.getSource().sendError(Text.translatable("command.regen.fail.no_uses"));
+            return 0;
+        }
 
         if (info.tryStart(player)) {
             ctx.getSource().sendFeedback(() -> Text.translatable("command.regen.triggered"), false);
@@ -162,11 +181,6 @@ public class RegenCommand {
         return 1;
     }
 
-    // ==================== 工具方法 ====================
-
-    /**
-     * 获取执行者自身玩家
-     */
     private static ServerPlayerEntity resolveSelfPlayer(CommandContext<ServerCommandSource> ctx) {
         try {
             return ctx.getSource().getPlayerOrThrow();
@@ -175,9 +189,6 @@ public class RegenCommand {
         }
     }
 
-    /**
-     * 从指令参数解析目标玩家
-     */
     private static ServerPlayerEntity resolveTargetPlayer(CommandContext<ServerCommandSource> ctx, String argName) throws CommandSyntaxException {
         Entity entity = EntityArgumentType.getEntity(ctx, argName);
         if (entity instanceof ServerPlayerEntity player) {
@@ -186,9 +197,6 @@ public class RegenCommand {
         throw EntityArgumentType.PLAYER_NOT_FOUND_EXCEPTION.create();
     }
 
-    /**
-     * 获取玩家再生信息，失败时自动发送错误消息
-     */
     private static RegenerationCore getInfoOrError(CommandContext<ServerCommandSource> ctx, ServerPlayerEntity player) {
         RegenerationCore info = RegenerationCore.get(player);
         if (info == null) {
@@ -197,9 +205,6 @@ public class RegenCommand {
         return info;
     }
 
-    /**
-     * 将玩家转为 RegenerationCapable，失败时发送错误消息
-     */
     private static RegenerationCapable asCapableOrError(CommandContext<ServerCommandSource> ctx, ServerPlayerEntity player) {
         if (player instanceof RegenerationCapable capable) {
             return capable;

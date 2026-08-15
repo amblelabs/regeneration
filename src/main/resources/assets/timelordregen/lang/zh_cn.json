@@ -39,6 +39,10 @@
   "command.regen.settimelord.success": "已将 %s 的生物数据修改为时间领主。",
   "command.regen.stopped": "已停止重生。",
   "command.regen.triggered": "正在重生！",
+  "command.regen.not_timelord": "你不是时间领主！",
+  "command.regen.fail.invulnerable": "细胞能量富裕期间你无法强迫自己重生！",
+  "command.regen.fail.active": "你已经在重生过程中了！",
+  "command.regen.fail.no_uses": "你的重生次数已经耗尽了！",
 
   "gui.regen.settings.title": "重生设置",
   "gui.regen.settings.reset_skin": "重置皮肤",

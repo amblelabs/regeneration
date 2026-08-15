@@ -879,4 +879,18 @@ public class RegenerationCore {
             NONE
         }
     }
+
+    //清除时间领主标签发包
+    public static final Identifier CLEAR_TIMELORD_PACKET = RegenerationMod.id("clear_timelord");
+
+    @Environment(EnvType.CLIENT)
+    public static void receiveClear(PacketByteBuf buf) {
+        UUID playerId = buf.readUuid();
+        if (net.minecraft.client.MinecraftClient.getInstance().world == null) return;
+        PlayerEntity entity = net.minecraft.client.MinecraftClient.getInstance().world.getPlayerByUuid(playerId);
+        if (entity == null) return;
+
+        entity.removeAttached(Attachments.REGENERATION);
+        entity.setAttached(Attachments.IS_TIMELORD, false);
+    }
 }
