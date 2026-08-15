@@ -1,6 +1,7 @@
 package dev.amble.ars.client;
 
 import dev.amble.ars.RegenerationMod;
+import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.client.gui.DelayOverlay;
 import dev.amble.ars.client.gui.RegenerationSettingsScreen;
 import dev.amble.ars.client.particle.RegenHeadParticle;
@@ -9,7 +10,6 @@ import dev.amble.ars.client.renderers.sky.GallifreySkyProperties;
 import dev.amble.ars.client.util.ClientColors;
 import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.core.dimensions.RegenerationDimensions;
-import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.network.RegenerationUINetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;

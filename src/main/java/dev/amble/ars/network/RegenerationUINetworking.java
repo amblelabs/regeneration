@@ -17,18 +17,15 @@ public class RegenerationUINetworking {
     public static void registerServerReceivers() {
         ServerPlayNetworking.registerGlobalReceiver(REQUEST_OPEN_GUI, (server, player, handler, buf, responseSender) -> {
             server.execute(() -> {
-                // 不是时间领主直接忽略
                 if (!(player instanceof RegenerationCapable capable) || !capable.isTimelord()) {
                     return;
                 }
 
-                // 先同步数据，确保客户端 info 不是 null
                 RegenerationCore info = capable.getRegenerationInfo();
                 if (info != null) {
                     syncRegenInfoToClient(player, info);
                 }
 
-                // 再发打开 UI 的包
                 sendOpenGuiPacket(player);
             });
         });

@@ -1,8 +1,8 @@
 package dev.amble.ars.mixin.TimelordAbilities;
 
 import dev.amble.ars.api.RegenerationCapable;
-import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.api.TimelordAbilities;
+import dev.amble.ars.core.RegenerationCore;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,10 +1,10 @@
 package dev.amble.ars.client;
 
+import dev.amble.ars.api.RegenerationCapable;
+import dev.amble.ars.client.util.ClientParticleUtil;
 import dev.amble.lib.animation.AnimatedEntity;
 import dev.amble.lib.client.bedrock.BedrockAnimation;
 import dev.amble.lib.client.bedrock.BedrockAnimationReference;
-import dev.amble.ars.api.RegenerationCapable;
-import dev.amble.ars.client.util.ClientParticleUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

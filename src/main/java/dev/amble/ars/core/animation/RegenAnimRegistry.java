@@ -1,7 +1,7 @@
 package dev.amble.ars.core.animation;
 
-import dev.amble.lib.register.datapack.SimpleDatapackRegistry;
 import dev.amble.ars.RegenerationMod;
+import dev.amble.lib.register.datapack.SimpleDatapackRegistry;
 import net.minecraft.util.Identifier;
 
 public class RegenAnimRegistry extends SimpleDatapackRegistry<AnimationTemplate> {

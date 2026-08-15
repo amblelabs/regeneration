@@ -1,8 +1,8 @@
 package dev.amble.ars.api;
 
-import dev.amble.ars.core.animation.AnimationTemplate;
 import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.core.animation.AnimationTemplate;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -15,10 +15,10 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
-import net.minecraft.state.property.Properties;
 
 public final class RegenerationEvents {
 	/**

@@ -2,7 +2,6 @@ package dev.amble.ars.data;
 
 import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.data.datagen.providers.*;
-import dev.amble.ars.data.datagen.providers.*;
 import dev.amble.lib.datagen.loot.AmbleBlockLootTable;
 import dev.amble.lib.datagen.sound.AmbleSoundProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;

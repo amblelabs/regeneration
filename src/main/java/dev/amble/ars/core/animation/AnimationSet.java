@@ -1,8 +1,8 @@
 package dev.amble.ars.core.animation;
 
+import dev.amble.ars.RegenerationMod;
 import dev.amble.lib.animation.AnimatedEntity;
 import dev.amble.lib.animation.AnimationTracker;
-import dev.amble.ars.RegenerationMod;
 import dev.drtheo.scheduler.api.common.Scheduler;
 import dev.drtheo.scheduler.api.common.TaskStage;
 import lombok.Getter;

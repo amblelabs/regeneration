@@ -2,6 +2,7 @@ package dev.amble.ars.mixin.client;
 
 import dev.amble.ars.RegenerationMod;
 import dev.amble.ars.core.dimensions.RegenerationDimensions;
+import dev.amble.ars.util.GallifreyanSkybox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.Camera;
@@ -18,7 +19,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import dev.amble.ars.util.GallifreyanSkybox;
 
 @Mixin(value = WorldRenderer.class, priority = 1001)
 public class GallifreySkyboxMixin {

@@ -1,10 +1,10 @@
 package dev.amble.ars.data;
 
+import com.mojang.serialization.Codec;
 import dev.amble.ars.RegenerationMod;
 import dev.amble.ars.core.RegenerationCore;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
-import com.mojang.serialization.Codec;
 
 public class Attachments {
     public static final AttachmentType<RegenerationCore> REGENERATION = AttachmentRegistry.<RegenerationCore>builder()

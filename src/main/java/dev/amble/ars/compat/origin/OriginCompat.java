@@ -3,6 +3,7 @@ package dev.amble.ars.compat.origin;
 import dev.amble.ars.RegenerationMod;
 import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.data.Attachments;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
@@ -23,38 +24,40 @@ public class OriginCompat {
         RegenerationMod.LOGGER.info("Origins detected, loading compatibility features.");
     }
 
-    /**
-     * 当玩家通过 Origins 选择起源时调用。
-     * 只有选了 timelordregen:timelord 起源才设为时间领主。
-     */
     public static void setupRegenerationPower(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
-
-        OriginComponent component = ModComponents.ORIGIN.get(serverPlayer);
-        if (component == null) return;
-
-        Origin currentOrigin = component.getOrigin(getDefaultLayer());
-        if (currentOrigin == null || currentOrigin.equals(Origin.EMPTY)) return;
-
-        // 精确匹配：只有 timelordregen:timelord 才触发
-        if (!currentOrigin.getIdentifier().equals(TIMELORD_ORIGIN_ID)) return;
-
-        RegenerationMod.LOGGER.debug("Setting up regeneration power for player {}", player.getName().getString());
+        if (!(player instanceof ServerPlayerEntity)) return;
+        if (!isTimelordOrigin(player)) return;
 
         if (player instanceof RegenerationCapable capable) {
             capable.setTimelord(true);
+
             RegenerationCore info = capable.getRegenerationInfo();
-            if (info != null) {
+            if (info == null) {
+                info = new RegenerationCore();
+                info.setUsesLeft(REGEN_ORIGIN_COUNT);
+                player.setAttached(Attachments.REGENERATION, info);
+            } else {
                 info.setUsesLeft(REGEN_ORIGIN_COUNT);
             }
+
+            RegenerationMod.LOGGER.debug("Granted timelord status via Origins to {}", player.getName().getString());
         }
+    }
+
+    private static boolean isTimelordOrigin(PlayerEntity player) {
+        OriginComponent component = ModComponents.ORIGIN.get(player);
+        if (component == null) return false;
+
+        Origin current = component.getOrigin(getDefaultLayer());
+        return current != null && !current.equals(Origin.EMPTY)
+                && current.getIdentifier().equals(TIMELORD_ORIGIN_ID);
     }
 
     public static OriginLayer getDefaultLayer() {
         if (DEFAULT_LAYER == null) {
             DEFAULT_LAYER = OriginLayers.getLayer(DEFAULT_LAYER_ID);
             if (DEFAULT_LAYER == null) {
-                RegenerationMod.LOGGER.error("Default origin layer not found, Origins compatibility may not work correctly.");
+                RegenerationMod.LOGGER.error("Default origin layer not found!");
             }
         }
         return DEFAULT_LAYER;

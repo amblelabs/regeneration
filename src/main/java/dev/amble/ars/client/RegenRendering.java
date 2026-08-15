@@ -1,8 +1,8 @@
 package dev.amble.ars.client;
 
+import dev.amble.ars.core.RegenerationCore;
 import dev.amble.lib.animation.AnimatedInstance;
 import dev.amble.lib.client.bedrock.BedrockAnimation;
-import dev.amble.ars.core.RegenerationCore;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Model;

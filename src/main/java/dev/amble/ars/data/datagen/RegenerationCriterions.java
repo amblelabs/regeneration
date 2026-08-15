@@ -1,8 +1,8 @@
 package dev.amble.ars.data.datagen;
 
-import dev.amble.lib.advancement.SimpleCriterion;
 import dev.amble.ars.RegenerationMod;
 import dev.amble.ars.api.RegenerationEvents;
+import dev.amble.lib.advancement.SimpleCriterion;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 

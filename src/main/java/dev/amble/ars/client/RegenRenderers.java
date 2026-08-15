@@ -2,12 +2,12 @@ package dev.amble.ars.client;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import dev.amble.lib.animation.AnimatedInstance;
-import dev.amble.lib.client.bedrock.BedrockAnimation;
 import dev.amble.ars.RegenerationMod;
-import dev.amble.ars.core.animation.AnimationTemplate;
 import dev.amble.ars.api.RegenerationCapable;
 import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.core.animation.AnimationTemplate;
+import dev.amble.lib.animation.AnimatedInstance;
+import dev.amble.lib.client.bedrock.BedrockAnimation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Model;

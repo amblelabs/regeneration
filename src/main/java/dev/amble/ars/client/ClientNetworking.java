@@ -2,8 +2,8 @@ package dev.amble.ars.client;
 
 import dev.amble.ars.RegenerationMod;
 import dev.amble.ars.api.RegenerationCapable;
-import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.client.gui.RegenerationSettingsScreen;
+import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.data.Attachments;
 import dev.amble.ars.network.RegenerationUINetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

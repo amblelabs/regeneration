@@ -1,19 +1,19 @@
 package dev.amble.ars.core;
 
-import dev.amble.lib.client.bedrock.BedrockAnimationReference;
-import dev.amble.lib.skin.SkinData;
-import dev.amble.lib.skin.SkinTracker;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.amble.ars.RegenerationMod;
+import dev.amble.ars.api.RegenerationCapable;
+import dev.amble.ars.api.RegenerationEvents;
 import dev.amble.ars.core.animation.AnimationSet;
 import dev.amble.ars.core.animation.AnimationTemplate;
 import dev.amble.ars.core.animation.RegenAnimRegistry;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.amble.ars.data.Attachments;
 import dev.amble.lib.animation.AnimatedEntity;
 import dev.amble.lib.animation.AnimationTracker;
-import dev.amble.ars.api.RegenerationCapable;
-import dev.amble.ars.api.RegenerationEvents;
-import dev.amble.ars.data.Attachments;
+import dev.amble.lib.client.bedrock.BedrockAnimationReference;
+import dev.amble.lib.skin.SkinData;
+import dev.amble.lib.skin.SkinTracker;
 import dev.drtheo.scheduler.api.TimeUnit;
 import dev.drtheo.scheduler.api.common.Scheduler;
 import dev.drtheo.scheduler.api.common.TaskStage;
@@ -43,8 +43,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Vector3f;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;

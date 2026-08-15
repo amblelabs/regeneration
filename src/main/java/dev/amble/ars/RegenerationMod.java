@@ -1,20 +1,19 @@
 package dev.amble.ars;
 
-import dev.amble.ars.core.RegenerationCore;
-import dev.amble.ars.core.dimensions.RegenerationDimensions;
-import dev.amble.ars.data.tree.RegenerationSounds;
-import dev.amble.ars.data.datagen.RegenerationCriterions;
 import dev.amble.ars.api.RegenerationEvents;
 import dev.amble.ars.block.RegenerationModBlocks;
 import dev.amble.ars.commands.RegenCommand;
 import dev.amble.ars.compat.Compat;
-import dev.amble.ars.core.*;
-import dev.amble.ars.item.RegenerationItemGroups;
-import dev.amble.ars.item.RegenerationItems;
+import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.core.animation.RegenAnimRegistry;
+import dev.amble.ars.core.dimensions.RegenerationDimensions;
 import dev.amble.ars.core.particle_effects.RegenParticleEffect;
 import dev.amble.ars.data.Attachments;
+import dev.amble.ars.data.datagen.RegenerationCriterions;
+import dev.amble.ars.data.tree.RegenerationSounds;
+import dev.amble.ars.item.RegenerationItemGroups;
+import dev.amble.ars.item.RegenerationItems;
 import dev.amble.ars.network.RegenerationUINetworking;
-import dev.amble.ars.core.animation.RegenAnimRegistry;
 import dev.amble.lib.container.RegistryContainer;
 import dev.amble.lib.register.AmbleRegistries;
 import net.fabricmc.api.ModInitializer;

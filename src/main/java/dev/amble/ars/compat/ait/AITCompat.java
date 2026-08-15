@@ -1,12 +1,12 @@
 package dev.amble.ars.compat.ait;
 
-import dev.amble.ars.RegenerationMod;
-import dev.amble.ars.core.animation.AnimationTemplate;
-import dev.amble.ars.api.RegenerationEvents;
-import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.registry.impl.DesktopRegistry;
+import dev.amble.ars.RegenerationMod;
+import dev.amble.ars.api.RegenerationEvents;
+import dev.amble.ars.core.RegenerationCore;
+import dev.amble.ars.core.animation.AnimationTemplate;
 import net.minecraft.text.Text;
 
 public class AITCompat {

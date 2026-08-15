@@ -1,7 +1,7 @@
 package dev.amble.ars.item.data;
 
 import dev.amble.ars.api.RegenerationCapable;
-import dev.amble.ars.client.util.ShiftTooltipHelper;  // 导入潜行工具类
+import dev.amble.ars.client.util.ShiftTooltipHelper;
 import dev.amble.ars.core.RegenerationCore;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;

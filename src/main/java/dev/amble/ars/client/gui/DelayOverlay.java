@@ -2,8 +2,8 @@ package dev.amble.ars.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.ars.RegenerationMod;
-import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.client.sound.PlayerFollowingLoopingSound;
+import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.data.tree.RegenerationSounds;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;

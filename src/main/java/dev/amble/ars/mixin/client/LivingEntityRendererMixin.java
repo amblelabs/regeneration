@@ -1,8 +1,8 @@
 package dev.amble.ars.mixin.client;
 
-import dev.amble.lib.animation.AnimatedInstance;
 import dev.amble.ars.client.ClientRegenParticleManager;
 import dev.amble.ars.client.RegenRenderers;
+import dev.amble.lib.animation.AnimatedInstance;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
