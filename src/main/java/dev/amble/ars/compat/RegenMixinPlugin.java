@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public class RegenMixinPlugin implements IMixinConfigPlugin {
-	private static final String MIXIN_PACKAGE_ROOT = "dev.amble.timelordregen.mixin.compat.";
+	private static final String MIXIN_PACKAGE_ROOT = "dev.amble.ars.mixin.compat.";
 	private final Logger logger = LogManager.getLogger("RegenMixinPlugin");
 
 	@Override

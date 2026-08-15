@@ -1,4 +1,4 @@
-package dev.amble.ars.mixin.origin;
+package dev.amble.ars.mixin.compat.origin;
 
 import dev.amble.ars.compat.origin.OriginCompat;
 import io.github.apace100.origins.component.PlayerOriginComponent;

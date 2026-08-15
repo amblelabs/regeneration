@@ -1,4 +1,4 @@
-package dev.amble.ars.mixin.ait;
+package dev.amble.ars.mixin.compat.ait;
 
 import dev.amble.ait.client.renderers.entities.ControlEntityRenderer;
 import dev.amble.ait.core.entities.ConsoleControlEntity;
