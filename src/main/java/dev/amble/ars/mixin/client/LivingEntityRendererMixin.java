@@ -23,10 +23,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
             at = @At("TAIL"))
     private void regen$afterRender(T livingEntity, float f, float delta, MatrixStack stack,
                                    VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        // ★ 第三人称粒子：自己构建矩阵，不再依赖 stack
+        //第三人称粒子
         ClientRegenParticleManager.trySpawnForEntity(livingEntity, delta);
 
-        // 保留旧的 RegenRenderers 调用（非粒子特效）
         if (livingEntity instanceof AnimatedInstance animated) {
             RegenRenderers.tryRender(animated, animated.getAge() + delta, this.getModel(), stack, vertexConsumerProvider, i, null);
         }

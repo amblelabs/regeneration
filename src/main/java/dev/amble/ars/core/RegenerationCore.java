@@ -27,6 +27,7 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTypes;
@@ -772,11 +773,25 @@ public class RegenerationCore {
             RegenerationMod.LOGGER.warn("Received null RegenerationInfo from server for player {}", playerId);
             return;
         }
-        if (net.minecraft.client.MinecraftClient.getInstance().world == null) {
-            RegenerationMod.LOGGER.warn("Received RegenerationInfo from server for player {}, but client world is null", playerId);
+
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        if (client.world == null) {
+            client.execute(() -> applySync(playerId, newInfo));
             return;
         }
-        PlayerEntity entity = net.minecraft.client.MinecraftClient.getInstance().world.getPlayerByUuid(playerId);
+
+        applySync(playerId, newInfo);
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void applySync(UUID playerId, RegenerationCore info) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world == null) {
+            RegenerationMod.LOGGER.warn("Sync delayed but world still null for {}", playerId);
+            return;
+        }
+        PlayerEntity entity = client.world.getPlayerByUuid(playerId);
         if (entity == null) {
             RegenerationMod.LOGGER.warn("Received RegenerationInfo from server for player {}, but could not find player in client world", playerId);
             return;
@@ -786,7 +801,7 @@ public class RegenerationCore {
             return;
         }
 
-        entity.setAttached(Attachments.REGENERATION, newInfo);
+        entity.setAttached(Attachments.REGENERATION, info);
         entity.setAttached(Attachments.IS_TIMELORD, true);
 
         RegenerationMod.LOGGER.debug("RegenerationInfo synced to client for {}", playerId);
