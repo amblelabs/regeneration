@@ -76,12 +76,13 @@ public class RegenerationCore {
     private static void forceSkinRefresh(ServerPlayerEntity player) {
         var playerManager = player.getServer().getPlayerManager();
 
-        playerManager.sendToAll(new PlayerRemoveS2CPacket(List.of(player.getUuid())));
+        for (ServerPlayerEntity other : playerManager.getPlayerList()) {
+            if (other == player) continue;
 
-        playerManager.sendToAll(new PlayerListS2CPacket(
-                PlayerListS2CPacket.Action.ADD_PLAYER,
-                player
-        ));
+            other.networkHandler.sendPacket(new PlayerRemoveS2CPacket(List.of(player.getUuid())));
+            other.networkHandler.sendPacket(new PlayerListS2CPacket(
+                    PlayerListS2CPacket.Action.ADD_PLAYER, player));
+        }
     }
 
     public static void init() {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RegenerationExplosion {
 
-    private static final double RADIUS = 15.0;
+    private static final double RADIUS = 7.0;
     private static final float DAMAGE_PER_TICK = 3.0f;
 
     private static TardisCompatBridge tardisBridge = null;
