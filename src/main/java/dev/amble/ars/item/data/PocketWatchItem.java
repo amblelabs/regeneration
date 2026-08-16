@@ -29,11 +29,11 @@ public class PocketWatchItem extends Item {
     private static final String CHARGES_KEY = "Charges";
     private static final String OPEN_KEY = "Open";
 
-    //记忆低语间隔（tick）
+    // 记忆低语间隔（tick）
     private static final int MESSAGE_INTERVAL_TICKS = 200;
     private static final Map<UUID, Long> messageCooldowns = new HashMap<>();
 
-    //低语消息池
+    // 低语消息池
     private static final String[] WHISPER_MESSAGES = {
             "message.timelordregen.pocket_watch.whisper.0",
             "message.timelordregen.pocket_watch.whisper.1",
@@ -55,21 +55,25 @@ public class PocketWatchItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
+        // 打开状态下右键 = 关闭
         if (isOpen(stack)) {
             setOpen(stack, false);
             messageCooldowns.remove(user.getUuid());
             return TypedActionResult.success(stack);
         }
 
+        // 潜行右键 = 储存（仅在关闭状态可用）
         if (user.isSneaking()) {
             return transferRegenerations(world, user, stack);
         }
 
+        // 正常右键 = 打开
         return openPocketWatch(world, user, stack);
     }
 
     /**
      * 打开怀表逻辑（正常右键）
+     * 主人打开时，怀表内的重生次数会自动回到玩家身上
      */
     private TypedActionResult<ItemStack> openPocketWatch(World world, PlayerEntity user, ItemStack stack) {
         setOpen(stack, true);
@@ -86,16 +90,33 @@ public class PocketWatchItem extends Item {
         }
 
         boolean isOwner = ownerId.equals(user.getUuid());
-        int charges = getCharges(stack);
 
+        // 非主人：仅在有能量时启动低语冷却
         if (!isOwner) {
-            if (charges > 0) {
+            if (getCharges(stack) > 0) {
                 messageCooldowns.put(user.getUuid(), world.getTime());
             }
             return TypedActionResult.success(stack);
         }
 
-        if (charges > 0) {
+        // ===== 主人打开：怀表能量回流玩家 =====
+        int charges = getCharges(stack);
+        if (charges > 0 && user instanceof RegenerationCapable capable) {
+            RegenerationCore info = capable.getRegenerationInfo();
+            if (info != null) {
+                int usesLeft = info.getUsesLeft();
+                int transferable = Math.min(charges, RegenerationCore.MAX_REGENERATIONS - usesLeft);
+                if (transferable > 0) {
+                    info.setUsesLeft(usesLeft + transferable);
+                    setCharges(stack, charges - transferable);
+                    world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                            SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
+                }
+            }
+        }
+
+        // 打开后如果还有剩余能量，启动低语
+        if (getCharges(stack) > 0) {
             messageCooldowns.put(user.getUuid(), world.getTime());
         }
 
@@ -103,11 +124,10 @@ public class PocketWatchItem extends Item {
     }
 
     /**
-     * 重生次数转移逻辑（潜行右键，TL专属）
+     * 重生次数储存逻辑（潜行右键，TL专属）
+     * 单向存入：玩家身上的重生次数 → 怀表
      */
     private TypedActionResult<ItemStack> transferRegenerations(World world, PlayerEntity user, ItemStack stack) {
-        user.getItemCooldownManager().set(this, COOLDOWN_TICKS);
-
         if (world.isClient()) {
             return TypedActionResult.success(stack);
         }
@@ -137,27 +157,20 @@ public class PocketWatchItem extends Item {
         int charges = getCharges(stack);
         int usesLeft = info.getUsesLeft();
 
-        int transferable;
-        if (charges > usesLeft) {
-            transferable = Math.min(charges - usesLeft, RegenerationCore.MAX_REGENERATIONS - usesLeft);
-            charges -= transferable;
-            usesLeft += transferable;
-        } else if (usesLeft > charges) {
-            transferable = Math.min(usesLeft - charges, RegenerationCore.MAX_REGENERATIONS - charges);
-            usesLeft -= transferable;
-            charges += transferable;
+        // 单向存入：玩家 → 怀表
+        int transferable = Math.min(usesLeft, RegenerationCore.MAX_REGENERATIONS - charges);
+        if (transferable > 0) {
+            info.setUsesLeft(usesLeft - transferable);
+            setCharges(stack, charges + transferable);
+            world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                    SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
         } else {
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), user.getSoundCategory(), 0.5F, 1.0F);
             return TypedActionResult.success(stack, false);
         }
 
-        info.setUsesLeft(usesLeft);
-        setCharges(stack, charges);
-
-        world.playSound(null, user.getX(), user.getY(), user.getZ(),
-                SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
-
+        user.getItemCooldownManager().set(this, COOLDOWN_TICKS);
         return TypedActionResult.success(stack, false);
     }
 
@@ -175,7 +188,6 @@ public class PocketWatchItem extends Item {
         if (!inMainHand && !inOffHand) return;
 
         int charges = getCharges(stack);
-
         if (charges <= 0) return;
 
         long currentTime = world.getTime();
@@ -240,7 +252,7 @@ public class PocketWatchItem extends Item {
         return null;
     }
 
-    private static int getCharges(ItemStack stack) {
+    public static int getCharges(ItemStack stack) {
         if (stack.getNbt() != null && stack.getNbt().contains(CHARGES_KEY)) {
             return stack.getNbt().getInt(CHARGES_KEY);
         }
@@ -260,5 +272,12 @@ public class PocketWatchItem extends Item {
 
     private static void setOpen(ItemStack stack, boolean open) {
         stack.getOrCreateNbt().putBoolean(OPEN_KEY, open);
+    }
+
+    /**
+     * 玩家断开连接时清理该玩家的低语冷却，防止内存泄漏
+     */
+    public static void onPlayerDisconnect(PlayerEntity player) {
+        messageCooldowns.remove(player.getUuid());
     }
 }
