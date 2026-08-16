@@ -29,7 +29,7 @@ public class PocketWatchItem extends Item {
     private static final String CHARGES_KEY = "Charges";
     private static final String OPEN_KEY = "Open";
 
-    // 记忆低语间隔（tick）
+    //记忆低语间隔（tick）
     private static final int MESSAGE_INTERVAL_TICKS = 200;
     private static final Map<UUID, Long> messageCooldowns = new HashMap<>();
 
@@ -55,18 +55,57 @@ public class PocketWatchItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
-        //打开状态下：任何右键都关闭怀表
         if (isOpen(stack)) {
             setOpen(stack, false);
             messageCooldowns.remove(user.getUuid());
             return TypedActionResult.success(stack);
         }
 
-        //潜行右键：打开怀表
         if (user.isSneaking()) {
-            return openPocketWatch(world, user, stack);
+            return transferRegenerations(world, user, stack);
         }
 
+        return openPocketWatch(world, user, stack);
+    }
+
+    /**
+     * 打开怀表逻辑（正常右键）
+     */
+    private TypedActionResult<ItemStack> openPocketWatch(World world, PlayerEntity user, ItemStack stack) {
+        setOpen(stack, true);
+
+        if (world.isClient()) {
+            return TypedActionResult.success(stack);
+        }
+
+        UUID ownerId = getOwner(stack);
+
+        if (ownerId == null) {
+            markOwner(stack, user);
+            ownerId = user.getUuid();
+        }
+
+        boolean isOwner = ownerId.equals(user.getUuid());
+        int charges = getCharges(stack);
+
+        if (!isOwner) {
+            if (charges > 0) {
+                messageCooldowns.put(user.getUuid(), world.getTime());
+            }
+            return TypedActionResult.success(stack);
+        }
+
+        if (charges > 0) {
+            messageCooldowns.put(user.getUuid(), world.getTime());
+        }
+
+        return TypedActionResult.success(stack);
+    }
+
+    /**
+     * 重生次数转移逻辑（潜行右键，TL专属）
+     */
+    private TypedActionResult<ItemStack> transferRegenerations(World world, PlayerEntity user, ItemStack stack) {
         user.getItemCooldownManager().set(this, COOLDOWN_TICKS);
 
         if (world.isClient()) {
@@ -120,73 +159,6 @@ public class PocketWatchItem extends Item {
                 SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
 
         return TypedActionResult.success(stack, false);
-    }
-
-    /**
-     * 打开怀表逻辑
-     */
-    private TypedActionResult<ItemStack> openPocketWatch(World world, PlayerEntity user, ItemStack stack) {
-        setOpen(stack, true);
-
-        if (world.isClient()) {
-            return TypedActionResult.success(stack);
-        }
-
-        UUID ownerId = getOwner(stack);
-        // 无主人时当前玩家成为主人
-        if (ownerId == null) {
-            markOwner(stack, user);
-            ownerId = user.getUuid();
-        }
-
-        boolean isOwner = ownerId.equals(user.getUuid());
-        int charges = getCharges(stack);
-
-        //非主人：不转移重生
-        if (!isOwner) {
-            messageCooldowns.put(user.getUuid(), world.getTime());
-            return TypedActionResult.success(stack);
-        }
-
-        //主人：尝试转移怀表次数转
-        if (!(user instanceof RegenerationCapable capable) || !capable.isTimelord()) {
-            if (charges > 0) {
-                messageCooldowns.put(user.getUuid(), world.getTime());
-            }
-            return TypedActionResult.success(stack);
-        }
-
-        RegenerationCore info = capable.getRegenerationInfo();
-        if (info == null) {
-            if (charges > 0) {
-                messageCooldowns.put(user.getUuid(), world.getTime());
-            }
-            return TypedActionResult.success(stack);
-        }
-
-        int usesLeft = info.getUsesLeft();
-
-        if (charges > usesLeft) {
-            int transferable = Math.min(charges - usesLeft, RegenerationCore.MAX_REGENERATIONS - usesLeft);
-            if (transferable > 0) {
-                charges -= transferable;
-                usesLeft += transferable;
-                info.setUsesLeft(usesLeft);
-                setCharges(stack, charges);
-                world.playSound(null, user.getX(), user.getY(), user.getZ(),
-                        SoundEvents.ITEM_TOTEM_USE, user.getSoundCategory(), 1.0F, 1.0F);
-            }
-        } else if (charges == usesLeft || usesLeft >= RegenerationCore.MAX_REGENERATIONS) {
-            world.playSound(null, user.getX(), user.getY(), user.getZ(),
-                    SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), user.getSoundCategory(), 0.5F, 1.0F);
-        }
-
-        // 转移后如果怀表里还有剩余次数，记忆继续低语
-        if (getCharges(stack) > 0) {
-            messageCooldowns.put(user.getUuid(), world.getTime());
-        }
-
-        return TypedActionResult.success(stack);
     }
 
     /**
