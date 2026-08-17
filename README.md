@@ -49,6 +49,7 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 - [Loqor](https://loqor.dev/)
 - [AddieDaBaddie](https://addi3.github.io/index)
 - [Maketendo](https://github.com/MaketendoDev)
+- [Small Moss](https://github.com/smallmoss233)
 
 --- 
 
