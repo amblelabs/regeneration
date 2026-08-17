@@ -90,9 +90,9 @@
   "category.timelordregen": "时间领主-重生",
 
   "message.timelordregen.cannot_force_regen": "§c细胞能量富裕期间你无法强迫自己重生！",
-  "message.timelordregen.pocket_watch.time.morning": "早晨",
+  "message.timelordregen.pocket_watch.time.morning": "上午",
   "message.timelordregen.pocket_watch.time.noon": "中午",
-  "message.timelordregen.pocket_watch.time.evening": "晚上",
+  "message.timelordregen.pocket_watch.time.evening": "下午",
   "message.timelordregen.pocket_watch.whisper.0": "找到它的主人……",
   "message.timelordregen.pocket_watch.whisper.1": "你听到了吗？那古老的心跳……",
   "message.timelordregen.pocket_watch.whisper.2": "时间……在倒流……",

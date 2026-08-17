@@ -92,7 +92,7 @@
   "message.timelordregen.cannot_force_regen": "§cYou cannot force regeneration while your cells are still rich with energy!",
   "message.timelordregen.pocket_watch.time.morning": "Morning",
   "message.timelordregen.pocket_watch.time.noon": "Noon",
-  "message.timelordregen.pocket_watch.time.evening": "Evening",
+  "message.timelordregen.pocket_watch.time.evening": "Afternoon",
   "message.timelordregen.pocket_watch.whisper.0": "Find its owner...",
   "message.timelordregen.pocket_watch.whisper.1": "Can you hear it? That ancient heartbeat...",
   "message.timelordregen.pocket_watch.whisper.2": "Time... is flowing backwards...",
