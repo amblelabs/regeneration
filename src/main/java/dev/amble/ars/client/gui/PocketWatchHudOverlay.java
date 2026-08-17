@@ -30,7 +30,7 @@ public class PocketWatchHudOverlay implements HudRenderCallback {
         if (pocketWatch == null) return;
 
         long timeOfDay = player.getWorld().getTimeOfDay() % 24000L;
-        String formattedTime = formatMinecraftTime(timeOfDay);
+        String formattedTime = formatMinecraftTime12Hour(timeOfDay);
 
         int screenWidth = client.getWindow().getScaledWidth();
         int screenHeight = client.getWindow().getScaledHeight();
@@ -45,20 +45,39 @@ public class PocketWatchHudOverlay implements HudRenderCallback {
         drawContext.drawTextWithShadow(client.textRenderer, displayText, x - textWidth / 2, y, 0xFFD700);
     }
 
+    /**
+     * 重新分配时间段：
+     * 0~5999   tick → 6:00~11:59  → 上午
+     * 6000~10999 tick → 12:00~16:59 → 下午
+     * 11000~12999 tick → 17:00~19:59 → 傍晚
+     * 13000~23999 tick → 20:00~5:59  → 夜晚
+     */
     private String getTimeOfDayKey(long time) {
         if (time >= 0 && time < 6000) {
             return "message.timelordregen.pocket_watch.time.morning";
-        } else if (time >= 6000 && time < 12000) {
-            return "message.timelordregen.pocket_watch.time.noon";
-        } else {
+        } else if (time >= 6000 && time < 11000) {
+            return "message.timelordregen.pocket_watch.time.afternoon";
+        } else if (time >= 11000 && time < 13000) {
             return "message.timelordregen.pocket_watch.time.evening";
+        } else {
+            return "message.timelordregen.pocket_watch.time.night";
         }
     }
 
-    private String formatMinecraftTime(long time) {
-        int totalMinutes = (int) ((time * 60 / 1000) + 360) % 1440;
-        int hours = totalMinutes / 60;
+    /**
+     * 12 小时制格式化：6:00 AM / 12:00 PM / 6:00 PM
+     */
+    private String formatMinecraftTime12Hour(long time) {
+        // tick 转总分钟数，+360 是因为 MC 0 tick = 现实 6:00
+        int totalMinutes = (int) ((time * 60L / 1000) + 360) % 1440;
+        int hours24 = totalMinutes / 60;
         int minutes = totalMinutes % 60;
-        return String.format("%02d:%02d", hours, minutes);
+
+        // 24小时制转12小时制
+        int hours12 = hours24 % 12;
+        if (hours12 == 0) hours12 = 12;
+        String ampm = hours24 < 12 ? "AM" : "PM";
+
+        return String.format("%d:%02d %s", hours12, minutes, ampm);
     }
 }
