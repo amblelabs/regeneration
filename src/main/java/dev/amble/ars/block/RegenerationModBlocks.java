@@ -2,6 +2,7 @@ package dev.amble.ars.block;
 
 import dev.amble.ars.data.tree.CadonSaplingGenerator;
 import dev.amble.ars.item.RegenerationItemGroups;
+import dev.amble.ars.util.ExBoatType;
 import dev.amble.lib.block.ABlockSettings;
 import dev.amble.lib.container.impl.BlockContainer;
 import dev.amble.lib.datagen.util.NoBlockDrop;
@@ -15,9 +16,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
 
-public class RegenerationModBlocks extends BlockContainer {
+public class RegenerationModBlocks extends BlockContainer implements ExBoatType {
 
-    // Cadon Wood
+    //卡顿木
     @NoEnglish
     public static final Block CADON_LOG = new PillarBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_LOG));
 
@@ -117,7 +118,5 @@ public class RegenerationModBlocks extends BlockContainer {
         }
         return new AItemSettings().group(RegenerationItemGroups.REGEN);
     }
-
-
 
 }
