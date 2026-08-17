@@ -65,7 +65,7 @@ public class RegenerationCore {
     private static final String[] REGENERATION_SKINS = new String[] {
             "duzo", "loqor", "drtheo_","jin_mary",
             "classic_account", "portal3i", "winndi",
-            "thatrhynoguy", "djaftonrr21", "queknees2",
+            "thatrhynoguy", "djaftonrr21", "queknees2", "tc020",
             "auroranyxs", "grimlyy_", "itzchipdip", "addie_astarr"
     };
 
