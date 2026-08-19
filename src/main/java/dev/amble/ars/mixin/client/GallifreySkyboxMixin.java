@@ -1,7 +1,7 @@
 package dev.amble.ars.mixin.client;
 
 import dev.amble.ars.RegenerationMod;
-import dev.amble.ars.core.dimensions.RegenerationDimensions;
+import dev.amble.ars.dimensions.RegenerationDimensions;
 import dev.amble.ars.util.GallifreyanSkybox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;

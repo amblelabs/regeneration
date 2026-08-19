@@ -10,7 +10,7 @@ import dev.amble.ars.client.particle.RightRegenParticle;
 import dev.amble.ars.client.renderers.sky.GallifreySkyProperties;
 import dev.amble.ars.client.util.ClientColors;
 import dev.amble.ars.core.RegenerationCore;
-import dev.amble.ars.core.dimensions.RegenerationDimensions;
+import dev.amble.ars.dimensions.RegenerationDimensions;
 import dev.amble.ars.item.RegenerationItems;
 import dev.amble.ars.item.data.PocketWatchItem;
 import dev.amble.ars.network.RegenerationUINetworking;

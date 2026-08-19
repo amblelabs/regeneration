@@ -6,7 +6,7 @@ import dev.amble.ars.commands.RegenCommand;
 import dev.amble.ars.compat.Compat;
 import dev.amble.ars.core.RegenerationCore;
 import dev.amble.ars.core.animation.RegenAnimRegistry;
-import dev.amble.ars.core.dimensions.RegenerationDimensions;
+import dev.amble.ars.dimensions.RegenerationDimensions;
 import dev.amble.ars.core.particle_effects.RegenParticleEffect;
 import dev.amble.ars.data.Attachments;
 import dev.amble.ars.data.datagen.RegenerationCriterions;
