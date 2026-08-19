@@ -137,7 +137,7 @@ public class RegenerationClientMod implements ClientModInitializer {
     public static void BlockRenderLayerMapRegister() {
         BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.FLOWER_OF_REMEMBRANCE, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCER, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCE, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.MOONLIGHT_BLOOM, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(RegenerationModBlocks.TYPHA_POD, RenderLayer.getCutout());
     }

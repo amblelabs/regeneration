@@ -84,7 +84,7 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
 
 
     @NoBlockDrop
-    public static final Block POTTED_FLOWER_OF_REMEMBRANCER = new FlowerPotBlock(FLOWER_OF_REMEMBRANCE, FabricBlockSettings
+    public static final Block POTTED_FLOWER_OF_REMEMBRANCE = new FlowerPotBlock(FLOWER_OF_REMEMBRANCE, FabricBlockSettings
             .copyOf(Blocks.POTTED_POPPY)
             .nonOpaque()
     );
@@ -113,7 +113,7 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
 
     @Override
     public Item.Settings createBlockItemSettings(Block block) {
-        if (block == RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCER) {
+        if (block == RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCE) {
             return new AItemSettings();
         }
         return new AItemSettings().group(RegenerationItemGroups.REGEN);

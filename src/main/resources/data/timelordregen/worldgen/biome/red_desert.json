@@ -22,14 +22,14 @@
       "max_delay": 24000,
       "min_delay": 12000,
       "replace_current_music": false,
-      "sound": "minecraft:music.overworld.forest"
+      "sound": "minecraft:music.overworld.desert"
     },
     "water_color": 16729344,
     "water_fog_color": 13393920
   },
   "features": [
     [],
-    ["minecraft:lake_lava_underground"],
+    [],
     ["minecraft:amethyst_geode"],
     ["minecraft:monster_room", "minecraft:monster_room_deep"],
     [],
@@ -62,10 +62,9 @@
       "minecraft:underwater_magma"
     ],
     [],
-    ["minecraft:spring_lava"],
     [],
     [],
-    ["minecraft:freeze_top_layer"]
+    []
   ],
   "has_precipitation": false,
   "spawn_costs": {},
