@@ -1,6 +1,5 @@
 package dev.amble.timelordregen.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import dev.amble.lib.animation.AnimatedInstance;
@@ -9,97 +8,63 @@ import dev.amble.timelordregen.RegenerationMod;
 import dev.amble.timelordregen.animation.AnimationTemplate;
 import dev.amble.timelordregen.api.RegenerationCapable;
 import dev.amble.timelordregen.api.RegenerationInfo;
-import dev.amble.timelordregen.client.particle.RightRegenParticle;
-import dev.amble.timelordregen.core.particle_effects.RegenParticleEffect;
+import dev.amble.timelordregen.client.util.BoneParticleSpawner;
+import dev.amble.timelordregen.client.util.BoneSpawnPoint;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.SpriteProvider;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.feature.HeadFeatureRenderer;
-import net.minecraft.client.render.entity.model.ModelWithArms;
-import net.minecraft.client.render.entity.model.ModelWithHead;
-import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 @Environment(EnvType.CLIENT)
 public enum RegenRenderers implements RegenRendering {
 	PARTICLE {
 		@Override
 		public void renderArm(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationInfo info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, Arm arm) {
-			matrices.translate(0, 0.81, 0);
-			renderParticles(matrices);
+			if (!(entity instanceof LivingEntity livingEntity)) return;
+			MinecraftClient client = MinecraftClient.getInstance();
+			ClientWorld world = client.world;
+			if (world == null) return;
+
+			// Get the arm ModelPart from the model
+			ModelPart armPart = getArmPart(model, arm);
+			if (armPart == null) return;
+
+			// Use the appropriate spawn point based on which arm
+			BoneSpawnPoint spawnPoint = (arm == Arm.RIGHT) ? BoneSpawnPoint.RIGHT_ARM : BoneSpawnPoint.LEFT_ARM;
+
+			float speed = BoneParticleSpawner.getSpeedForAnimation(animation);
+			BoneParticleSpawner.spawnAtBone(world, livingEntity, armPart, spawnPoint, speed);
 		}
 
 		@Override
 		public void renderAtHead(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationInfo info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, ModelPart headPart) {
-			matrices.translate(0, 0.5, 0);
-			renderParticles(matrices);
+			if (!(entity instanceof LivingEntity livingEntity)) return;
+			MinecraftClient client = MinecraftClient.getInstance();
+			ClientWorld world = client.world;
+			if (world == null) return;
+
+			float speed = BoneParticleSpawner.getSpeedForAnimation(animation);
+			BoneParticleSpawner.spawnAtBone(world, livingEntity, headPart, BoneSpawnPoint.HEAD, speed);
 		}
 
-		public void renderParticles(MatrixStack matrices) {
-			MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
-
-			// Get the sprite provider from the particle factory
-			SpriteProvider spriteProvider =
-				RightRegenParticle.Factory.getSpriteProvider();
-
-			if (spriteProvider == null) {
-				return;
+		/**
+		 * Gets the arm ModelPart from the model.
+		 */
+		@Nullable
+		private ModelPart getArmPart(Model model, Arm arm) {
+			if (model instanceof BipedEntityModel<?> biped) {
+				return arm == Arm.RIGHT ? biped.rightArm : biped.leftArm;
 			}
-
-			// Get vertex consumer for particle rendering
-			RenderSystem.setShader(GameRenderer::getParticleProgram);
-			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder bufferBuilder = tessellator.getBuffer();
-			net.minecraft.client.render.Camera camera = client.gameRenderer.getCamera();
-			if (!bufferBuilder.isBuilding()) {
-				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-			}
-
-			matrices.push();
-
-			Quaternionf rotation = new Quaternionf().set(camera.getRotation());
-
-			matrices.scale(0.25F, 0.25F, 0.25F);
-
-
-			for (int i = 0; i < 5; i++) {
-				matrices.push();
-
-				Sprite sprite = spriteProvider.getSprite(RegenerationMod.RANDOM);
-				RenderSystem.setShaderTexture(0, sprite.getAtlasId());
-				RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-				float u1 = sprite.getMinU();
-				float v1 = sprite.getMinV();
-				float u2 = sprite.getMaxU();
-				float v2 = sprite.getMaxV();
-
-				Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-				bufferBuilder.vertex(matrix4f, -1.0F, -1.0F, 0.0F).texture(u1, v1).next();
-				bufferBuilder.vertex(matrix4f, -1.0F, 1.0F, 0.0F).texture(u1, v2).next();
-				bufferBuilder.vertex(matrix4f, 1.0F, 1.0F, 0.0F).texture(u2, v2).next();
-				bufferBuilder.vertex(matrix4f, 1.0F, -1.0F, 0.0F).texture(u2, v1).next();
-
-				matrices.pop();
-			}
-
-			tessellator.draw();
-			matrices.pop();
+			return null;
 		}
 	};
 
@@ -117,23 +82,38 @@ public enum RegenRenderers implements RegenRendering {
 		if (!(entity instanceof RegenerationCapable capable)) return;
 
 		capable.withInfo().ifPresent(info -> {
-			if (!info.isActive()) return;
+			// Only render particles during actual regeneration, not during delay
+			if (!info.isRegenerating()) return;
 
 			RegenRendering type = RegenRenderers.PARTICLE;
 
-			BedrockAnimation animation;
+			// Get the currently playing animation from the entity, not from the template
+			BedrockAnimation animation = null;
 			try {
-				animation = info.getAnimation().get(AnimationTemplate.Stage.START).reference().get().orElseThrow();
+				// First try to get the current animation from the animated entity
+				var currentRef = entity.getCurrentAnimation();
+				if (currentRef != null) {
+					animation = currentRef.get().orElse(null);
+				}
 
-				if (animation.metadata.excess().has(KEY)) {
-					String key = animation.metadata.excess().get(KEY).getAsString();
-					type = RegenRenderers.valueOf(key.toUpperCase());
+				// If no current animation, fall back to START from template
+				if (animation == null) {
+					var wrapper = info.getAnimation().get(AnimationTemplate.Stage.START);
+					if (wrapper != null && wrapper.reference() != null) {
+						animation = wrapper.reference().get().orElse(null);
+					}
+				}
+
+				// Check for custom render type in animation metadata
+				if (animation != null && animation.metadata != null && animation.metadata.excess() != null) {
+					if (animation.metadata.excess().has(KEY)) {
+						String key = animation.metadata.excess().get(KEY).getAsString();
+						type = RegenRenderers.valueOf(key.toUpperCase());
+					}
 				}
 			} catch (Exception e) {
-				String validOptions = java.util.Arrays.toString(RegenRenderers.values());
-				String errorMsg = "Failed to get regeneration effect type from animation metadata, valid options are: " + validOptions + ". Error: " + e.getMessage();
-				RegenerationMod.LOGGER.error(errorMsg, e);
-				throw new RuntimeException(errorMsg, e);
+				// Log but don't throw - gracefully degrade to default particle rendering
+				RegenerationMod.LOGGER.debug("Could not get animation for regen effect: {}", e.getMessage());
 			}
 
 			matrices.push();

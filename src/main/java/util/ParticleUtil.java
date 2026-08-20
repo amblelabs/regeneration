@@ -21,21 +21,21 @@ public class ParticleUtil {
 
         double leftX = entity.getX() + cos * -0.8f - sin * 0;
         double leftZ = entity.getZ() + sin * -0.8f + cos * 0;
-        serverWorld.spawnParticles(new RegenParticleEffect(entity.getId(), 90, 0, false, true, 0.4f), leftX, entity.getY() + 1.25f, leftZ,
+        serverWorld.spawnParticles(new RegenParticleEffect(entity.getId(), 0, 0, false, true, 0.4f), leftX, entity.getY() + 1.25f, leftZ,
                 100, 0, 0, 0, 1);
 
         // Head particle (centered)
         if (hasHead) {
             float pitchRadians = entity.getPitch() * ((float) Math.PI / 180F);
             double yOffset = 1.5f + Math.sin(-pitchRadians) * 0.5f;
-            serverWorld.spawnParticles(new RegenParticleEffect(entity.getId(), 0, -90, true, true, 0.4f), entity.getX(), entity.getY() + yOffset, entity.getZ(),
+            serverWorld.spawnParticles(new RegenParticleEffect(entity.getId(), 0, 0, true, true, 0.4f), entity.getX(), entity.getY() + yOffset, entity.getZ(),
                     100, 0.1, 0, 0.1, 1);
         }
 
         //  Right particle (relative to facing)
         double rightX = entity.getX() - cos * -0.8f - sin * 0;
         double rightZ = entity.getZ() - sin * -0.8f + cos * 0;
-        serverWorld.spawnParticles(new RegenParticleEffect(entity.getId(), -90, 0, false, true, 0.4f), rightX, entity.getY() + 1.25f, rightZ,
+        serverWorld.spawnParticles(new RegenParticleEffect(entity.getId(), 0, 0, false, true, 0.4f), rightX, entity.getY() + 1.25f, rightZ,
                 100, 0, 0, 0, 1);
     }
 }

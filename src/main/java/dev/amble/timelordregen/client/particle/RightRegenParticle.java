@@ -7,7 +7,6 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import org.jetbrains.annotations.Nullable;
@@ -21,12 +20,18 @@ public class RightRegenParticle extends ExplosionSmokeParticle {
         super(clientWorld, d, e, f, 0, 0, 0, spriteProvider);
         this.spriteProvider = spriteProvider;
 
-        if (!(entity instanceof PlayerEntity player)) return;
+        if (!(entity instanceof LivingEntity living)) return;
         this.gravityStrength = 0.01f;
         this.velocityMultiplier = 0.999f;
 
-        float yawRad = (float) Math.toRadians(player.headYaw + yawOffset/*shouldFollowPlayer ? (player.headYaw + yawOffset) : yawOffset*/);
-        float pitchRad = shouldPitch ? (float) Math.toRadians(shouldFollowPlayer ? (player.getPitch() + pitchOffset) : pitchOffset) : 0f;
+        // When shouldFollowPlayer is true, yawOffset/pitchOffset are relative to player's look direction
+        // When shouldFollowPlayer is false, yawOffset/pitchOffset are absolute world rotations
+        float yawRad = shouldFollowPlayer
+            ? (float) Math.toRadians(living.getHeadYaw() + yawOffset)
+            : (float) Math.toRadians(yawOffset);
+        float pitchRad = shouldPitch
+            ? (float) Math.toRadians(shouldFollowPlayer ? (living.getPitch() + pitchOffset) : pitchOffset)
+            : 0f;
 
         double dirX = -Math.sin(yawRad) * Math.cos(pitchRad);
         double dirY = shouldPitch ? -Math.sin(pitchRad) : 0;

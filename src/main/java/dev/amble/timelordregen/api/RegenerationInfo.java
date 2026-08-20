@@ -206,14 +206,11 @@ public class RegenerationInfo {
 	public boolean tryStart(LivingEntity entity) {
 		if (this.isActive() || this.usesLeft <= 0) return false;
 
-		this.delay.start(entity.age);
+		// Immediately queue regeneration instead of starting delay
+		this.setRegenQueued(true);
 		this.markDirty();
 
 		entity.setHealth(entity.getMaxHealth());
-
-		if (entity instanceof AnimatedEntity animated) {
-			animated.playAnimation(BedrockAnimationReference.parse(Identifier.of("start", RegenerationMod.RANDOM.nextBoolean() ? "right" : "left")));
-		}
 
 		return true;
 	}
@@ -221,9 +218,7 @@ public class RegenerationInfo {
 	private boolean start(LivingEntity entity) {
 		if (this.isRegenerating() || this.usesLeft <= 0) return false;
 
-		boolean moving = entity.getX() != entity.prevX || entity.getY() != entity.prevY || entity.getZ() != entity.prevZ || !entity.isOnGround();
-		if (moving) return false;
-
+		// Removed movement check - regeneration should start immediately
 		this.setRegenQueued(false);
 		this.decrement();
 		this.setRegenerating(true);
