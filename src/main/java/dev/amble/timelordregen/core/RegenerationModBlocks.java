@@ -18,6 +18,29 @@ public class RegenerationModBlocks extends BlockContainer {
 
     // Cadon Wood
     @NoEnglish
+    public static final Block GALLIFREY_STONE = new PillarBlock(ABlockSettings.copyOf(Blocks.STONE));
+
+    @NoEnglish
+    public static final Block AZBANTIUM_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
+
+    @NoEnglish
+    public static final Block CHISELED_GALLIFREY_STONE_BRICK = new PillarBlock(ABlockSettings.copyOf(Blocks.CHISELED_STONE_BRICKS));
+
+    public static final Block GALLIFREY_STONE_BRICKS = new PillarBlock(ABlockSettings.copyOf(Blocks.STONE_BRICKS));
+
+    @NoEnglish
+    public static final Block GALLIFREY_COPPER_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.COPPER_ORE));
+
+    @NoEnglish
+    public static final Block GALLIFREY_DIAMOND_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
+
+    @NoEnglish
+    public static final Block GALLIFREY_GOLD_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.GOLD_ORE));
+
+    @NoEnglish
+    public static final Block GALLIFREY_IRON_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.IRON_ORE));
+
+    @NoEnglish
     public static final Block CADON_LOG = new PillarBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_LOG));
 
     @NoEnglish

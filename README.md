@@ -49,6 +49,7 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 - [Loqor](https://loqor.dev/)
 - [AddieDaBaddie](https://addi3.github.io/index)
 - [Maketendo](https://github.com/MaketendoDev)
+- Rhyno
 
 --- 
 
@@ -56,7 +57,7 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 - Classic (Animations & Builds)
 - pianoinflames (Music & SFX)
 - Ouro (Models & Textures)
-- Rhyno (Textures & Initial Ideas)
+- Rhyno (Creative Director)
 </div>
 
 ### Thankyou's:

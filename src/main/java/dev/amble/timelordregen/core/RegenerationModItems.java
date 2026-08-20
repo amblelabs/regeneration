@@ -18,6 +18,9 @@ public class RegenerationModItems extends ItemContainer {
 	@NoEnglish
 	public static final Item POCKET_WATCH = new PocketWatchItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
+    @NoEnglish
+    public static final Item AZBANTIUM_AXE = new AxeItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
 /// Disabled cus they crash when placed. idk why and neither does theo - ADDIE
 
     //@AutomaticModel
