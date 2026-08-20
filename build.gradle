@@ -19,10 +19,10 @@ repositories {
     }
 	// amblekit
     maven {
-        url "https://amblelabs.github.io/maven"
+        url "https://maven.amblelabs.dev"
 
         content {
-            includeGroup "dev.amble"
+            includeGroup "dev.amblelabs"
         }
     }
     maven {
@@ -74,7 +74,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     //amblekit
-    modApi("dev.amble:lib:${project.amblekit_version}") {
+    modApi("dev.amblelabs:modkit:${project.amblekit_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
