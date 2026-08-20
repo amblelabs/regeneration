@@ -67,19 +67,17 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
                     RegenerationModBlocks.CADON_TRAPDOOR,
                     RegenerationModBlocks.CADON_DOOR,
                     RegenerationModBlocks.CADON_PRESSURE_PLATE,
-                    RegenerationModBlocks.CADON_BUTTON,
-                    RegenerationModBlocks.GALLIFREY_COPPER_ORE,
-                    RegenerationModBlocks.GALLIFREY_STONE,
-                    RegenerationModBlocks.GALLIFREY_DIAMOND_ORE,
-                    RegenerationModBlocks.GALLIFREY_STONE_BRICKS,
-                    RegenerationModBlocks.AZBANTIUM_ORE,
-                    RegenerationModBlocks.GALLIFREY_IRON_ORE,
-                    RegenerationModBlocks.GALLIFREY_GOLD_ORE,
-                    RegenerationModBlocks.GALLIFREY_STONE_BRICKS,
-                    RegenerationModBlocks.CHISELED_GALLIFREY_STONE_BRICK
-
+                    RegenerationModBlocks.CADON_BUTTON
             ));
+
             provider.registerSimpleBlock(RegenerationModBlocks.CADON_LEAVES);
+            provider.registerLogBlock(RegenerationModBlocks.GALLIFREY_COPPER_ORE, RegenerationModBlocks.GALLIFREY_COPPER_ORE);
+            provider.registerLogBlock(RegenerationModBlocks.GALLIFREY_DIAMOND_ORE, RegenerationModBlocks.GALLIFREY_DIAMOND_ORE);
+            provider.registerLogBlock(RegenerationModBlocks.GALLIFREY_GOLD_ORE, RegenerationModBlocks.GALLIFREY_GOLD_ORE);
+            provider.registerLogBlock(RegenerationModBlocks.GALLIFREY_IRON_ORE, RegenerationModBlocks.GALLIFREY_IRON_ORE);
+            provider.registerLogBlock(RegenerationModBlocks.GALLIFREY_STONE, RegenerationModBlocks.GALLIFREY_STONE);
+            provider.registerLogBlock(RegenerationModBlocks.GALLIFREY_STONE_BRICKS, RegenerationModBlocks.GALLIFREY_STONE_BRICKS);
+            provider.registerLogBlock(RegenerationModBlocks.CHISELED_GALLIFREY_STONE_BRICK, RegenerationModBlocks.CHISELED_GALLIFREY_STONE_BRICK);
 
             return provider;
         }));
