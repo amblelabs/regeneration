@@ -50,6 +50,7 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 - [AddieDaBaddie](https://addi3.github.io/index)
 - [Maketendo](https://github.com/MaketendoDev)
 - Rhyno
+- SmallMoss
 
 --- 
 

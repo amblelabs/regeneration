@@ -21,6 +21,23 @@ public class RegenerationModItems extends ItemContainer {
     @NoEnglish
     public static final Item AZBANTIUM_AXE = new AxeItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
+    @NoEnglish
+    public static final Item AZBANTIUM_BATTLEAXE = new AxeItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
+    @NoEnglish
+    public static final Item AZBANTIUM_HOW = new HoeItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
+    @NoEnglish
+    public static final Item AZBANTIUM_PICKAXE = new PickaxeItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
+    @NoEnglish
+    public static final Item AZBANTIUM_SWORD = new SwordItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
+    @NoEnglish
+    public static final Item AZBANTIUM_INGOT = new IngotItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
+
+
 /// Disabled cus they crash when placed. idk why and neither does theo - ADDIE
 
     //@AutomaticModel
