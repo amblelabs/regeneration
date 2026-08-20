@@ -68,6 +68,16 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
                     RegenerationModBlocks.CADON_DOOR,
                     RegenerationModBlocks.CADON_PRESSURE_PLATE,
                     RegenerationModBlocks.CADON_BUTTON
+                    RegenerationModBlocks.GALLIFREY_COPPER_ORE
+                    RegenerationModBlocks.GALLIFREY_STONE
+                    RegenerationModBlocks.GALLIFREY_DIAMOND_ORE
+                    RegenerationModBlocks.GALLIFREY_STONE_BRICKS
+                    RegenerationModBlocks.AZBANTIUM_ORE
+                    RegenerationModBlocks.GALLIFREY_IRON_ORE
+                    RegenerationModBlocks.GALLIFREY_GOLD_ORE
+                    RegenerationModBlocks.GALLIFREY_STONE_BRICKS
+                    RegenerationModBlocks.CHISELED_GALLIFREY_STONE_BRICK
+
             ));
             provider.registerSimpleBlock(RegenerationModBlocks.CADON_LEAVES);
 
@@ -122,6 +132,14 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
             provider.addTranslation(RegenerationModBlocks.MOONLIGHT_BLOOM, "Moonlight Bloom");
             provider.addTranslation(RegenerationModBlocks.FLOWER_OF_REMEMBRANCE, "Flower Of Remembrance");
             provider.addTranslation(RegenerationModBlocks.TYPHA_POD, "Typha Pod");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_COPPER_ORE, "Gallifrey Copper Ore");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_IRON_ORE, "Gallifrey Iron Ore");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_DIAMOND_ORE, "Gallifrey Diamond Ore");
+            provider.addTranslation(RegenerationModBlocks.AZBANTIUM_ORE, "Azbantium Ore");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_STONE, "Gallifrey Stone");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_STONE_BRICKS, "Gallifrey Stone Bricks");
+            provider.addTranslation(RegenerationModBlocks.CHISELED_GALLIFREY_STONE_BRICK, "Chiseled Gallifrey Stone Bricks");
+            provider.addTranslation(RegenerationModBlocks.GALLIFREY_GOLD_ORE, "Gallifrey Gold Ore");
 
 			// Advancements
 			provider.addTranslation("achievement.timelordregen.title.regeneration", "Change, my dear.");

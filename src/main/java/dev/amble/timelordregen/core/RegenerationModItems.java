@@ -7,9 +7,7 @@ import dev.amble.lib.item.AItemSettings;
 import dev.amble.timelordregen.api.boat.ABoatItem;
 import dev.amble.timelordregen.core.item.ElixirOfLifeItem;
 import dev.amble.timelordregen.core.item.PocketWatchItem;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.*;
 
 public class RegenerationModItems extends ItemContainer {
 
@@ -21,7 +19,7 @@ public class RegenerationModItems extends ItemContainer {
 	public static final Item POCKET_WATCH = new PocketWatchItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_AXE = new AxeItem(ToolMaterials.NETHERITE, 4, 1, new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_AXE = new AxeItem(ToolMaterials.NETHERITE, 5, 1, new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
     public static final Item AZBANTIUM_BATTLEAXE = new AxeItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
@@ -36,7 +34,7 @@ public class RegenerationModItems extends ItemContainer {
     public static final Item AZBANTIUM_SWORD = new SwordItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_INGOT = new IngotItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_INGOT = new Item(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
 
 
