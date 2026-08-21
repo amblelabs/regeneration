@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "timelordregen:gallifrey_stone",
+    "timelordregen:chiseled_gallifrey_stone_brick",
+    "timelordregen:gallifrey_stone_bricks",
+    "timelordregen:gallifrey_copper_ore",
+    "timelordregen:gallifrey_diamond_ore",
+    "timelordregen:gallifrey_gold_ore",
+    "timelordregen:gallifrey_iron_ore",
+    "timelordregen:azbantium_ore"
+  ]
+}

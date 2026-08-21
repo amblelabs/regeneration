@@ -18,29 +18,38 @@ import net.minecraft.sound.BlockSoundGroup;
 
 public class RegenerationModBlocks extends BlockContainer implements ExBoatType {
 
-    //卡顿木
+    //GALLIFREY BLOCK / 伽理弗雷方块
+
     @NoEnglish
     public static final Block GALLIFREY_STONE = new Block(ABlockSettings.copyOf(Blocks.STONE));
 
     @NoEnglish
-    public static final Block AZBANTIUM_ORE = new Block(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
-
-    @NoEnglish
     public static final Block CHISELED_GALLIFREY_STONE_BRICK = new Block(ABlockSettings.copyOf(Blocks.CHISELED_STONE_BRICKS));
 
+    @NoEnglish
     public static final Block GALLIFREY_STONE_BRICKS = new Block(ABlockSettings.copyOf(Blocks.STONE_BRICKS));
+
+    @NoEnglish
+    public static final Block GALLIFREY_IRON_ORE = new Block(ABlockSettings.copyOf(Blocks.IRON_ORE));
 
     @NoEnglish
     public static final Block GALLIFREY_COPPER_ORE = new Block(ABlockSettings.copyOf(Blocks.COPPER_ORE));
 
     @NoEnglish
-    public static final Block GALLIFREY_DIAMOND_ORE = new Block(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
-
-    @NoEnglish
     public static final Block GALLIFREY_GOLD_ORE = new Block(ABlockSettings.copyOf(Blocks.GOLD_ORE));
 
     @NoEnglish
-    public static final Block GALLIFREY_IRON_ORE = new Block(ABlockSettings.copyOf(Blocks.IRON_ORE));
+    public static final Block GALLIFREY_DIAMOND_ORE = new Block(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
+
+    @NoEnglish
+    public static final Block AZBANTIUM_ORE = new Block(ABlockSettings.copyOf(Blocks.OBSIDIAN));
+
+    @NoEnglish
+    @NoBlockDrop
+    @ShovelMineable
+    public static final Block GALLIFREY_GRASS_BLOCK = new GrassBlock(AbstractBlock.Settings.copy(Blocks.GRASS_BLOCK));
+
+    //CADON / 卡顿木
 
     @NoEnglish
     public static final Block CADON_LOG = new PillarBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_LOG));
@@ -86,16 +95,11 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
     @NoEnglish
     public static final Block CADON_FENCE_GATE = new FenceGateBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_FENCE_GATE), WoodType.DARK_OAK);
 
-    @NoEnglish
-    @NoBlockDrop
-    @ShovelMineable
-    public static final Block GALLIFREY_GRASS_BLOCK =
-            new GrassBlock(AbstractBlock.Settings.copy(Blocks.GRASS_BLOCK));
-
 
     @NoEnglish
     public static final Block CADON_SAPLING = new SaplingBlock(new CadonSaplingGenerator(),ABlockSettings.copyOf(Blocks.OAK_SAPLING));
 
+    //PLANT / 植物
 
     @NoEnglish
     @NoBlockDrop
