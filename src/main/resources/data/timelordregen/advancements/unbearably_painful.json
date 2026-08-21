@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "timelordregen:elixir_of_life"
+    },
+    "title": {
+      "translate": "advancements.timelordregen.unbearably_painful.title"
+    },
+    "description": {
+      "translate": "advancements.timelordregen.unbearably_painful.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "drink_elixir": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "timelordregen:elixir_of_life"
+          ]
+        }
+      }
+    }
+  },
+  "requirements": [
+    ["drink_elixir"]
+  ]
+}

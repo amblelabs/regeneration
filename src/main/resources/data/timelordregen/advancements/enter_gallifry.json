@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "timelordregen:pocket_watch"
+    },
+    "title": {
+      "translate": "advancements.timelordregen.enter_gallifrey.title"
+    },
+    "description": {
+      "translate": "advancements.timelordregen_gallifrey.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "entered_gallifrey": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "timelordregen:gallifrey"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "entered_gallifrey"
+    ]
+  ]
+}

@@ -1,8 +1,8 @@
 package dev.amble.timelordregen.client;
 
+import dev.amble.timelordregen.core.RegenerationCore;
 import dev.amble.lib.animation.AnimatedInstance;
 import dev.amble.lib.client.bedrock.BedrockAnimation;
-import dev.amble.timelordregen.api.RegenerationInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Model;
@@ -17,10 +17,10 @@ import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public interface RegenRendering {
-	void renderArm(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationInfo info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, Arm arm);
-	void renderAtHead(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationInfo info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, ModelPart headPart);
+	void renderArm(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationCore info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, Arm arm);
+	void renderAtHead(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationCore info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, ModelPart headPart);
 
-	default void render(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationInfo info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, @Nullable Arm firstPersonArm) {
+	default void render(AnimatedInstance entity, float progress, @Nullable BedrockAnimation animation, RegenerationCore info, Model model, MatrixStack matrices, VertexConsumerProvider provider, float light, @Nullable Arm firstPersonArm) {
 		if (model instanceof ModelWithArms armed) {
 			for (Arm arm : Arm.values()) {
 				if (firstPersonArm != null && arm != firstPersonArm) continue;

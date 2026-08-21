@@ -1,3 +1,5 @@
 {
-  "type": "origins:simple"
+  "type": "origins:simple",
+  "name": "origin.timelordregen.regeneration.name",
+  "description": "origin.timelordregen.regeneration.description"
 }

@@ -3,5 +3,7 @@
     "timelordregen:regeneration"
   ],
   "icon": "timelordregen:elixir_of_life",
-  "impact": 3
+  "impact": 3,
+  "name": "origin.timelordregen.timelord.name",
+  "description": "origin.timelordregen.timelord.description"
 }

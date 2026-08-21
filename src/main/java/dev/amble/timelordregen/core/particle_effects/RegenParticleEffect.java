@@ -3,7 +3,6 @@ package dev.amble.timelordregen.core.particle_effects;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.amble.timelordregen.RegenerationMod;
-import lombok.Getter;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
@@ -12,32 +11,29 @@ import net.minecraft.world.World;
 
 public class RegenParticleEffect implements ParticleEffect {
     private final int entityId;
-    @Getter
     private final float yawOffset;
-    @Getter
     private final float pitchOffset;
     private final boolean shouldPitch;
     private final boolean shouldFollowPlayer;
-    @Getter
     private final float speed;
+    private final boolean shortLife;
 
-    public RegenParticleEffect(int entityId, float yawOffset, float pitchOffset, boolean shouldPitch, boolean shouldFollowPlayer, float speed) {
+    public RegenParticleEffect(int entityId, float yawOffset, float pitchOffset, boolean shouldPitch, boolean shouldFollowPlayer, float speed, boolean shortLife) {
         this.entityId = entityId;
         this.yawOffset = yawOffset;
         this.pitchOffset = pitchOffset;
         this.shouldPitch = shouldPitch;
         this.shouldFollowPlayer = shouldFollowPlayer;
         this.speed = speed;
+        this.shortLife = shortLife;
     }
 
-    public RegenParticleEffect() {
-        this.entityId = -1;
-        this.yawOffset = 0;
-        this.pitchOffset = 0;
-        this.shouldPitch = true;
-        this.shouldFollowPlayer = true;
-        this.speed = 0.4f;
-    }
+    public float getYawOffset() { return yawOffset; }
+    public float getPitchOffset() { return pitchOffset; }
+    public boolean getShouldPitch() { return shouldPitch; }
+    public boolean getShouldFollowPlayer() { return shouldFollowPlayer; }
+    public float getSpeed() { return speed; }
+    public boolean isShortLife() { return shortLife; }
 
     public static final Factory<RegenParticleEffect> PARAMETERS_FACTORY = new Factory<>() {
         @Override
@@ -48,7 +44,8 @@ public class RegenParticleEffect implements ParticleEffect {
             boolean shouldPitch = stringReader.readBoolean();
             boolean shouldFollowPlayer = stringReader.readBoolean();
             float speed = stringReader.readFloat();
-            return new RegenParticleEffect(entityId, yawOffset, pitchOffset, shouldPitch, shouldFollowPlayer, speed);
+            boolean shortLife = stringReader.readBoolean();
+            return new RegenParticleEffect(entityId, yawOffset, pitchOffset, shouldPitch, shouldFollowPlayer, speed, shortLife);
         }
 
         @Override
@@ -59,7 +56,8 @@ public class RegenParticleEffect implements ParticleEffect {
             boolean shouldPitch = packetByteBuf.readBoolean();
             boolean shouldFollowPlayer = packetByteBuf.readBoolean();
             float speed = packetByteBuf.readFloat();
-            return new RegenParticleEffect(entityId, yawOffset, pitchOffset, shouldPitch, shouldFollowPlayer, speed);
+            boolean shortLife = packetByteBuf.readBoolean();
+            return new RegenParticleEffect(entityId, yawOffset, pitchOffset, shouldPitch, shouldFollowPlayer, speed, shortLife);
         }
     };
 
@@ -71,11 +69,12 @@ public class RegenParticleEffect implements ParticleEffect {
         buf.writeBoolean(shouldPitch);
         buf.writeBoolean(shouldFollowPlayer);
         buf.writeFloat(speed);
+        buf.writeBoolean(shortLife);
     }
 
     @Override
     public String asString() {
-        return entityId + " " + yawOffset + " " + pitchOffset + " " + shouldPitch + " " + shouldFollowPlayer + " " + speed;
+        return entityId + " " + yawOffset + " " + pitchOffset + " " + shouldPitch + " " + shouldFollowPlayer + " " + speed + " " + shortLife;
     }
 
     public Entity getEntity(World world) {
@@ -85,13 +84,4 @@ public class RegenParticleEffect implements ParticleEffect {
     public ParticleType<RegenParticleEffect> getType() {
         return RegenerationMod.RIGHT_REGEN_PARTICLE;
     }
-
-    public boolean getShouldPitch() {
-        return this.shouldPitch;
-    }
-
-    public boolean getShouldFollowPlayer() {
-        return this.shouldFollowPlayer;
-    }
-
 }

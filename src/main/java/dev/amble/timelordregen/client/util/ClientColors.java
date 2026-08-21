@@ -1,9 +1,8 @@
 package dev.amble.timelordregen.client.util;
 
-import dev.amble.timelordregen.core.RegenerationModBlocks;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.color.world.BiomeColors;
 
 @Environment(EnvType.CLIENT)

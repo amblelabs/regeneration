@@ -1,31 +1,38 @@
 package dev.amble.timelordregen.api;
 
+import dev.amble.timelordregen.core.RegenerationCore;
 import dev.amble.timelordregen.data.Attachments;
 import net.minecraft.entity.LivingEntity;
 
 import java.util.Optional;
 
 public interface RegenerationCapable {
-	default RegenerationInfo getRegenerationInfo() {
-		if (!(this instanceof LivingEntity living)) throw new UnsupportedOperationException("This method is only default for LivingEntity instances. Override it and implement it");
+    default RegenerationCore getRegenerationInfo() {
+        if (!(this instanceof LivingEntity living)) throw new UnsupportedOperationException("This method is only default for LivingEntity instances. Override it and implement it");
+        return getLivingInfo(living);
+    }
 
-		return getLivingInfo(living);
-	}
+    default Optional<RegenerationCore> withInfo() {
+        return Optional.ofNullable(this.getRegenerationInfo());
+    }
 
-	default Optional<RegenerationInfo> withInfo() {
-		return Optional.ofNullable(this.getRegenerationInfo());
-	}
+    default void tickRegeneration() {
+        if (!this.isTimelord()) return;
+        RegenerationCore info = this.getRegenerationInfo();
+        if (info != null) {
+            if (!(this instanceof LivingEntity living)) throw new UnsupportedOperationException("This method is only default for LivingEntity instances. Override it and implement it");
+            info.tick(living);
+        }
+    }
 
-	default void tickRegeneration() {
-		RegenerationInfo info = this.getRegenerationInfo();
-		if (info != null) {
-			if (!(this instanceof LivingEntity living)) throw new UnsupportedOperationException("This method is only default for LivingEntity instances. Override it and implement it");
+    default boolean isTimelord() {
+        return true;
+    }
 
-			info.tick(living);
-		}
-	}
+    default void setTimelord(boolean timelord) {
+    }
 
-	static RegenerationInfo getLivingInfo(LivingEntity entity) {
-		return entity.getAttachedOrCreate(Attachments.REGENERATION);
-	}
+    static RegenerationCore getLivingInfo(LivingEntity entity) {
+        return entity.getAttached(Attachments.REGENERATION);
+    }
 }

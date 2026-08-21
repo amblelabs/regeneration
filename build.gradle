@@ -19,8 +19,7 @@ repositories {
     }
 	// amblekit
     maven {
-        url "https://maven.amblelabs.dev"
-
+        url "https://amblelabs.dev/maven"
         content {
             includeGroup "dev.amblelabs"
         }
@@ -78,8 +77,8 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-	// ait compat
-	modCompileOnlyApi "com.github.amblelabs:ait:${project.ait_version}"
+	// ait
+    modImplementation "dev.amblelabs:ait:${project.ait_version}"
 
     // terraform api
     modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:7.0.1"
@@ -115,8 +114,6 @@ processResources {
     inputs.property "version", project.version
     inputs.property "amblekit_version", project.amblekit_version
 
-    exclude '.cache'
-
     def expansionVars = [
             "version": project.version,
             "amblekit_version": project.amblekit_version
@@ -124,7 +121,6 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": inputs.properties.version
-
     }
 }
 

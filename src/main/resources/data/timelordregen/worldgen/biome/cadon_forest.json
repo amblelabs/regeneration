@@ -24,8 +24,8 @@
       "replace_current_music": false,
       "sound": "minecraft:music.overworld.forest"
     },
-    "water_color": 4159204,
-    "water_fog_color": 329011
+    "water_color": 16729344,
+    "water_fog_color": 13393920
   },
   "features": [
     [],
@@ -68,7 +68,6 @@
       "minecraft:ore_lapis_buried",
       "minecraft:ore_copper",
       "minecraft:underwater_magma",
-      "minecraft:disk_sand",
       "minecraft:disk_clay",
       "minecraft:disk_gravel"
     ],
@@ -79,10 +78,12 @@
     ],
     [
       "minecraft:glow_lichen",
-      "minecraft:forest_flowers",
       "timelordregen:cadon_tree",
       "timelordregen:fancy_cadon_tree",
       "minecraft:flower_default",
+      "timelordregen:patch_typha_pod",
+      "timelordregen:patch_moonlight_bloom",
+      "timelordregen:patch_flower_of_remembrance",
       "minecraft:patch_grass_forest",
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal",

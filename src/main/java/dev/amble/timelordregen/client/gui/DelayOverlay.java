@@ -2,10 +2,9 @@ package dev.amble.timelordregen.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.timelordregen.RegenerationMod;
-import dev.amble.timelordregen.api.RegenerationEvents;
-import dev.amble.timelordregen.api.RegenerationInfo;
 import dev.amble.timelordregen.client.sound.PlayerFollowingLoopingSound;
-import dev.amble.timelordregen.core.RegenerationSounds;
+import dev.amble.timelordregen.core.RegenerationCore;
+import dev.amble.timelordregen.data.tree.RegenerationSounds;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -14,61 +13,63 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 
 public class DelayOverlay implements HudRenderCallback {
-	private static final Identifier TEXTURE = RegenerationMod.id("textures/gui/delay_overlay.png");
-	private static PlayerFollowingLoopingSound SOUND;
-	private static final float FADEOUT_THRESHOLD = 0.75F;
-	private static final float BACKGROUND_VALUE = 0.1F;
+    private static final Identifier TEXTURE = RegenerationMod.id("textures/gui/delay_overlay.png");
+    private static PlayerFollowingLoopingSound SOUND;
 
-	@Override
-	public void onHudRender(DrawContext context, float tickDelta) {
-		MinecraftClient mc = MinecraftClient.getInstance();
+    @Override
+    public void onHudRender(DrawContext context, float tickDelta) {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc.player == null || mc.world == null) return;
 
-		if (mc.player == null || mc.world == null)
-			return;
+        if (!mc.player.isAlive()) {
+            if (SOUND != null) {
+                mc.getSoundManager().stop(SOUND);
+                SOUND = null;
+            }
+            return;
+        }
 
-		RegenerationInfo info = RegenerationInfo.get(mc.player);
+        RegenerationCore info = RegenerationCore.get(mc.player);
+        boolean active = info != null && !info.isRegenerating() && info.getDelay().isRunning();
 
-		boolean hasFx = info != null && !info.isRegenerating() && info.getDelay().isRunning();
-		if (!hasFx) {
-			if (SOUND != null) {
-				mc.getSoundManager().stop(SOUND);
-				SOUND = null;
-			}
-			return;
-		}
+        if (!active) {
+            if (SOUND != null) {
+                mc.getSoundManager().stop(SOUND);
+                SOUND = null;
+            }
+            return;
+        }
 
-		float opacity = info.getDelay().getEventProgress(mc.player.age + tickDelta) + BACKGROUND_VALUE;
-		opacity = (float) (opacity * getFadeoutMultiplier(opacity, FADEOUT_THRESHOLD, 1.0F, 12.0F));
+        float time = mc.player.age + tickDelta;
+        float period = 5 * 20;
+        float pulse = (float) (0.5 * (0.5 + 0.5 * Math.sin(2 * Math.PI * time / period)));
+        float opacity = Math.max(0, Math.min(0.5f, pulse));
 
-		opacity = Math.max(opacity, BACKGROUND_VALUE);
+        if (SOUND == null || !mc.getSoundManager().isPlaying(SOUND)) {
+            SOUND = new PlayerFollowingLoopingSound(RegenerationSounds.SWING_REGEN_LOOP, SoundCategory.PLAYERS, opacity * 0.5f);
+            mc.getSoundManager().play(SOUND);
+        } else {
+            SOUND.setVolume(opacity * 0.5f);
+        }
 
-		if (SOUND == null || !mc.getSoundManager().isPlaying(SOUND)) {
-			SOUND = new PlayerFollowingLoopingSound(RegenerationSounds.SWING_REGEN_LOOP, SoundCategory.PLAYERS, opacity);
-			mc.getSoundManager().play(SOUND);
-		}
+        if (opacity < 0.01f) return;
 
-		SOUND.setVolume(opacity * 0.5F);
+        if (mc.options.getPerspective() != Perspective.FIRST_PERSON) return;
 
-		if (opacity <= 0.0F) {
-			return;
-		}
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
 
-		// TODO \/ breaks with chat open
-		if (mc.options.getPerspective() == Perspective.FIRST_PERSON) {
-			RenderSystem.disableDepthTest();
-			RenderSystem.depthMask(false);
-			context.setShaderColor(1.0F, 1.0F, 1.0F, opacity);
-			context.drawTexture(TEXTURE, 0, 0, 0, 0.0F, 0.0F, context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight());
-			RenderSystem.defaultBlendFunc();
-			RenderSystem.depthMask(true);
-			RenderSystem.enableDepthTest();
-			context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		}
-	}
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
 
-	private static double getFadeoutMultiplier(float x, float start, float end, float steepness) {
-		double t = (x - start) / (end - start);
-		// Logistic function centered at t = 0.5
-		return 1.0 / (1.0 + Math.exp(steepness * (t - 0.5)));
-	}
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        context.drawTexture(TEXTURE, 0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
+
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+    }
 }

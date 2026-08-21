@@ -7,16 +7,14 @@
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "origin.PlayerOriginComponentMixin",
-    "boat.BoatEntityMixin",
-    "boat.BoatEntityTypeMixin",
-    "boat.ChestBoatEntityMixin"
+    "compat.origin.PlayerOriginComponentMixin",
+    "TimelordAbilities.PhantomSpawnerMixin",
+    "TimelordAbilities.PlayerEntityAbilitiesMixin"
   ],
   "client": [
-    "ait.ControlEntityRendererMixin",
+    "compat.ait.ControlEntityRendererMixin",
     "client.GallifreySkyboxMixin",
-    "client.LivingEntityRendererMixin",
-    "client.PlayerEntityRendererMixin"
+    "client.LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
