@@ -1,6 +1,6 @@
 package dev.amble.timelordregen.client.gui;
 
-import dev.amble.timelordregen.item.data.PocketWatchItem;
+import dev.amble.timelordregen.core.item.PocketWatchItem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

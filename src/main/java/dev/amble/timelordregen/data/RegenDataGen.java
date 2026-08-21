@@ -44,6 +44,14 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
             // Yes this is confusing but oh well - Loqor
             provider.registerLogBlock(RegenerationModBlocks.CADON_LOG, RegenerationModBlocks.CADON_WOOD);
             provider.registerLogBlock(RegenerationModBlocks.STRIPPED_CADON_LOG, RegenerationModBlocks.STRIPPED_CADON_WOOD);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_STONE);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_COPPER_ORE);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_DIAMOND_ORE);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_GOLD_ORE);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_IRON_ORE);
+            provider.registerSimpleBlock(RegenerationModBlocks.GALLIFREY_STONE_BRICKS);
+            provider.registerSimpleBlock(RegenerationModBlocks.CHISELED_GALLIFREY_STONE_BRICK);
             provider.registerBlockSet(new BlockSetRecord(
                     RegenerationModBlocks.CADON_PLANKS,
                     RegenerationModBlocks.CADON_STAIRS,

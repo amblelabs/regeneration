@@ -1,4 +1,4 @@
-package dev.amble.timelordregen.item.data;
+package dev.amble.timelordregen.core.item;
 
 import dev.amble.timelordregen.api.RegenerationCapable;
 import dev.amble.timelordregen.client.util.ShiftTooltipHelper;

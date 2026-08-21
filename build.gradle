@@ -36,7 +36,6 @@ repositories {
 
 	mavenCentral()
 
-
 	// YACL
 	maven { url 'https://maven.isxander.dev/releases' }
 
@@ -64,6 +63,14 @@ repositories {
         name = 'TerraformersMC'
         url = 'https://maven.terraformersmc.com/'
     }
+	maven {
+		name = "JEI"
+		url = "https://maven.blamejared.com/"
+	}
+	maven {
+		name = "Jitpack"
+		url = "https://jitpack.io/"
+	}
 }
 
 dependencies {
@@ -111,6 +118,7 @@ dependencies {
 }
 
 processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
     inputs.property "amblekit_version", project.amblekit_version
 
@@ -171,8 +179,14 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_22
 	targetCompatibility = JavaVersion.VERSION_17
+}
+
+sourcesJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 jar {

@@ -51,7 +51,7 @@
       "aquifers_enabled": true,
       "ore_veins_enabled": true,
       "default_block": {
-        "Name": "minecraft:stone"
+        "Name": "timelordregen:gallifrey_stone"
       },
       "default_fluid": {
         "Name": "minecraft:water",
@@ -539,7 +539,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:stone"
+                            "Name": "timelordregen:gallifrey_stone"
                           }
                         }
                       ]
@@ -588,7 +588,7 @@
                               {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                  "Name": "minecraft:stone"
+                                  "Name": "timelordregen:gallifrey_stone"
                                 }
                               }
                             ]
@@ -613,7 +613,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:stone"
+                            "Name": "timelordregen:gallifrey_stone"
                           }
                         }
                       ]
@@ -662,7 +662,7 @@
                               {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                  "Name": "minecraft:stone"
+                                  "Name": "timelordregen:gallifrey_stone"
                                 }
                               }
                             ]
@@ -687,7 +687,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:stone"
+                            "Name": "timelordregen:gallifrey_stone"
                           }
                         }
                       ]
@@ -764,7 +764,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:stone"
+                            "Name": "timelordregen:gallifrey_stone"
                           }
                         }
                       ]
@@ -828,7 +828,7 @@
                   {
                     "type": "minecraft:block",
                     "result_state": {
-                      "Name": "minecraft:stone"
+                      "Name": "timelordregen:gallifrey_stone"
                     }
                   }
                 ]

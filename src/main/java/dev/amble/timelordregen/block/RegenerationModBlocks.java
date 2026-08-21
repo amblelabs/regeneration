@@ -1,7 +1,7 @@
 package dev.amble.timelordregen.block;
 
 import dev.amble.timelordregen.data.tree.CadonSaplingGenerator;
-import dev.amble.timelordregen.item.RegenerationItemGroups;
+import dev.amble.timelordregen.core.RegenerationModItemGroups;
 import dev.amble.timelordregen.util.ExBoatType;
 import dev.amble.lib.block.ABlockSettings;
 import dev.amble.lib.container.impl.BlockContainer;
@@ -20,27 +20,27 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
 
     //卡顿木
     @NoEnglish
-    public static final Block GALLIFREY_STONE = new PillarBlock(ABlockSettings.copyOf(Blocks.STONE));
+    public static final Block GALLIFREY_STONE = new Block(ABlockSettings.copyOf(Blocks.STONE));
 
     @NoEnglish
-    public static final Block AZBANTIUM_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
+    public static final Block AZBANTIUM_ORE = new Block(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
 
     @NoEnglish
-    public static final Block CHISELED_GALLIFREY_STONE_BRICK = new PillarBlock(ABlockSettings.copyOf(Blocks.CHISELED_STONE_BRICKS));
+    public static final Block CHISELED_GALLIFREY_STONE_BRICK = new Block(ABlockSettings.copyOf(Blocks.CHISELED_STONE_BRICKS));
 
-    public static final Block GALLIFREY_STONE_BRICKS = new PillarBlock(ABlockSettings.copyOf(Blocks.STONE_BRICKS));
-
-    @NoEnglish
-    public static final Block GALLIFREY_COPPER_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.COPPER_ORE));
+    public static final Block GALLIFREY_STONE_BRICKS = new Block(ABlockSettings.copyOf(Blocks.STONE_BRICKS));
 
     @NoEnglish
-    public static final Block GALLIFREY_DIAMOND_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
+    public static final Block GALLIFREY_COPPER_ORE = new Block(ABlockSettings.copyOf(Blocks.COPPER_ORE));
 
     @NoEnglish
-    public static final Block GALLIFREY_GOLD_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.GOLD_ORE));
+    public static final Block GALLIFREY_DIAMOND_ORE = new Block(ABlockSettings.copyOf(Blocks.DIAMOND_ORE));
 
     @NoEnglish
-    public static final Block GALLIFREY_IRON_ORE = new PillarBlock(ABlockSettings.copyOf(Blocks.IRON_ORE));
+    public static final Block GALLIFREY_GOLD_ORE = new Block(ABlockSettings.copyOf(Blocks.GOLD_ORE));
+
+    @NoEnglish
+    public static final Block GALLIFREY_IRON_ORE = new Block(ABlockSettings.copyOf(Blocks.IRON_ORE));
 
     @NoEnglish
     public static final Block CADON_LOG = new PillarBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_LOG));
@@ -139,7 +139,7 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
         if (block == RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCE) {
             return new AItemSettings();
         }
-        return new AItemSettings().group(RegenerationItemGroups.REGEN);
+        return new AItemSettings().group(RegenerationModItemGroups.REGEN);
     }
 
 }

@@ -10,9 +10,9 @@ import dev.amble.timelordregen.client.particle.RightRegenParticle;
 import dev.amble.timelordregen.client.renderers.sky.GallifreySkyProperties;
 import dev.amble.timelordregen.client.util.ClientColors;
 import dev.amble.timelordregen.core.RegenerationCore;
+import dev.amble.timelordregen.core.RegenerationModItems;
 import dev.amble.timelordregen.dimensions.RegenerationDimensions;
-import dev.amble.timelordregen.item.RegenerationItems;
-import dev.amble.timelordregen.item.data.PocketWatchItem;
+import dev.amble.timelordregen.core.item.PocketWatchItem;
 import dev.amble.timelordregen.network.RegenerationUINetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -51,7 +51,7 @@ public class RegenerationClientMod implements ClientModInitializer {
         HudRenderCallback.EVENT.register(new PocketWatchHudOverlay());
 
         ModelPredicateProviderRegistry.register(
-                RegenerationItems.POCKET_WATCH,
+                RegenerationModItems.POCKET_WATCH,
                 new Identifier("timelordregen", "open"),
                 (stack, world, entity, seed) -> PocketWatchItem.isOpen(stack) ? 1.0f : 0.0f
         );

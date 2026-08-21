@@ -1,21 +1,29 @@
 package dev.amble.timelordregen.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.amble.timelordregen.RegenerationMod;
 import dev.amble.timelordregen.api.RegenerationCapable;
 import dev.amble.timelordregen.core.RegenerationCore;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
 
 public class RegenerationSettingsScreen extends Screen {
 
     private final PlayerEntity player;
     private final RegenerationCore info;
+
+    private static final Identifier GALLIFREYAN = RegenerationMod.id("textures/gui/regen_gallifreyan.png");
 
     private static final int COLOR_OVERLAY      = 0xE6000000;
     private static final int COLOR_PANEL        = 0xFF1A0A0E;
@@ -107,7 +115,32 @@ public class RegenerationSettingsScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        ctx.fill(0, 0, this.width, this.height, COLOR_OVERLAY);
+        ctx.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(1, 1, 1, 0.25f);
+
+        MatrixStack stack = ctx.getMatrices();
+        stack.push();
+        stack.translate(-100, this.height - 180, 0);
+        stack.translate(135, 140, 0);
+        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((MinecraftClient.getInstance().player.age
+                + delta) * 0.2f));
+        stack.translate(-135, -140, 0);
+        ctx.drawTexture(GALLIFREYAN, 0,0, 0, 0, 256, 256, 256, 256);
+        stack.pop();
+
+        stack.push();
+        stack.translate(this.width - 180, -100, 0);
+        stack.translate(135, 140, 0);
+        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((MinecraftClient.getInstance().player.age
+                + delta) * 0.2f));
+        stack.translate(-135, -140, 0);
+        ctx.drawTexture(GALLIFREYAN, 0,0, 0, 0, 256, 256, 256, 256);
+        stack.pop();
+
+        RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(1, 1, 1, 1f);
 
         ctx.fill(panelX - 2, panelY - 2, panelX + PANEL_WIDTH + 2, panelY + PANEL_HEIGHT + 2, 0xFF080808);
         ctx.fill(panelX, panelY, panelX + PANEL_WIDTH, panelY + PANEL_HEIGHT, COLOR_PANEL);

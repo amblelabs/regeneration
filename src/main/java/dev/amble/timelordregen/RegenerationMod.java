@@ -5,14 +5,14 @@ import dev.amble.timelordregen.block.RegenerationModBlocks;
 import dev.amble.timelordregen.commands.RegenCommand;
 import dev.amble.timelordregen.compat.Compat;
 import dev.amble.timelordregen.core.RegenerationCore;
+import dev.amble.timelordregen.core.RegenerationModItems;
 import dev.amble.timelordregen.core.animation.RegenAnimRegistry;
 import dev.amble.timelordregen.dimensions.RegenerationDimensions;
 import dev.amble.timelordregen.core.particle_effects.RegenParticleEffect;
 import dev.amble.timelordregen.data.Attachments;
 import dev.amble.timelordregen.data.datagen.RegenerationCriterions;
 import dev.amble.timelordregen.data.tree.RegenerationSounds;
-import dev.amble.timelordregen.item.RegenerationItemGroups;
-import dev.amble.timelordregen.item.RegenerationItems;
+import dev.amble.timelordregen.core.RegenerationModItemGroups;
 import dev.amble.timelordregen.network.RegenerationUINetworking;
 import dev.amble.lib.container.RegistryContainer;
 import dev.amble.lib.register.AmbleRegistries;
@@ -56,11 +56,10 @@ public class RegenerationMod implements ModInitializer {
 	    Attachments.init();
         RegenerationDimensions.init();
         RegenerationUINetworking.registerServerReceivers();
-        RegistryContainer.register(RegenerationItemGroups.class, MOD_ID);
+        RegistryContainer.register(RegenerationModItemGroups.class, MOD_ID);
         RegistryContainer.register(RegenerationModBlocks.class, MOD_ID);
-        RegistryContainer.register(RegenerationItems.class, MOD_ID);
         RegistryContainer.register(RegenerationModItems.class, MOD_ID);
-		// RegistryContainer2.register(RegenerationModBoatTypes.class, MOD_ID);
+        RegistryContainer.register(RegenerationModItems.class, MOD_ID);
 	    RegenerationSounds.init();
         RegenerationEvents.registerListeners();
 
@@ -79,9 +78,6 @@ public class RegenerationMod implements ModInitializer {
 	    Compat.init();
 	    RegenerationCriterions.init();
 
-        /**
-        AIT反射软依赖
-         */
         if (FabricLoader.getInstance().isModLoaded("ait")) {
             try {
                 Class<?> compatClass = Class.forName("dev.amble.timelordregen.compat.ait.AITCompat");
