@@ -65,10 +65,6 @@ repositories {
         name = 'TerraformersMC'
         url = 'https://maven.terraformersmc.com/'
     }
-    maven {
-        name = "JEI"
-        url = "https://maven.blamejared.com/"
-    }
 }
 
 dependencies {

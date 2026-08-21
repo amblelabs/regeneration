@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "timelordregen",
   "version": "${version}",
-  "name": "AmbleLabs Regeneration Small Moss",
+  "name": "Regeneration",
   "description": "A Doctor Who regeneration mod.",
   "authors": ["AmbleLabs"],
   "contact": {
@@ -12,13 +12,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.amble.ars.RegenerationMod"
+      "dev.amble.timelordregen.RegenerationMod"
     ],
     "client": [
-      "dev.amble.ars.client.RegenerationClientMod"
+      "dev.amble.timelordregen.client.RegenerationClientMod"
     ],
     "fabric-datagen": [
-      "dev.amble.ars.data.RegenDataGen"
+      "dev.amble.timelordregen.data.RegenDataGen"
     ]
   },
   "mixins": [
