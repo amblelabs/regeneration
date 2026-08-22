@@ -128,7 +128,7 @@ processResources {
     ]
 
     filesMatching("fabric.mod.json") {
-        expand "version": inputs.properties.version
+        expand expansionVars
     }
 }
 
