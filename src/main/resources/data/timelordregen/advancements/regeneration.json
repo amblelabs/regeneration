@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "timelordregen:pocket_watch"
+    },
+    "title": {
+      "translate": "advancement.timelordregen.regeneration.title"
+    },
+    "description": {
+      "translate": "advancement.timelordregen.regeneration.description"
+    },
+    "background": "timelordregen:textures/block/gallifrey_stone.png",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "timelordregen:azbantium_hoe"
+    },
+    "title": {
+      "translate": "advancement.timelordregen.azbantium_hoe.title"
+    },
+    "description": {
+      "translate": "advancement.timelordregen.azbantium_hoe.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "minecraft:nether/obtain_ancient_debris",
+  "criteria": {
+    "has_azbantium_hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "timelordregen:azbantium_hoe"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

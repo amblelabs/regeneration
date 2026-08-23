@@ -1,4 +1,6 @@
 {
+  "advancement.timelordregen.regeneration.title": "Regeneration",
+  "advancement.timelordregen.regeneration.description": "The journey of a Time Lord begins.",
   "achievement.timelordregen.description.delay": "Delay your regeneration",
   "achievement.timelordregen.description.regeneration": "First regeneration!",
   "achievement.timelordregen.description.watch": "Obtain a pocket watch — a vessel that holds regeneration energy.",
@@ -11,6 +13,8 @@
   "advancements.timelordregen.unbearably_painful.description": "You feel your organs growing, and your cells multiplying like never before.",
   "advancements.timelordregen.enter_gallifrey.title": "Origin of Spiral Politics",
   "advancements.timelordregen_gallifrey.description": "A rust-coloured planet outside of time, its interior as rusty as its exterior — and laggy.",
+  "advancement.timelordregen.azbantium_hoe.title": "4.5 Billion Years of Devotion",
+  "advancement.timelordregen.azbantium_hoe.description": "If you made this your first Azbantium gear, I suggest you get some sleep and consider farming for retirement",
 
   "block.timelordregen.cadon_button": "Cadon Button",
   "block.timelordregen.cadon_door": "Cadon Door",
@@ -88,7 +92,7 @@
   "item.timelordregen.pocket_watch.state.closed": "§7[Closed]",
   "item.timelordregen.azbantium_axe": "Azbantium Axe",
   "item.timelordregen.azbantium_battleaxe": "Azbantium Battleaxe",
-  "item.timelordregen.azbantium_how": "Azbantium How",
+  "item.timelordregen.azbantium_hoe": "Azbantium Hoe",
   "item.timelordregen.azbantium_pickaxe": "Azbantium Pickaxe",
   "item.timelordregen.azbantium_sword": "Azbantium Sword",
   "item.timelordregen.azbantium_ingot": "Azbantium Ingot",
