@@ -1,0 +1,35 @@
+{
+  "parent": "timelordregen:azbantium_ingot",
+  "display": {
+    "icon": {
+      "item": "timelordregen:white_point_star"
+    },
+    "title": {
+      "translate": "advancement.timelordregen.white_point_star.title"
+    },
+    "description": {
+      "translate": "advancement.timelordregen.white_point_star.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_white_point_star": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "timelordregen:white_point_star"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    ["has_white_point_star"]
+  ]
+}
