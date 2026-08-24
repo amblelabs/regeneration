@@ -14,7 +14,7 @@
     "announce_to_chat": true,
     "hidden": false
   },
-  "parent": "minecraft:nether/obtain_ancient_debris",
+  "parent": "timelordregen:azbantium_ingot",
   "criteria": {
     "has_azbantium_hoe": {
       "trigger": "minecraft:inventory_changed",

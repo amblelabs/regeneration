@@ -1,0 +1,35 @@
+{
+  "parent": "timelordregen:enter_gallifry",
+  "display": {
+    "icon": {
+      "item": "timelordregen:azbantium_ingot"
+    },
+    "title": {
+      "translate": "achievement.timelordregen.title.azbantium_ingot"
+    },
+    "description": {
+      "translate": "achievement.timelordregen.description.azbantium_ingot"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_azbantium_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "timelordregen:azbantium_ingot"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    ["get_azbantium_ingot"]
+  ]
+}

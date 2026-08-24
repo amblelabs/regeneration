@@ -1,0 +1,35 @@
+{
+  "parent": "timelordregen:regeneration",
+  "display": {
+    "icon": {
+      "item": "timelordregen:pocket_watch"
+    },
+    "title": {
+      "translate": "achievement.timelordregen.title.watch"
+    },
+    "description": {
+      "translate": "achievement.timelordregen.description.watch"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_watch": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "timelordregen:pocket_watch"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    ["get_watch"]
+  ]
+}

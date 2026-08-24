@@ -32,4 +32,7 @@ public class RegenerationModItems extends ItemContainer {
 
     @NoEnglish
     public static final Item AZBANTIUM_INGOT = new Item(new AItemSettings().group(RegenerationModItemGroups.REGEN));
+
+    @NoEnglish
+    public static final Item WHITE_POINT_STAR = new Item(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 }
