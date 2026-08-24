@@ -10,7 +10,36 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class ClientParticleUtil {
+
+    private static final int TRAIL_COUNT = 3;            // 每个主粒子带几条尾巴
+    private static final double TRAIL_SPACING = 0.06;    // 尾巴间距
+    private static final double TRAIL_SPEED_DECAY = 0.7; // 尾巴速度衰减
+    private static final int TRAIL_DELAY_TICKS = 1;      // 拖尾延迟 tick 数
+    private static final double TRAIL_POS_FACTOR = -0.003;  // 位置预测系数
+
+    private static class TrailTask {
+        int remainingDelay;
+        Vec3d emitPos;
+        Vec3d velocity;
+        float lerpedValue;
+        int entityId;
+
+        TrailTask(int remainingDelay, Vec3d emitPos, Vec3d velocity, float lerpedValue, int entityId) {
+            this.remainingDelay = remainingDelay;
+            this.emitPos = emitPos;
+            this.velocity = velocity;
+            this.lerpedValue = lerpedValue;
+            this.entityId = entityId;
+        }
+    }
+
+    private static final Map<String, ArrayDeque<TrailTask>> TRAIL_QUEUES = new HashMap<>();
 
     public static void spawnForPart(ClientWorld world, LivingEntity entity,
                                     MatrixStack baseStack, ModelPart part,
@@ -22,7 +51,8 @@ public class ClientParticleUtil {
             return;
         }
 
-        // ===== 手臂 =====
+        processDelayedTrails(world, entity.getId(), partName);
+
         final Vec3d[] pivotWorld = {null};
         final Vec3d[] palmCorners = new Vec3d[4];
         final double[] bestDistSq = {-1.0};
@@ -51,7 +81,6 @@ public class ClientParticleUtil {
         }
 
         if (isDelay) {
-            // 延缓期：在手掌端面内随机生成，速度为0，严格框在手掌范围内
             int count = shortLife ? 6 : 3;
             for (int i = 0; i < count; i++) {
                 double u = Math.random();
@@ -68,11 +97,7 @@ public class ClientParticleUtil {
                 );
             }
         } else {
-            // 动画期：在手掌端面四边形内随机发射，带圆锥形扩散
-            // === 数量翻倍，接近头部密度 ===
             int count = shortLife ? 14 : 8;
-
-            // === 圆锥扩散参数：半角增大到 32°，总张角 64° ===
             double spreadAngle = Math.toRadians(32.0);
 
             for (int i = 0; i < count; i++) {
@@ -83,17 +108,14 @@ public class ClientParticleUtil {
                 Vec3d emitPos = lerp(p01, p32, v);
                 emitPos = emitPos.add(dir.multiply(-0.08));
 
-                // === 速度范围稍微提高，让扩散更有张力 ===
                 double speed = 1.0 + Math.random() * 0.6;
 
-                // ========== 圆锥形扩散核心代码 ==========
                 Vec3d worldUp = Math.abs(dir.y) < 0.99 ? new Vec3d(0, 1, 0) : new Vec3d(1, 0, 0);
                 Vec3d axisX = dir.crossProduct(worldUp).normalize();
                 Vec3d axisY = dir.crossProduct(axisX).normalize();
 
                 double theta = Math.random() * 2.0 * Math.PI;
                 double phi = Math.random() * spreadAngle;
-
                 double sinPhi = Math.sin(phi);
                 double cosPhi = Math.cos(phi);
                 double cosTheta = Math.cos(theta);
@@ -106,14 +128,61 @@ public class ClientParticleUtil {
                 double vx = coneDir.x * speed;
                 double vy = coneDir.y * speed;
                 double vz = coneDir.z * speed;
-                // =======================================
 
                 world.addParticle(
                         new RegenParticleEffect(entity.getId(), 0, 0, true, false, lerpedValue, shortLife),
                         emitPos.x, emitPos.y, emitPos.z,
                         vx, vy, vz
                 );
+
+                queueTrail(entity.getId(), partName, emitPos, new Vec3d(vx, vy, vz), lerpedValue);
             }
+        }
+    }
+
+    private static void processDelayedTrails(ClientWorld world, int entityId, String partName) {
+        String key = entityId + ":" + partName;
+        ArrayDeque<TrailTask> queue = TRAIL_QUEUES.get(key);
+        if (queue == null || queue.isEmpty()) return;
+
+        Iterator<TrailTask> it = queue.iterator();
+        while (it.hasNext()) {
+            TrailTask task = it.next();
+            task.remainingDelay--;
+
+            if (task.remainingDelay <= 0) {
+                if (world.getEntityById(task.entityId) != null) {
+                    spawnTrailNow(world, task);
+                }
+                it.remove();
+            }
+        }
+    }
+
+    private static void queueTrail(int entityId, String partName, Vec3d emitPos, Vec3d velocity, float lerpedValue) {
+        String key = entityId + ":" + partName;
+        TRAIL_QUEUES.computeIfAbsent(key, k -> new ArrayDeque<>())
+                .add(new TrailTask(TRAIL_DELAY_TICKS, emitPos, velocity, lerpedValue, entityId));
+    }
+
+    private static void spawnTrailNow(ClientWorld world, TrailTask task) {
+        double speedLen = task.velocity.length();
+        if (speedLen <= 0.001) return;
+
+        Vec3d velDir = task.velocity.multiply(1.0 / speedLen);
+
+        Vec3d basePos = task.emitPos.add(task.velocity.multiply(TRAIL_DELAY_TICKS * TRAIL_POS_FACTOR));
+
+        for (int t = 1; t <= TRAIL_COUNT; t++) {
+            Vec3d trailPos = basePos.subtract(velDir.multiply(TRAIL_SPACING * t));
+            double trailSpeed = speedLen * TRAIL_SPEED_DECAY * (0.85 + Math.random() * 0.3);
+            Vec3d trailVel = velDir.multiply(trailSpeed);
+
+            world.addParticle(
+                    new RegenParticleEffect(task.entityId, 0, 0, true, false, task.lerpedValue, true),
+                    trailPos.x, trailPos.y, trailPos.z,
+                    trailVel.x, trailVel.y, trailVel.z
+            );
         }
     }
 
@@ -150,6 +219,9 @@ public class ClientParticleUtil {
     private static void spawnHeadParticles(ClientWorld world, LivingEntity entity,
                                            MatrixStack baseStack, ModelPart part,
                                            float lerpedValue, boolean shortLife, boolean isDelay) {
+
+        // 头部处理延迟拖尾
+        processDelayedTrails(world, entity.getId(), "head");
 
         final float[] minX = {Float.MAX_VALUE};
         final float[] maxX = {-Float.MAX_VALUE};
@@ -228,6 +300,10 @@ public class ClientParticleUtil {
                     emitPos.x, emitPos.y, emitPos.z,
                     vx, vy, vz
             );
+
+            if (!isDelay) {
+                queueTrail(entity.getId(), "head", emitPos, new Vec3d(vx, vy, vz), lerpedValue);
+            }
         }
     }
 }
