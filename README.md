@@ -32,7 +32,6 @@ Adds Regeneration from Doctor Who - Your body has a way of cheating death by reg
 
 ### If you have [Origins](https://modrinth.com/mod/origins)
 - You can choose to be a Time Lord and gain the regeneration power
-- On your last regeneration you become a random origin
 - If you are not a Time Lord & you regenerate, you become a random origin
 
 <h2>
