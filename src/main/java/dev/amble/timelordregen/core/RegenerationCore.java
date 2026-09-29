@@ -419,6 +419,7 @@ public class RegenerationCore {
     }
 
     public void resetSkinToBase(ServerPlayerEntity player) {
+        if (!this.useOverlay) return;
         this.deactivateOverlay();
         this.applySkin(player);
         this.syncTracking(player);
