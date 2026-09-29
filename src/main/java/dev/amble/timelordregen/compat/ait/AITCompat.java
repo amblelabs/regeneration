@@ -49,7 +49,7 @@ public class AITCompat implements TardisCompatBridge {
                     if (mode == RegenerationCore.TARDIS_MODE_ENABLED) {
                         tardis.interiorChanging().queueInteriorChange(DesktopRegistry.getInstance().getRandom(tardis));
                     } else if (mode == RegenerationCore.TARDIS_MODE_REFURBISH) {
-                        tardis.interiorChanging().queueInteriorChange(null);
+                        tardis.interiorChanging().queueInteriorChange(tardis.getDesktop().getSchema());
                     }
                 })
         );
