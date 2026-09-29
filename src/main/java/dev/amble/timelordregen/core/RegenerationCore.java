@@ -26,7 +26,9 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
@@ -202,6 +204,14 @@ public class RegenerationCore {
                 info.stopRegeneration(newPlayer);
                 info.sync(newPlayer, newPlayer.getUuid());
             }
+        });
+
+        EntityTrackingEvents.START_TRACKING.register((tracked, viewer) -> {
+            if (!(tracked instanceof LivingEntity living) || RegenerationCore.get(living) == null) return;
+            Scheduler.get().runTaskLater(() -> {
+                RegenerationCore info = RegenerationCore.get(living);
+                if (info != null && !living.isRemoved() && !viewer.isDisconnected()) info.sync(viewer, living.getUuid());
+            }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 1);
         });
     }
 
@@ -411,9 +421,7 @@ public class RegenerationCore {
     public void resetSkinToBase(ServerPlayerEntity player) {
         this.deactivateOverlay();
         this.applySkin(player);
-        for (ServerPlayerEntity target : player.getServer().getPlayerManager().getPlayerList()) {
-            this.sync(target, player.getUuid());
-        }
+        this.syncTracking(player);
     }
 
     public void tick(LivingEntity entity) {
@@ -425,9 +433,7 @@ public class RegenerationCore {
 
         if (this.isDirty()) {
             this.setDirty(false);
-            for (ServerPlayerEntity player : entity.getWorld().getServer().getPlayerManager().getPlayerList()) {
-                this.sync(player, entity.getUuid());
-            }
+            this.syncTracking(entity);
         }
 
         if (this.channel != null && entity instanceof ServerPlayerEntity sp && !this.channel.tick(sp, this)) this.channel = null;
@@ -751,6 +757,13 @@ public class RegenerationCore {
         this.setDirty(true);
     }
 
+    private void syncTracking(LivingEntity entity) {
+        if (entity instanceof ServerPlayerEntity player) this.sync(player, entity.getUuid());
+        for (ServerPlayerEntity target : PlayerLookup.tracking(entity)) {
+            this.sync(target, entity.getUuid());
+        }
+    }
+
     private void sync(ServerPlayerEntity target, UUID sourceId) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(sourceId);
@@ -847,6 +860,15 @@ public class RegenerationCore {
     }
 
     public static final Identifier CLEAR_TIMELORD_PACKET = RegenerationMod.id("clear_timelord");
+
+    public static void sendClear(ServerPlayerEntity player) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeUuid(player.getUuid());
+        ServerPlayNetworking.send(player, CLEAR_TIMELORD_PACKET, buf);
+        for (ServerPlayerEntity target : PlayerLookup.tracking(player)) {
+            ServerPlayNetworking.send(target, CLEAR_TIMELORD_PACKET, PacketByteBufs.copy(buf));
+        }
+    }
 
     @Environment(EnvType.CLIENT)
     public static void receiveClear(UUID playerId) {
