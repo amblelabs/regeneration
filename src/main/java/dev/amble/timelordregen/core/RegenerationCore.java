@@ -279,6 +279,7 @@ public class RegenerationCore {
     private boolean baseSkinCaptured = false;
     @Nullable private String overlaySkinId = null;
     private boolean useOverlay = false;
+    @Nullable private String pendingSkin;
 
     private int tardisInteriorMode = TARDIS_MODE_ENABLED;
 
@@ -413,6 +414,7 @@ public class RegenerationCore {
     }
 
     public void onTransitionApplySkin(ServerPlayerEntity player, String username) {
+        this.pendingSkin = null;
         this.setOverlaySkin(username);
         this.activateOverlay();
         this.applySkin(player);
@@ -640,6 +642,7 @@ public class RegenerationCore {
             AnimationTemplate template = RegenAnimRegistry.getInstance().getRandom();
             AnimationSet set = template.instantiate(changeSkin, targetSkin);
             this.currentAnimationSet = set;
+            if (template.getTransitionPoint().isPresent()) this.pendingSkin = targetSkin;
 
             set.finish(() -> {
                 RegenerationMod.LOGGER.info("Animation finish callback for {}", entity.getUuid());
@@ -667,7 +670,9 @@ public class RegenerationCore {
     private void finish(LivingEntity entity) {
         RegenerationMod.LOGGER.info("finish() called for {}", entity.getUuid());
 
+        String skin = this.pendingSkin;
         this.stopRegeneration(entity);
+        if (skin != null && entity instanceof ServerPlayerEntity player) this.onTransitionApplySkin(player, skin);
 
         long worldTime = entity.getWorld().getTime();
         this.invulnerableUntil = worldTime + INVULNERABLE_DURATION;
@@ -717,6 +722,7 @@ public class RegenerationCore {
     public void stopRegeneration(@Nullable LivingEntity entity) {
         if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
 
+        this.pendingSkin = null;
         if (this.currentAnimationSet != null) {
             this.currentAnimationSet.cancel();
             this.currentAnimationSet = null;
