@@ -84,6 +84,15 @@ public class RegenerationBlockTagProvider extends AmbleBlockTagProvider {
         getOrCreateTagBuilder(BlockTags.SAPLINGS)
                 .add(RegenerationModBlocks.CADON_SAPLING);
 
+        getOrCreateTagBuilder(BlockTags.ANIMALS_SPAWNABLE_ON)
+                .add(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK);
+
+        getOrCreateTagBuilder(BlockTags.WOLVES_SPAWNABLE_ON)
+                .add(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK);
+
+        getOrCreateTagBuilder(BlockTags.RABBITS_SPAWNABLE_ON)
+                .add(RegenerationModBlocks.GALLIFREY_GRASS_BLOCK);
+
         // 注意：BlockTags.FLAMMABLE 在 1.20.1 中不存在，已移除
     }
 }
