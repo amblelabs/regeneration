@@ -672,7 +672,8 @@ public class RegenerationCore {
         this.regenBoostTimer = 0;
 
         RegenerationEvents.FINISH.invoker().onFinish(entity, this);
-        this.setAnimation(RegenAnimRegistry.getInstance().getRandom());
+        AnimationTemplate next = RegenAnimRegistry.getInstance().getRandom();
+        if (next != null) this.setAnimation(next);
         this.markDirty();
 
         entity.setNoGravity(false);
