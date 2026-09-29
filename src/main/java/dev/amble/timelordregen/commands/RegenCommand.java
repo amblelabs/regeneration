@@ -128,6 +128,7 @@ public class RegenCommand {
         RegenerationCore info = capable.getRegenerationInfo();
         if (info != null) {
             info.stopRegeneration(player);
+            info.resetSkinToBase(player);
         }
 
         if (capable.isTimelord()) {
