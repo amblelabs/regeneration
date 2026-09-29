@@ -32,6 +32,8 @@ public class ClientRegenParticleManager {
         capable.withInfo().ifPresent(info -> {
             if (!info.isActive()) return;
             if (!(entity instanceof AbstractClientPlayerEntity player)) return;
+            int fps = MinecraftClient.getInstance().getCurrentFps();
+            if (fps > 60 && player.getRandom().nextInt(fps) >= 60) return;
 
             boolean isDelay = info.getDelay().isRunning();
             spawnParts(player, isDelay, !isDelay, false);
