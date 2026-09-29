@@ -78,8 +78,7 @@ public class RegenerationCore {
             if (other == player) continue;
 
             other.networkHandler.sendPacket(new PlayerRemoveS2CPacket(List.of(player.getUuid())));
-            other.networkHandler.sendPacket(new PlayerListS2CPacket(
-                    PlayerListS2CPacket.Action.ADD_PLAYER, player));
+            other.networkHandler.sendPacket(PlayerListS2CPacket.entryFromPlayer(List.of(player)));
         }
     }
 
