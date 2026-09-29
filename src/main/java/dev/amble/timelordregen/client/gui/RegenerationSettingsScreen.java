@@ -276,7 +276,7 @@ public class RegenerationSettingsScreen extends Screen {
         @Override
         public void renderButton(DrawContext ctx, int mx, int my, float delta) {
             int tx = getX(), ty = getY(), tw = getWidth(), th = getHeight();
-            boolean hovered = isHovered();
+            boolean hovered = isSelected();
 
             int bg = hovered ? COLOR_BTN_HOVER : COLOR_BTN_BG;
             ctx.fill(tx, ty, tx + tw, ty + th, bg);
