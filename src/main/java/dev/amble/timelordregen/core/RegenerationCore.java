@@ -36,6 +36,7 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket;
@@ -143,6 +144,9 @@ public class RegenerationCore {
             if (info.isActive()) return false;
 
             if (entity.isRemoved()) return true;
+
+            if (!damageSource.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                    && (entity.getMainHandStack().isOf(Items.TOTEM_OF_UNDYING) || entity.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING))) return true;
 
             if (info.getUsesLeft() > 0) {
                 return !info.tryStart(entity);
