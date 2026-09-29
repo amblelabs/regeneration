@@ -8,6 +8,8 @@ import dev.amble.timelordregen.api.RegenerationEvents;
 import dev.amble.timelordregen.core.animation.AnimationSet;
 import dev.amble.timelordregen.core.animation.AnimationTemplate;
 import dev.amble.timelordregen.core.animation.RegenAnimRegistry;
+import dev.amble.timelordregen.core.energy.EnergyChannel;
+import dev.amble.timelordregen.core.energy.RegenEnergy;
 import dev.amble.timelordregen.data.Attachments;
 import dev.amble.lib.animation.AnimatedEntity;
 import dev.amble.lib.animation.AnimationTracker;
@@ -272,6 +274,8 @@ public class RegenerationCore {
 
     private int tardisInteriorMode = TARDIS_MODE_ENABLED;
 
+    @Nullable private EnergyChannel channel;
+
     private RegenerationCore(int usesLeft, boolean isRegenerating, boolean regenQueued, Identifier animation, Delay delay) {
         this.usesLeft = usesLeft;
         this.isRegenerating = isRegenerating;
@@ -349,6 +353,9 @@ public class RegenerationCore {
 
     @Nullable public String getOverlaySkinId() { return overlaySkinId; }
 
+    @Nullable public EnergyChannel getChannel() { return channel; }
+    public void setChannel(@Nullable EnergyChannel channel) { this.channel = channel; }
+
     public void decrement() {
         this.setUsesLeft(this.getUsesLeft() - 1);
     }
@@ -425,13 +432,19 @@ public class RegenerationCore {
             }
         }
 
+        if (this.channel != null && entity instanceof ServerPlayerEntity sp && !this.channel.tick(sp, this)) this.channel = null;
+
         long worldTime = entity.getWorld().getTime();
 
         this.tickInvulnerability(entity, worldTime);
         this.tickConfusion(entity, worldTime);
 
         if (this.isRegenerating()) {
-            RegenerationExplosion.tick(entity);
+            if (this.currentAnimationSet == null && entity instanceof AnimatedEntity) {
+                this.finish(entity);
+            } else {
+                RegenerationExplosion.tick(entity);
+            }
         }
 
         if (delay.isRunning()) {
@@ -581,6 +594,7 @@ public class RegenerationCore {
     public boolean tryStart(LivingEntity entity) {
         if (this.isActive() || this.isInvulnerable() || this.usesLeft <= 0) return false;
         if (entity.isRemoved()) return false;
+        if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
         this.delay.start(entity.age);
         this.markDirty();
         entity.setHealth(entity.getMaxHealth());
@@ -594,6 +608,7 @@ public class RegenerationCore {
     private boolean start(LivingEntity entity) {
         if (this.isRegenerating() || this.isInvulnerable() || this.usesLeft <= 0) return false;
         if (!entity.isAlive()) return false;
+        if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
 
         this.setRegenQueued(false);
         this.decrement();
@@ -657,7 +672,8 @@ public class RegenerationCore {
         this.regenBoostTimer = 0;
 
         RegenerationEvents.FINISH.invoker().onFinish(entity, this);
-        this.setAnimation(RegenAnimRegistry.getInstance().getRandom());
+        AnimationTemplate next = RegenAnimRegistry.getInstance().getRandom();
+        if (next != null) this.setAnimation(next);
         this.markDirty();
 
         entity.setNoGravity(false);
@@ -694,6 +710,8 @@ public class RegenerationCore {
     }
 
     public void stopRegeneration(@Nullable LivingEntity entity) {
+        if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
+
         if (this.currentAnimationSet != null) {
             this.currentAnimationSet.cancel();
             this.currentAnimationSet = null;

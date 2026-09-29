@@ -3,7 +3,10 @@ package dev.amble.timelordregen.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.timelordregen.RegenerationMod;
 import dev.amble.timelordregen.api.RegenerationCapable;
+import dev.amble.timelordregen.client.config.RegenConfigScreen;
+import dev.amble.timelordregen.client.energy.EnergyClient;
 import dev.amble.timelordregen.core.RegenerationCore;
+import dev.amble.timelordregen.core.energy.EnergyAbility;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
@@ -40,9 +43,10 @@ public class RegenerationSettingsScreen extends Screen {
     private static final int COLOR_RUNE         = 0xFF6B4226;
 
     private static final int PANEL_WIDTH  = 280;
-    private static final int PANEL_HEIGHT = 250;
+    private static final int PANEL_HEIGHT = 278;
 
     private int panelX, panelY;
+    private ButtonWidget crackButton;
 
     public RegenerationSettingsScreen(PlayerEntity player) {
         super(Text.translatable("gui.regen.settings.title"));
@@ -106,8 +110,20 @@ public class RegenerationSettingsScreen extends Screen {
             ));
         }
 
+        crackButton = this.addDrawableChild(new TimeLordButton(
+                cx - 100, FabricLoader.getInstance().isModLoaded("ait") ? cy + 84 : cy + 56, 200, 20,
+                Text.translatable("gui.regen.settings.crack"),
+                button -> EnergyClient.input(EnergyAbility.CRACK, true)
+        ));
+
         this.addDrawableChild(new TimeLordButton(
-                cx - 50, cy + 90, 100, 20,
+                cx - 102, cy + 118, 100, 20,
+                Text.translatable("gui.regen.settings.energy_settings"),
+                button -> this.client.setScreen(RegenConfigScreen.create(this))
+        ));
+
+        this.addDrawableChild(new TimeLordButton(
+                cx + 2, cy + 118, 100, 20,
                 Text.translatable("gui.regen.settings.done"),
                 button -> this.close()
         ));
@@ -168,7 +184,9 @@ public class RegenerationSettingsScreen extends Screen {
         ctx.fill(cardX, cardY, cardX + cardW, cardY + cardH, COLOR_CARD_BG);
         ctx.drawBorder(cardX, cardY, cardW, cardH, COLOR_CARD_BORDER);
 
-        int remaining = info.getUsesLeft();
+        RegenerationCore live = RegenerationCore.get(player);
+        if (live == null) live = info;
+        int remaining = live.getUsesLeft();
         String remainingText = Text.translatable("gui.regen.settings.remaining", remaining).getString();
         ctx.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal(remainingText).formatted(Formatting.GOLD),
@@ -180,6 +198,13 @@ public class RegenerationSettingsScreen extends Screen {
         int statusWidth = this.textRenderer.getWidth(statusText);
         ctx.drawTextWithShadow(this.textRenderer, statusText,
                 panelX + (PANEL_WIDTH - statusWidth) / 2, statusY, statusColor);
+
+        int energy = EnergyClient.energy;
+        ctx.drawCenteredTextWithShadow(this.textRenderer,
+                Text.translatable("gui.regen.settings.energy", energy),
+                panelX + PANEL_WIDTH / 2, statusY + 12, COLOR_GOLD);
+        if (crackButton != null)
+            crackButton.active = energy + EnergyClient.perRegen <= EnergyClient.cap && remaining >= 1;
 
         super.render(ctx, mouseX, mouseY, delta);
     }

@@ -19,6 +19,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class AITCompat implements TardisCompatBridge {
 
@@ -52,6 +53,20 @@ public class AITCompat implements TardisCompatBridge {
                     }
                 })
         );
+    }
+
+    @Override
+    public boolean isTardis(World world) {
+        return TardisServerWorld.isTardisDimension(world);
+    }
+
+    @Override
+    public boolean drawFuel(World world, double amount) {
+        if (amount <= 0.0 || !(world instanceof TardisServerWorld tw)) return true;
+        ServerTardis tardis = tw.getTardis();
+        if (tardis == null || tardis.getFuel() < amount) return false;
+        tardis.removeFuel(amount);
+        return true;
     }
 
     @Override

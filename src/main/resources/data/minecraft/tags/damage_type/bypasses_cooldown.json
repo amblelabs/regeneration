@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "timelordregen:regeneration_energy",
+    "timelordregen:regeneration_energy_armored"
+  ]
+}

@@ -2,12 +2,15 @@ package dev.amble.timelordregen.mixin;
 
 import dev.amble.timelordregen.api.RegenerationCapable;
 import dev.amble.timelordregen.core.RegenerationCore;
+import dev.amble.timelordregen.config.RegenerationServerConfig;
+import dev.amble.timelordregen.core.energy.RegenEnergy;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -42,5 +45,10 @@ public class LivingEntityMixin {
                 cir.setReturnValue(false);
             }
         }
+    }
+
+    @Inject(method = "dropLoot", at = @At("HEAD"), cancellable = true)
+    private void regeneration$burnLoot(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
+        if (RegenEnergy.isEnergy(source) && RegenerationServerConfig.get().burnLoot) ci.cancel();
     }
 }

@@ -2,6 +2,7 @@ package dev.amble.timelordregen.client;
 
 import dev.amble.timelordregen.RegenerationMod;
 import dev.amble.timelordregen.block.RegenerationModBlocks;
+import dev.amble.timelordregen.client.energy.EnergyClient;
 import dev.amble.timelordregen.client.gui.DelayOverlay;
 import dev.amble.timelordregen.client.gui.PocketWatchHudOverlay;
 import dev.amble.timelordregen.client.gui.RegenerationSettingsScreen;
@@ -86,6 +87,7 @@ public class RegenerationClientMod implements ClientModInitializer {
             });
         });
     registerKeyBindings();
+    EnergyClient.init();
 }
 
     private void registerKeyBindings() {

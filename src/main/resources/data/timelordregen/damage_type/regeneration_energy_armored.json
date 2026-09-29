@@ -1,0 +1,6 @@
+{
+  "message_id": "timelordregen.regeneration_energy",
+  "exhaustion": 0.0,
+  "scaling": "never",
+  "effects": "burning"
+}

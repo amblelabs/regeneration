@@ -7,6 +7,7 @@ import dev.amble.timelordregen.compat.Compat;
 import dev.amble.timelordregen.core.RegenerationCore;
 import dev.amble.timelordregen.core.RegenerationModItems;
 import dev.amble.timelordregen.core.animation.RegenAnimRegistry;
+import dev.amble.timelordregen.core.energy.RegenEnergy;
 import dev.amble.timelordregen.dimensions.RegenerationDimensions;
 import dev.amble.timelordregen.core.particle_effects.RegenParticleEffect;
 import dev.amble.timelordregen.data.Attachments;
@@ -75,6 +76,7 @@ public class RegenerationMod implements ModInitializer {
 
         // Init regeneration manager
 		RegenerationCore.init();
+		RegenEnergy.init();
 	    Compat.init();
 	    RegenerationCriterions.init();
 
