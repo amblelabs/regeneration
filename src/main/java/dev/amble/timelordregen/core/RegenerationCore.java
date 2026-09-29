@@ -638,12 +638,12 @@ public class RegenerationCore {
                 RegenerationMod.LOGGER.info("Animation finish callback for {}", entity.getUuid());
                 this.finish(entity);
             });
-            set.start(animated);
             for (AnimationTemplate.Stage stage : AnimationTemplate.Stage.values()) {
                 set.callback(stage, s -> {
                     RegenerationEvents.CHANGE_STAGE.invoker().onStateChange(entity, this, s);
                 });
             }
+            set.start(animated);
             RegenerationMod.LOGGER.info("Started regeneration animation for {}", entity.getUuid());
         } else {
             Scheduler.get().runTaskLater(() -> {
