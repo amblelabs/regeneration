@@ -448,11 +448,6 @@ public class RegenerationCore {
         }
 
         if (delay.isRunning()) {
-            if (this.getUsesLeft() <= 0) {
-                delay.stop();
-                this.markDirty();
-                return;
-            }
             Delay.Result result = delay.tick(worldTime);
             switch (result) {
                 case REGENERATE -> {
@@ -598,6 +593,7 @@ public class RegenerationCore {
         this.delay.start(entity.getWorld().getTime());
         this.markDirty();
         entity.setHealth(entity.getMaxHealth());
+        this.decrement();
         if (entity instanceof AnimatedEntity animated) {
             animated.playAnimation(BedrockAnimationReference.parse(Identifier.of("start", RegenerationMod.RANDOM.nextBoolean() ? "right" : "left")));
         }
@@ -606,12 +602,11 @@ public class RegenerationCore {
     }
 
     private boolean start(LivingEntity entity) {
-        if (this.isRegenerating() || this.isInvulnerable() || this.usesLeft <= 0) return false;
+        if (this.isRegenerating() || this.isInvulnerable()) return false;
         if (!entity.isAlive()) return false;
         if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
 
         this.setRegenQueued(false);
-        this.decrement();
         this.setRegenerating(true);
         entity.setHealth(entity.getMaxHealth());
 
