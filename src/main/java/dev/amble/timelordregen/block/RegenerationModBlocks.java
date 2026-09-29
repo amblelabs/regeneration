@@ -2,7 +2,6 @@ package dev.amble.timelordregen.block;
 
 import dev.amble.timelordregen.data.tree.CadonSaplingGenerator;
 import dev.amble.timelordregen.core.RegenerationModItemGroups;
-import dev.amble.timelordregen.util.ExBoatType;
 import dev.amble.lib.block.ABlockSettings;
 import dev.amble.lib.container.impl.BlockContainer;
 import dev.amble.lib.datagen.util.NoBlockDrop;
@@ -16,7 +15,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
 
-public class RegenerationModBlocks extends BlockContainer implements ExBoatType {
+public class RegenerationModBlocks extends BlockContainer {
 
     //GALLIFREY BLOCK / 伽理弗雷方块
 

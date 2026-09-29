@@ -4,7 +4,6 @@
   "plugin": "dev.amble.timelordregen.compat.RegenMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "EntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
     "compat.origin.PlayerOriginComponentMixin",

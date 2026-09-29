@@ -59,7 +59,6 @@ public class RegenerationMod implements ModInitializer {
         RegistryContainer.register(RegenerationModItemGroups.class, MOD_ID);
         RegistryContainer.register(RegenerationModBlocks.class, MOD_ID);
         RegistryContainer.register(RegenerationModItems.class, MOD_ID);
-        RegistryContainer.register(RegenerationModItems.class, MOD_ID);
 	    RegenerationSounds.init();
         RegenerationEvents.registerListeners();
 
