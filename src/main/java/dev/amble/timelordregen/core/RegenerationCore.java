@@ -198,6 +198,7 @@ public class RegenerationCore {
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            if (alive) return;
             if (!(newPlayer instanceof RegenerationCapable regen)) return;
             RegenerationCore info = RegenerationCore.get(newPlayer);
             if (info != null) {
