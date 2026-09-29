@@ -2,6 +2,7 @@ package dev.amble.timelordregen.core;
 
 import dev.amble.timelordregen.compat.ait.TardisCompatBridge;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ public class RegenerationExplosion {
         );
 
         List<LivingEntity> targets = world.getEntitiesByClass(LivingEntity.class, area,
-                e -> e != source && e.isAlive());
+                e -> e != source && e.isAlive() && !(e instanceof PlayerEntity p && (p.getAbilities().invulnerable || source instanceof PlayerEntity sp && !sp.shouldDamagePlayer(p))));
 
         for (LivingEntity target : targets) {
             Vec3d push = target.getPos().subtract(center).normalize();
