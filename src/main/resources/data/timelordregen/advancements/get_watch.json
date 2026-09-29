@@ -2,27 +2,27 @@
   "parent": "timelordregen:regeneration",
   "display": {
     "icon": {
-      "item": "timelordregen:elixir_of_life"
+      "item": "timelordregen:pocket_watch"
     },
     "title": {
-      "translate": "advancements.timelordregen.this_is_what.title"
+      "translate": "achievement.timelordregen.title.watch"
     },
     "description": {
-      "translate": "advancements.timelordregen.this_is_what.description"
+      "translate": "achievement.timelordregen.description.watch"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "has_elixir": {
+    "get_watch": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "timelordregen:elixir_of_life"
+              "timelordregen:pocket_watch"
             ]
           }
         ]
@@ -30,6 +30,6 @@
     }
   },
   "requirements": [
-    ["has_elixir"]
+    ["get_watch"]
   ]
 }

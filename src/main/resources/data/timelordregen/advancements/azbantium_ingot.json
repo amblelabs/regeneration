@@ -1,28 +1,28 @@
 {
-  "parent": "timelordregen:regeneration",
+  "parent": "timelordregen:enter_gallifry",
   "display": {
     "icon": {
-      "item": "timelordregen:elixir_of_life"
+      "item": "timelordregen:azbantium_ingot"
     },
     "title": {
-      "translate": "advancements.timelordregen.this_is_what.title"
+      "translate": "achievement.timelordregen.title.azbantium_ingot"
     },
     "description": {
-      "translate": "advancements.timelordregen.this_is_what.description"
+      "translate": "achievement.timelordregen.description.azbantium_ingot"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "has_elixir": {
+    "get_azbantium_ingot": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "timelordregen:elixir_of_life"
+              "timelordregen:azbantium_ingot"
             ]
           }
         ]
@@ -30,6 +30,6 @@
     }
   },
   "requirements": [
-    ["has_elixir"]
+    ["get_azbantium_ingot"]
   ]
 }

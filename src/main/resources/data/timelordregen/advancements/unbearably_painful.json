@@ -1,4 +1,5 @@
 {
+  "parent": "timelordregen:this_is_what",
   "display": {
     "icon": {
       "item": "timelordregen:elixir_of_life"

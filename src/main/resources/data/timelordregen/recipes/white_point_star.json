@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "ADA",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "timelordregen:azbantium_ingot"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "timelordregen:white_point_star",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "timelordregen:unbearably_painful",
+  "display": {
+    "icon": {
+      "item": "timelordregen:elixir_of_life"
+    },
+    "title": {
+      "translate": "achievement.timelordregen.title.delay"
+    },
+    "description": {
+      "translate": "achievement.timelordregen.description.delay"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "delay_regeneration": {
+      "trigger": "timelordregen:delay_regeneration"
+    }
+  },
+  "requirements": [
+    ["delay_regeneration"]
+  ]
+}

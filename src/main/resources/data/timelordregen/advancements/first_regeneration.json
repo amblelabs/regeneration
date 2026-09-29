@@ -1,0 +1,26 @@
+{
+  "parent": "timelordregen:unbearably_painful",
+  "display": {
+    "icon": {
+      "item": "timelordregen:elixir_of_life"
+    },
+    "title": {
+      "translate": "achievement.timelordregen.title.regeneration"
+    },
+    "description": {
+      "translate": "achievement.timelordregen.description.regeneration"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "first_regeneration": {
+      "trigger": "timelordregen:first_regeneration"
+    }
+  },
+  "requirements": [
+    ["first_regeneration"]
+  ]
+}

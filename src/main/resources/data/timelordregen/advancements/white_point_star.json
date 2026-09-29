@@ -1,28 +1,28 @@
 {
-  "parent": "timelordregen:regeneration",
+  "parent": "timelordregen:azbantium_ingot",
   "display": {
     "icon": {
-      "item": "timelordregen:elixir_of_life"
+      "item": "timelordregen:white_point_star"
     },
     "title": {
-      "translate": "advancements.timelordregen.this_is_what.title"
+      "translate": "advancement.timelordregen.white_point_star.title"
     },
     "description": {
-      "translate": "advancements.timelordregen.this_is_what.description"
+      "translate": "advancement.timelordregen.white_point_star.description"
     },
-    "frame": "task",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "has_elixir": {
+    "has_white_point_star": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "timelordregen:elixir_of_life"
+              "timelordregen:white_point_star"
             ]
           }
         ]
@@ -30,6 +30,6 @@
     }
   },
   "requirements": [
-    ["has_elixir"]
+    ["has_white_point_star"]
   ]
 }

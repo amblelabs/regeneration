@@ -14,14 +14,9 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
         genModels(pack);
         generateRecipes(pack);
         generateSoundData(pack);
-        generateAchievement(pack);
         genTags(pack);
         genLoot(pack);
         pack.addProvider(RegenerationWorldGenerator::new);
-    }
-
-    private void generateAchievement(FabricDataGenerator.Pack pack) {
-        pack.addProvider(RegenerationModAchivementProvider::new);
     }
 
     public void generateSoundData(FabricDataGenerator.Pack pack) {

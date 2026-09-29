@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "timelordregen:azbantium_ore"
+  },
+  "result": "timelordregen:azbantium_ingot",
+  "experience": 2.0,
+  "cookingtime": 300
+}

@@ -8,10 +8,13 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.HoeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -103,46 +106,50 @@ public final class RegenerationEvents {
 		void onEvent(@Nullable LivingEntity entity, RegenerationCore data);
 	}
     public static void registerListeners() {
-        // 剥皮功能：用斧头右键点击原木/木头
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             BlockPos pos = hitResult.getBlockPos();
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
-            PlayerEntity entity = player;
-            ItemStack stack = entity.getStackInHand(hand);
+            ItemStack stack = player.getStackInHand(hand);
+            Item item = stack.getItem();
 
-            // 检查是否手持斧头
-            if (!(stack.getItem() instanceof AxeItem)) {
-                return ActionResult.PASS;
-            }
+            // 处理斧头剥皮
+            if (item instanceof AxeItem) {
+                Block newBlock = null;
 
-            Block newBlock = null;
-
-            // 判断当前方块，映射到去皮版本
-            if (block == RegenerationModBlocks.CADON_LOG) {
-                newBlock = RegenerationModBlocks.STRIPPED_CADON_LOG;
-            } else if (block == RegenerationModBlocks.CADON_WOOD) {
-                newBlock = RegenerationModBlocks.STRIPPED_CADON_WOOD;
-            }
-
-            if (newBlock == null) {
-                return ActionResult.PASS;
-            }
-
-            // 执行替换
-            if (!world.isClient) {
-                // 保留原方块的 Axis 属性（使用 Properties.AXIS）
-                BlockState newState = newBlock.getDefaultState();
-                if (state.contains(Properties.AXIS)) {
-                    newState = newState.with(Properties.AXIS, state.get(Properties.AXIS));
+                if (block == RegenerationModBlocks.CADON_LOG) {
+                    newBlock = RegenerationModBlocks.STRIPPED_CADON_LOG;
+                } else if (block == RegenerationModBlocks.CADON_WOOD) {
+                    newBlock = RegenerationModBlocks.STRIPPED_CADON_WOOD;
                 }
-                world.setBlockState(pos, newState);
-                world.playSound(null, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                // 消耗耐久（服务端）
-                stack.damage(1, entity, p -> p.sendToolBreakStatus(hand));
+
+                if (newBlock != null) {
+                    if (!world.isClient) {
+                        BlockState newState = newBlock.getDefaultState();
+                        if (state.contains(Properties.AXIS)) {
+                            newState = newState.with(Properties.AXIS, state.get(Properties.AXIS));
+                        }
+                        world.setBlockState(pos, newState);
+                        world.playSound(null, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
+                    }
+                    return ActionResult.SUCCESS;
+                }
             }
 
-            return ActionResult.SUCCESS;
+            // 处理锄头锄地
+            if (item instanceof HoeItem) {
+                if (block == RegenerationModBlocks.GALLIFREY_GRASS_BLOCK) {
+                    if (!world.isClient) {
+                        // 替换为原版耕地（或自定义耕地）
+                        world.setBlockState(pos, Blocks.FARMLAND.getDefaultState(), 3);
+                        world.playSound(null, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
+                    }
+                    return ActionResult.SUCCESS;
+                }
+            }
+
+            return ActionResult.PASS;
         });
-    }
-}
+    }}

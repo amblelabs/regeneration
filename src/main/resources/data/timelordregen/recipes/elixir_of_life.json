@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ASF",
+    "GMG",
+    " G "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:golden_apple"
+    },
+    "S": {
+      "item": "timelordregen:white_point_star"
+    },
+    "F": {
+      "tag": "minecraft:flowers"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "M": {
+      "item": "minecraft:milk_bucket"
+    }
+  },
+  "result": {
+    "item": "timelordregen:elixir_of_life",
+    "count": 1
+  }
+}
