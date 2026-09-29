@@ -501,7 +501,7 @@ public class RegenerationCore {
         if (this.regenBoostTimer >= boostedInterval) {
             this.regenBoostTimer = 0;
             PlayerEntity player = (PlayerEntity) entity;
-            if (player.getHungerManager().getFoodLevel() > 0 || player.getWorld().getGameRules().getBoolean(net.minecraft.world.GameRules.NATURAL_REGENERATION)) {
+            if (player.getHungerManager().getFoodLevel() > 0 && player.getWorld().getGameRules().getBoolean(net.minecraft.world.GameRules.NATURAL_REGENERATION)) {
                 entity.heal(1.0f);
                 if (player.getHungerManager().getFoodLevel() > 0) {
                     player.getHungerManager().addExhaustion(3.0f);
