@@ -17,6 +17,9 @@
     "client": [
       "dev.amble.timelordregen.client.RegenerationClientMod"
     ],
+    "modmenu": [
+      "dev.amble.timelordregen.client.config.RegenModMenu"
+    ],
     "fabric-datagen": [
       "dev.amble.timelordregen.data.RegenDataGen"
     ]

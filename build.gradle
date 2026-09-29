@@ -99,6 +99,7 @@ dependencies {
 
 	// yacl
 	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+	modCompileOnly "com.terraformersmc:modmenu:7.1.0"
 
 	// origins
 	modCompileOnlyApi "com.github.apace100:origins-fabric:${project.origins_version}"
