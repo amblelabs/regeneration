@@ -13,6 +13,7 @@
   ],
   "client": [
     "compat.ait.ControlEntityRendererMixin",
+    "client.EnergyCameraMixin",
     "client.GallifreySkyboxMixin",
     "client.LivingEntityRendererMixin"
   ],

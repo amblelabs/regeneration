@@ -101,6 +101,9 @@
 
   "key.timelordregen.open_settings": "Open Regeneration Settings",
   "key.timelordregen.force_regen": "Force Regeneration(2s)",
+  "key.timelordregen.energy_blast": "Regeneration Blast",
+  "key.timelordregen.energy_heal": "Channel Energy (sneak: transfer)",
+  "key.timelordregen.energy_crack": "Crack a Regeneration",
   "category.timelordregen": "Time Lord - Regeneration",
 
   "message.timelordregen.cannot_force_regen": "§cYou cannot force regeneration while your cells are still rich with energy!",
@@ -126,6 +129,7 @@
   "message.timelordregen.energy.busy": "Your body is busy regenerating",
   "message.timelordregen.energy.transfer_full": "%s cannot hold any more energy",
 
+  "hud.timelordregen.energy": "%s ⌁ %s",
   "death.attack.timelordregen.regeneration_energy": "%1$s was disintegrated by %2$s's regeneration energy",
   "death.attack.timelordregen.regeneration_energy.item": "%1$s was disintegrated by %2$s using %3$s",
   "death.attack.timelordregen.regeneration_energy.player": "%1$s was disintegrated by %2$s's regeneration energy",

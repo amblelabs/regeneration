@@ -1,7 +1,10 @@
 package dev.amble.timelordregen.client;
 
 import dev.amble.timelordregen.api.RegenerationCapable;
+import dev.amble.timelordregen.client.energy.EnergyClient;
 import dev.amble.timelordregen.client.util.ClientParticleUtil;
+import dev.amble.timelordregen.core.energy.EnergyAbility;
+import dev.amble.timelordregen.core.energy.EnergyFxType;
 import dev.amble.lib.animation.AnimatedEntity;
 import dev.amble.lib.client.bedrock.BedrockAnimation;
 import dev.amble.lib.client.bedrock.BedrockAnimationReference;
@@ -24,28 +27,48 @@ public class ClientRegenParticleManager {
 
     public static void trySpawnForEntity(LivingEntity entity, float tickDelta) {
         if (!entity.isAlive()) return;
+        if (entity instanceof AbstractClientPlayerEntity player) energy(player);
         if (!(entity instanceof RegenerationCapable capable)) return;
         capable.withInfo().ifPresent(info -> {
             if (!info.isActive()) return;
             if (!(entity instanceof AbstractClientPlayerEntity player)) return;
 
             boolean isDelay = info.getDelay().isRunning();
-            float lerpedValue = resolveLerpedValue(entity);
-
-            PlayerEntityRenderer renderer = (PlayerEntityRenderer) MinecraftClient.getInstance()
-                    .getEntityRenderDispatcher().getRenderer(player);
-            var model = renderer.getModel();
-            ClientWorld world = (ClientWorld) entity.getWorld();
-
-            MatrixStack baseStack = buildEntityWorldStack(entity);
-
-            ClientParticleUtil.spawnForPart(world, entity, baseStack, model.rightArm, "right_arm", lerpedValue, false, isDelay);
-            ClientParticleUtil.spawnForPart(world, entity, baseStack, model.leftArm, "left_arm", lerpedValue, false, isDelay);
-
-            if (!isDelay) {
-                ClientParticleUtil.spawnForPart(world, entity, baseStack, model.head, "head", lerpedValue, false, isDelay);
-            }
+            spawnParts(player, isDelay, !isDelay, false);
         });
+    }
+
+    private static void energy(AbstractClientPlayerEntity player) {
+        EnergyClient.ChannelView v = EnergyClient.CHANNELS.get(player.getId());
+        long now = player.getWorld().getTime();
+        if (v == null || v.ability == EnergyAbility.TRANSFER || v.spawned == now) return;
+        v.spawned = now;
+        if (v.ability == EnergyAbility.HEAL) {
+            for (int i = 0; i < 3; i++) spawnParts(player, true, false, false);
+            return;
+        }
+        boolean charge = v.phase == EnergyFxType.CHARGE;
+        spawnParts(player, charge, !charge, !charge);
+    }
+
+    private static void spawnParts(AbstractClientPlayerEntity entity, boolean isDelay, boolean head, boolean twice) {
+        float lerpedValue = resolveLerpedValue(entity);
+
+        PlayerEntityRenderer renderer = (PlayerEntityRenderer) MinecraftClient.getInstance()
+                .getEntityRenderDispatcher().getRenderer(entity);
+        var model = renderer.getModel();
+        ClientWorld world = (ClientWorld) entity.getWorld();
+
+        MatrixStack baseStack = buildEntityWorldStack(entity);
+
+        for (int i = twice ? 2 : 1; i > 0; i--) {
+            ClientParticleUtil.spawnForPart(world, entity, baseStack, model.rightArm, "right_arm", lerpedValue, twice, isDelay);
+            ClientParticleUtil.spawnForPart(world, entity, baseStack, model.leftArm, "left_arm", lerpedValue, twice, isDelay);
+        }
+
+        if (head) {
+            ClientParticleUtil.spawnForPart(world, entity, baseStack, model.head, "head", lerpedValue, twice, isDelay);
+        }
     }
 
     /**
