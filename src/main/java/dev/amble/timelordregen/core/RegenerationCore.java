@@ -21,7 +21,6 @@ import dev.drtheo.scheduler.api.common.Scheduler;
 import dev.drtheo.scheduler.api.common.TaskStage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -159,13 +158,6 @@ public class RegenerationCore {
                 return ActionResult.SUCCESS;
             }
             return ActionResult.PASS;
-        });
-
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
-            RegenerationCore info = RegenerationCore.get(player);
-            if (info != null) {
-                info.applySkin(player);
-            }
         });
 
         ServerPlayNetworking.registerGlobalReceiver(UPDATE_SKIN_PACKET, (server, player, handler, buf, responseSender) -> {
@@ -403,7 +395,8 @@ public class RegenerationCore {
         UUID uuid = player.getUuid();
 
         if (this.useOverlay && this.overlaySkinId != null) {
-            SkinData.usernameUpload(this.overlaySkinId, uuid);
+            SkinData current = SkinTracker.getInstance().get(uuid);
+            if (current == null || !this.overlaySkinId.equals(current.key())) SkinData.usernameUpload(this.overlaySkinId, uuid);
             RegenerationMod.LOGGER.info("Applied overlay skin {} for {}", this.overlaySkinId, uuid);
         } else {
             SkinTracker.getInstance().removeSynced(uuid);
