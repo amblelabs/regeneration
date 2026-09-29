@@ -34,15 +34,7 @@ public class RegenerationItemTagProvider extends FabricTagProvider<Item> {
                 .add(RegenerationModBlocks.CADON_LOG.asItem())
                 .add(RegenerationModBlocks.CADON_WOOD.asItem())
                 .add(RegenerationModBlocks.STRIPPED_CADON_LOG.asItem())
-                .add(RegenerationModBlocks.STRIPPED_CADON_WOOD.asItem())
-                .add(RegenerationModBlocks.CADON_PLANKS.asItem())
-                .add(RegenerationModBlocks.CADON_SLAB.asItem())
-                .add(RegenerationModBlocks.CADON_STAIRS.asItem())
-                .add(RegenerationModBlocks.CADON_FENCE.asItem())
-                .add(RegenerationModBlocks.CADON_DOOR.asItem())
-                .add(RegenerationModBlocks.CADON_BUTTON.asItem())
-                .add(RegenerationModBlocks.CADON_TRAPDOOR.asItem())
-                .add(RegenerationModBlocks.CADON_FENCE_GATE.asItem());
+                .add(RegenerationModBlocks.STRIPPED_CADON_WOOD.asItem());
 
         getOrCreateTagBuilder(ItemTags.TRAPDOORS)
                 .add(RegenerationModBlocks.CADON_TRAPDOOR.asItem());
