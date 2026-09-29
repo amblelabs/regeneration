@@ -1,7 +1,6 @@
 package dev.amble.timelordregen.client.util;
 
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 
@@ -30,7 +29,7 @@ public class TooltipHelper {
             if (!line.isEmpty()) {
                 MutableText text = Text.literal(line);
                 if (color != null) {
-                    text = text.setStyle(Style.EMPTY.withColor(color));
+                    text = text.setStyle(originalText.getStyle());
                 } else if (!colorCode.isEmpty()) {
                     // 直接拼接 § 代码（不推荐，但兼容旧用法）
                     text = Text.literal(colorCode + line);
