@@ -81,7 +81,7 @@ public class AnimationTemplate extends EnumMap<AnimationTemplate.Stage, Animatio
                     if (set.getTarget() instanceof LivingEntity living) {
                         RegenerationEvents.TRANSITION.invoker().onTransition(living, RegenerationCore.get(living), this.transition.stage());
                     }
-                }, TaskStage.END_SERVER_TICK, this.transition.unit(), this.transition.duration());
+                }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, Math.round(this.transition.duration() * TimeUnit.TICKS.from(this.transition.unit(), 1)));
             });
         }
 
@@ -154,18 +154,18 @@ public class AnimationTemplate extends EnumMap<AnimationTemplate.Stage, Animatio
         }
     }
 
-    public record ReferenceWrapper(BedrockAnimationReference reference, long duration, TimeUnit unit) {
+    public record ReferenceWrapper(BedrockAnimationReference reference, double duration, TimeUnit unit) {
         public static final Codec<ReferenceWrapper> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
                         BedrockAnimationReference.CODEC.fieldOf("reference").forGetter(ReferenceWrapper::reference),
-                        Codec.LONG.fieldOf("duration").forGetter(ReferenceWrapper::duration),
+                        Codec.DOUBLE.fieldOf("duration").forGetter(ReferenceWrapper::duration),
                         TIME_UNIT_CODEC.fieldOf("unit").forGetter(ReferenceWrapper::unit))
                 .apply(instance, ReferenceWrapper::new));
     }
 
-    public record TransitionPoint(Stage stage, long duration, TimeUnit unit) {
+    public record TransitionPoint(Stage stage, double duration, TimeUnit unit) {
         public static final Codec<TransitionPoint> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
                         Stage.CODEC.fieldOf("stage").forGetter(TransitionPoint::stage),
-                        Codec.LONG.fieldOf("duration").forGetter(TransitionPoint::duration),
+                        Codec.DOUBLE.fieldOf("duration").forGetter(TransitionPoint::duration),
                         TIME_UNIT_CODEC.fieldOf("unit").forGetter(TransitionPoint::unit))
                 .apply(instance, TransitionPoint::new));
     }
