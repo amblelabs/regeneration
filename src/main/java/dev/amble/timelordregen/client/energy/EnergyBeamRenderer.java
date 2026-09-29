@@ -99,7 +99,7 @@ public final class EnergyBeamRenderer {
         if (py > 0.01f) fovk = MathHelper.clamp(1.428148f / py, 0.5f, 3.0f); // 1/tan(35deg), fp hand is drawn at fov 70
         EnergyClient.ChannelView lv = EnergyClient.local();
         PlayerEntity me = MinecraftClient.getInstance().player;
-        if (lv != null && lv.ability == EnergyAbility.HEAL && me != null && firstPerson(me) && RegenerationClientConfig.get().handGlow) palms(me, w.getTime() + ctx.tickDelta(), ctx.tickDelta());
+        if (lv != null && lv.ability == EnergyAbility.HEAL && me != null && firstPerson(me) && RegenerationClientConfig.get().handGlow) palms(me, me.age + ctx.tickDelta(), ctx.tickDelta());
         EnergyMotes.render(ctx);
         long now = w.getTime();
         if (EnergyClient.CHANNELS.isEmpty() && now > quiet) return;
