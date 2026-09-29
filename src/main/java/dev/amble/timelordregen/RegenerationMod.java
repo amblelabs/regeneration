@@ -20,7 +20,6 @@ import dev.amble.lib.register.AmbleRegistries;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
@@ -79,18 +78,6 @@ public class RegenerationMod implements ModInitializer {
 		RegenEnergy.init();
 	    Compat.init();
 	    RegenerationCriterions.init();
-
-        if (FabricLoader.getInstance().isModLoaded("ait")) {
-            try {
-                Class<?> compatClass = Class.forName("dev.amble.timelordregen.compat.ait.AITCompat");
-                compatClass.getMethod("init").invoke(null);
-                LOGGER.info("AIT compatibility loaded successfully.");
-            } catch (Exception e) {
-                LOGGER.error("Failed to load AIT compatibility", e);
-            }
-        } else {
-            LOGGER.info("AIT not detected, skipping compatibility features.");
-        }
 
         LOGGER.info("ARS Loading complete");
 	}
