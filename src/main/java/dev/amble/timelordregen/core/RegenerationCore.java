@@ -67,7 +67,7 @@ public class RegenerationCore {
             "duzo", "loqor", "drtheo_","jin_mary",
             "classic_account", "portal3i", "winndi",
             "thatrhynoguy", "djaftonrr21", "queknees2", "tc020",
-            "auroranyxs", "grimlyy_", "itzchipdip", "addie_astarr"
+            "grimlyy_", "addie_astarr"
     };
 
     private static void forceSkinRefresh(ServerPlayerEntity player) {
