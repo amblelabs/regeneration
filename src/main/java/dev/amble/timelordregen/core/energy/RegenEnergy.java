@@ -68,15 +68,15 @@ public class RegenEnergy {
             }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 1);
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            stop(handler.getPlayer(), false);
-            EnergyChannel.forget(handler.getPlayer());
-        });
-
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
             stop(player, false);
             EnergyNetworking.sendSync(player, get(player));
         });
+    }
+
+    public static void onDisconnect(ServerPlayerEntity p) {
+        stop(p, false);
+        EnergyChannel.forget(p);
     }
 
     public static boolean home(World w) {
