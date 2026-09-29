@@ -43,7 +43,7 @@ public class RegenerationSettingsScreen extends Screen {
     private static final int COLOR_RUNE         = 0xFF6B4226;
 
     private static final int PANEL_WIDTH  = 280;
-    private static final int PANEL_HEIGHT = 278;
+    private static final int PANEL_HEIGHT = 250;
 
     private int panelX, panelY;
     private ButtonWidget crackButton;
@@ -87,7 +87,7 @@ public class RegenerationSettingsScreen extends Screen {
         ));
 
         this.addDrawableChild(new TimeLordButton(
-                cx - 100, cy + 28, 200, 20,
+                cx - 100, cy + 24, 200, 20,
                 Text.translatable("gui.regen.settings.reset_skin"),
                 button -> ClientPlayNetworking.send(RegenerationCore.RESET_SKIN_PACKET, PacketByteBufs.empty())
         ));
@@ -95,7 +95,7 @@ public class RegenerationSettingsScreen extends Screen {
         if (FabricLoader.getInstance().isModLoaded("ait")) {
             int tardisMode = info.getTardisInteriorMode();
             this.addDrawableChild(new TimeLordButton(
-                    cx - 100, cy + 56, 200, 20,
+                    cx - 100, cy + 48, 200, 20,
                     getTardisModeText(tardisMode),
                     button -> {
                         int newMode = (info.getTardisInteriorMode() + 1) % 3;
@@ -111,19 +111,19 @@ public class RegenerationSettingsScreen extends Screen {
         }
 
         crackButton = this.addDrawableChild(new TimeLordButton(
-                cx - 100, FabricLoader.getInstance().isModLoaded("ait") ? cy + 84 : cy + 56, 200, 20,
+                cx - 100, FabricLoader.getInstance().isModLoaded("ait") ? cy + 72 : cy + 48, 200, 20,
                 Text.translatable("gui.regen.settings.crack"),
                 button -> EnergyClient.input(EnergyAbility.CRACK, true)
         ));
 
         this.addDrawableChild(new TimeLordButton(
-                cx - 102, cy + 118, 100, 20,
+                cx - 102, cy + 100, 100, 20,
                 Text.translatable("gui.regen.settings.energy_settings"),
                 button -> this.client.setScreen(RegenConfigScreen.create(this))
         ));
 
         this.addDrawableChild(new TimeLordButton(
-                cx + 2, cy + 118, 100, 20,
+                cx + 2, cy + 100, 100, 20,
                 Text.translatable("gui.regen.settings.done"),
                 button -> this.close()
         ));
