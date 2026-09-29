@@ -440,7 +440,11 @@ public class RegenerationCore {
         this.tickConfusion(entity, worldTime);
 
         if (this.isRegenerating()) {
-            RegenerationExplosion.tick(entity);
+            if (this.currentAnimationSet == null && entity instanceof AnimatedEntity) {
+                this.finish(entity);
+            } else {
+                RegenerationExplosion.tick(entity);
+            }
         }
 
         if (delay.isRunning()) {
