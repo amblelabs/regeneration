@@ -15,6 +15,7 @@ public class RegenerationBlockTagProvider extends AmbleBlockTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        this.withBlocks(RegenerationModBlocks.class);
         super.configure(wrapperLookup);
 
         // ==================== 基础挖掘标签 ====================
