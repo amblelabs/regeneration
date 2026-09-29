@@ -5,6 +5,7 @@ import dev.amble.timelordregen.core.RegenerationModItemGroups;
 import dev.amble.timelordregen.util.ExBoatType;
 import dev.amble.lib.block.ABlockSettings;
 import dev.amble.lib.container.impl.BlockContainer;
+import dev.amble.lib.container.impl.NoBlockItem;
 import dev.amble.lib.datagen.util.NoBlockDrop;
 import dev.amble.lib.datagen.util.NoEnglish;
 import dev.amble.lib.datagen.util.ShovelMineable;
@@ -111,6 +112,7 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
 
 
     @NoBlockDrop
+    @NoBlockItem
     public static final Block POTTED_FLOWER_OF_REMEMBRANCE = new FlowerPotBlock(FLOWER_OF_REMEMBRANCE, FabricBlockSettings
             .copyOf(Blocks.POTTED_POPPY)
             .nonOpaque()
@@ -140,9 +142,6 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
 
     @Override
     public Item.Settings createBlockItemSettings(Block block) {
-        if (block == RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCE) {
-            return new AItemSettings();
-        }
         return new AItemSettings().group(RegenerationModItemGroups.REGEN);
     }
 
