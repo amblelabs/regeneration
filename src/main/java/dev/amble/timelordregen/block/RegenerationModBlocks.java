@@ -10,6 +10,9 @@ import dev.amble.lib.datagen.util.NoEnglish;
 import dev.amble.lib.datagen.util.ShovelMineable;
 import dev.amble.lib.item.AItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FlattenableBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.effect.StatusEffects;
@@ -144,6 +147,35 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
             return new AItemSettings();
         }
         return new AItemSettings().group(RegenerationModItemGroups.REGEN);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+
+        FlammableBlockRegistry flammable = FlammableBlockRegistry.getDefaultInstance();
+        flammable.add(CADON_LOG, 5, 5);
+        flammable.add(STRIPPED_CADON_LOG, 5, 5);
+        flammable.add(CADON_WOOD, 5, 5);
+        flammable.add(STRIPPED_CADON_WOOD, 5, 5);
+        flammable.add(CADON_PLANKS, 5, 20);
+        flammable.add(CADON_SLAB, 5, 20);
+        flammable.add(CADON_STAIRS, 5, 20);
+        flammable.add(CADON_FENCE, 5, 20);
+        flammable.add(CADON_FENCE_GATE, 5, 20);
+        flammable.add(CADON_LEAVES, 30, 60);
+        flammable.add(FLOWER_OF_REMEMBRANCE, 60, 100);
+        flammable.add(MOONLIGHT_BLOOM, 60, 100);
+        flammable.add(TYPHA_POD, 60, 100);
+
+        FlattenableBlockRegistry.register(GALLIFREY_GRASS_BLOCK, Blocks.DIRT_PATH.getDefaultState());
+
+        CompostingChanceRegistry compost = CompostingChanceRegistry.INSTANCE;
+        compost.add(CADON_LEAVES, 0.3f);
+        compost.add(CADON_SAPLING, 0.3f);
+        compost.add(TYPHA_POD, 0.3f);
+        compost.add(FLOWER_OF_REMEMBRANCE, 0.65f);
+        compost.add(MOONLIGHT_BLOOM, 0.65f);
     }
 
 }
