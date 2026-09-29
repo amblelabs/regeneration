@@ -40,6 +40,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -51,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -585,7 +587,8 @@ public class RegenerationCore {
             if (entity instanceof ServerPlayerEntity player) {
                 player.networkHandler.requestTeleport(
                         player.getX(), player.getY(), player.getZ(),
-                        player.getYaw(), player.getPitch()
+                        player.getYaw(), player.getPitch(),
+                        EnumSet.of(PositionFlag.X, PositionFlag.Y, PositionFlag.Z, PositionFlag.X_ROT)
                 );
             }
         }
