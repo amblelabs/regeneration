@@ -22,6 +22,12 @@ public class Attachments {
             .copyOnDeath()
             .buildAndRegister(RegenerationMod.id("is_timelord"));
 
+    public static final AttachmentType<Integer> REGEN_ENERGY = AttachmentRegistry.<Integer>builder()
+            .persistent(Codec.INT)
+            .initializer(() -> 0)
+            .copyOnDeath()
+            .buildAndRegister(RegenerationMod.id("regen_energy"));
+
     public static void init() {
     }
 }

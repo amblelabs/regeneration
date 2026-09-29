@@ -1,0 +1,14 @@
+{
+  "energy_charge": {
+    "movement": false,
+    "fps_camera": false
+  },
+  "energy_stream": {
+    "movement": false,
+    "fps_camera": false
+  },
+  "energy_release": {
+    "movement": true,
+    "fps_camera": false
+  }
+}

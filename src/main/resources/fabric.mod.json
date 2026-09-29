@@ -28,7 +28,8 @@
     "minecraft": "1.20.1",
     "fabricloader": ">=0.14.22",
     "fabric-api": "*",
-    "amblekit": ">=1.1.16-dev+mc.1.20.1"
+    "amblekit": ">=1.1.16-dev+mc.1.20.1",
+    "yet_another_config_lib_v3": ">=3.6.1+1.20.1-fabric"
   },
   "suggests": {
     "doctor_m": ">=2.1",

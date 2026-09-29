@@ -19,6 +19,10 @@ public class RegenerationExplosion {
         tardisBridge = bridge;
     }
 
+    public static TardisCompatBridge getTardisBridge() {
+        return tardisBridge;
+    }
+
     public static void tick(LivingEntity source) {
         if (source.getWorld().isClient) return;
 
