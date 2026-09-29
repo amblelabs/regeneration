@@ -76,6 +76,7 @@ public class RegenerationClientMod implements ClientModInitializer {
         BlockRenderLayerMapRegister();
 
 	    HudRenderCallback.EVENT.register(new DelayOverlay());
+	    ClientTickEvents.END_CLIENT_TICK.register(DelayOverlay::tick);
 
     registerKeyBindings();
     EnergyClient.init();
