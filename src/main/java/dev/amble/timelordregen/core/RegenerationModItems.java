@@ -16,19 +16,19 @@ public class RegenerationModItems extends ItemContainer {
 	public static final Item POCKET_WATCH = new PocketWatchItem(new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_AXE = new AxeItem(ToolMaterials.NETHERITE, 5, 1, new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_AXE = new AxeItem(ToolMaterials.NETHERITE, 5, -3.0f, new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_BATTLEAXE = new AxeItem(ToolMaterials.NETHERITE, 6, 1,new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_BATTLEAXE = new AxeItem(ToolMaterials.NETHERITE, 6, -3.0f,new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_HOE = new HoeItem(ToolMaterials.NETHERITE, 3, 1,new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_HOE = new HoeItem(ToolMaterials.NETHERITE, 3, 0.0f,new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_PICKAXE = new PickaxeItem(ToolMaterials.NETHERITE, 5, 1,new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_PICKAXE = new PickaxeItem(ToolMaterials.NETHERITE, 5, -2.8f,new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
-    public static final Item AZBANTIUM_SWORD = new SwordItem(ToolMaterials.NETHERITE, 7, 2,new AItemSettings().group(RegenerationModItemGroups.REGEN));
+    public static final Item AZBANTIUM_SWORD = new SwordItem(ToolMaterials.NETHERITE, 7, -2.4f,new AItemSettings().group(RegenerationModItemGroups.REGEN));
 
     @NoEnglish
     public static final Item AZBANTIUM_INGOT = new Item(new AItemSettings().group(RegenerationModItemGroups.REGEN));
