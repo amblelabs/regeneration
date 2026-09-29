@@ -158,6 +158,7 @@ public class AnimationSet {
     public void cancel() {
         if (this.finished) return;
         RegenerationMod.LOGGER.debug("AnimationSet cancelled");
+        this.finishCallbacks.clear();
         this.finishAnimation();
     }
 }
