@@ -6,7 +6,6 @@ import dev.amble.timelordregen.api.RegenerationEvents;
 import dev.amble.timelordregen.core.RegenerationCore;
 import dev.amble.timelordregen.core.animation.AnimationTemplate;
 import dev.amble.ait.core.tardis.ServerTardis;
-import dev.amble.ait.core.tardis.handler.travel.TravelUtil;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementManager;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.registry.impl.DesktopRegistry;
@@ -84,12 +83,9 @@ public class AITCompat implements TardisCompatBridge {
             world.playSound(null, consolePos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 6f, pitch);
         }
 
-        TravelUtil.randomPos(tardis, 50000, IncrementManager.increment(tardis), cached -> {
-            world.getServer().execute(() -> {
-                tardis.travel().destination(cached);
-                tardis.removeFuel(0.1d * IncrementManager.increment(tardis) * tardis.travel().instability());
-            });
-        });
+        int increment = IncrementManager.increment(tardis);
+        tardis.travel().destination(dest -> dest.offset(world.random.nextBetween(-increment, increment), 0, world.random.nextBetween(-increment, increment)));
+        tardis.removeFuel(0.1d * increment * tardis.travel().instability());
     }
 
     private static void spawnOverloadParticles(ServerWorld world, BlockPos pos) {
