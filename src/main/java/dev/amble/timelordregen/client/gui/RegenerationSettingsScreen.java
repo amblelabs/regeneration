@@ -24,7 +24,7 @@ import net.minecraft.util.math.RotationAxis;
 public class RegenerationSettingsScreen extends Screen {
 
     private final PlayerEntity player;
-    private final RegenerationCore info;
+    private RegenerationCore info;
 
     private static final Identifier GALLIFREYAN = RegenerationMod.id("textures/gui/regen_gallifreyan.png");
 
@@ -130,6 +130,12 @@ public class RegenerationSettingsScreen extends Screen {
     }
 
     @Override
+    public void tick() {
+        this.info = RegenerationCore.get(player);
+        if (this.info == null) this.close();
+    }
+
+    @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
         ctx.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
 
@@ -184,9 +190,7 @@ public class RegenerationSettingsScreen extends Screen {
         ctx.fill(cardX, cardY, cardX + cardW, cardY + cardH, COLOR_CARD_BG);
         ctx.drawBorder(cardX, cardY, cardW, cardH, COLOR_CARD_BORDER);
 
-        RegenerationCore live = RegenerationCore.get(player);
-        if (live == null) live = info;
-        int remaining = live.getUsesLeft();
+        int remaining = info.getUsesLeft();
         String remainingText = Text.translatable("gui.regen.settings.remaining", remaining).getString();
         ctx.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal(remainingText).formatted(Formatting.GOLD),
