@@ -18,6 +18,8 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldView;
 
 public class RegenerationModBlocks extends BlockContainer implements ExBoatType {
 
@@ -139,7 +141,12 @@ public class RegenerationModBlocks extends BlockContainer implements ExBoatType 
             .offset(AbstractBlock.OffsetType.XZ)
             .pistonBehavior(PistonBehavior.DESTROY)
             .mapColor(MapColor.DARK_GREEN)
-    );
+    ) {
+        @Override
+        public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+            return false;
+        }
+    };
 
     @Override
     public Item.Settings createBlockItemSettings(Block block) {
