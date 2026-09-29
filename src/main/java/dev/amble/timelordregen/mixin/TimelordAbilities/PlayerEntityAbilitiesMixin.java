@@ -1,5 +1,7 @@
 package dev.amble.timelordregen.mixin.TimelordAbilities;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import dev.amble.timelordregen.api.RegenerationCapable;
 import dev.amble.timelordregen.api.TimelordAbilities;
 import dev.amble.timelordregen.core.RegenerationCore;
@@ -60,11 +62,16 @@ public abstract class PlayerEntityAbilitiesMixin {
         }
     }
 
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void timelord$trackAir(CallbackInfo ci, @Share("air") LocalIntRef air) {
+        air.set(((PlayerEntity)(Object) this).getAir());
+    }
+
     /**
      生命恢复+氧气消耗减少
      */
     @Inject(method = "tick", at = @At("TAIL"))
-    private void timelord$tickAbilities(CallbackInfo ci) {
+    private void timelord$tickAbilities(CallbackInfo ci, @Share("air") LocalIntRef air) {
         if (!timelord$isTimelord()) {
             this.timelord$regenBoostTimer = 0;
             return;
@@ -85,7 +92,7 @@ public abstract class PlayerEntityAbilitiesMixin {
             this.timelord$regenBoostTimer = 0;
         }
 
-        if (player.isSubmergedInWater() && TimelordAbilities.shouldCompensateAirLoss(player.age)) {
+        if (player.isSubmergedInWater() && player.getAir() < air.get() && TimelordAbilities.shouldCompensateAirLoss(player.age)) {
             int maxAir = player.getMaxAir();
             int currentAir = player.getAir();
             if (currentAir < maxAir) {
