@@ -62,7 +62,7 @@ final class EnergyHud {
             int rows = MathHelper.ceil((hp + MathHelper.ceil(p.getAbsorptionAmount())) / 2.0f / 10.0f);
             int rh = Math.max(10 - (rows - 2), 3);
             int top = sh - 39 - (rows - 1) * rh - (p.getArmor() > 0 ? 10 : 0);
-            y = Math.min(top, sh - 49) - 8;
+            y = Math.min(top, sh - 84) - 8;
         } else {
             y = sh - 31;
         }
