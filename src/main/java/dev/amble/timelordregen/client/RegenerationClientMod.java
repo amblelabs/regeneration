@@ -5,7 +5,6 @@ import dev.amble.timelordregen.block.RegenerationModBlocks;
 import dev.amble.timelordregen.client.energy.EnergyClient;
 import dev.amble.timelordregen.client.gui.DelayOverlay;
 import dev.amble.timelordregen.client.gui.PocketWatchHudOverlay;
-import dev.amble.timelordregen.client.gui.RegenerationSettingsScreen;
 import dev.amble.timelordregen.client.particle.RegenHeadParticle;
 import dev.amble.timelordregen.client.particle.RightRegenParticle;
 import dev.amble.timelordregen.client.renderers.sky.GallifreySkyProperties;
@@ -35,18 +34,17 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.UUID;
+
 import static dev.amble.timelordregen.RegenerationMod.id;
 
 public class RegenerationClientMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
 
-        ClientPlayNetworking.registerGlobalReceiver(RegenerationCore.SYNC_PACKET, (client, handler, buf, responseSender) -> {
-            RegenerationCore.receive(buf);
-        });
-
         ClientPlayNetworking.registerGlobalReceiver(RegenerationCore.CLEAR_TIMELORD_PACKET, (client, handler, buf, responseSender) -> {
-            RegenerationCore.receiveClear(buf);
+            UUID playerId = buf.readUuid();
+            client.execute(() -> RegenerationCore.receiveClear(playerId));
         });
 
         HudRenderCallback.EVENT.register(new PocketWatchHudOverlay());
@@ -79,13 +77,6 @@ public class RegenerationClientMod implements ClientModInitializer {
 
 	    HudRenderCallback.EVENT.register(new DelayOverlay());
 
-        ClientPlayNetworking.registerGlobalReceiver(RegenerationUINetworking.OPEN_GUI_PACKET, (client, handler, buf, responseSender) -> {
-            client.execute(() -> {
-                if (client.player != null) {
-                    client.setScreen(new RegenerationSettingsScreen(client.player));
-                }
-            });
-        });
     registerKeyBindings();
     EnergyClient.init();
 }

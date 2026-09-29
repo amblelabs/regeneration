@@ -29,7 +29,6 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTypes;
@@ -759,48 +758,6 @@ public class RegenerationCore {
         ServerPlayNetworking.send(target, SYNC_PACKET, buf);
     }
 
-    @Environment(EnvType.CLIENT)
-    public static void receive(PacketByteBuf buf) {
-        UUID playerId = buf.readUuid();
-        RegenerationCore newInfo = buf.decodeAsJson(CODEC);
-        if (newInfo == null) {
-            RegenerationMod.LOGGER.warn("Received null RegenerationInfo from server for player {}", playerId);
-            return;
-        }
-
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        if (client.world == null) {
-            client.execute(() -> applySync(playerId, newInfo));
-            return;
-        }
-
-        applySync(playerId, newInfo);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void applySync(UUID playerId, RegenerationCore info) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null) {
-            RegenerationMod.LOGGER.warn("Sync delayed but world still null for {}", playerId);
-            return;
-        }
-        PlayerEntity entity = client.world.getPlayerByUuid(playerId);
-        if (entity == null) {
-            RegenerationMod.LOGGER.warn("Received RegenerationInfo from server for player {}, but could not find player in client world", playerId);
-            return;
-        }
-        if (!(entity instanceof RegenerationCapable)) {
-            RegenerationMod.LOGGER.warn("Received RegenerationInfo from server for player {}, but player is not RegenerationCapable", playerId);
-            return;
-        }
-
-        entity.setAttached(Attachments.REGENERATION, info);
-        entity.setAttached(Attachments.IS_TIMELORD, true);
-
-        RegenerationMod.LOGGER.debug("RegenerationInfo synced to client for {}", playerId);
-    }
-
     public static RegenerationCore get(LivingEntity entity) {
         if (!(entity instanceof RegenerationCapable capability)) return null;
         return capability.getRegenerationInfo();
@@ -892,8 +849,7 @@ public class RegenerationCore {
     public static final Identifier CLEAR_TIMELORD_PACKET = RegenerationMod.id("clear_timelord");
 
     @Environment(EnvType.CLIENT)
-    public static void receiveClear(PacketByteBuf buf) {
-        UUID playerId = buf.readUuid();
+    public static void receiveClear(UUID playerId) {
         if (net.minecraft.client.MinecraftClient.getInstance().world == null) return;
         PlayerEntity entity = net.minecraft.client.MinecraftClient.getInstance().world.getPlayerByUuid(playerId);
         if (entity == null) return;
