@@ -37,7 +37,7 @@ public class RegenerationUINetworking {
 
     private static void handleForceRegen(ServerPlayerEntity player) {
         RegenerationCore info = RegenerationCore.get(player);
-        if (info == null || info.getUsesLeft() <= 0) return;
+        if (info == null || (info.getUsesLeft() <= 0 && !info.getDelay().isRunning())) return;
 
         if (info.isInvulnerable()) {
             player.sendMessage(Text.translatable("message.timelordregen.cannot_force_regen"), true);

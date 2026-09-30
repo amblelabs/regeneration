@@ -36,6 +36,7 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket;
@@ -144,6 +145,9 @@ public class RegenerationCore {
 
             if (entity.isRemoved()) return true;
 
+            if (!damageSource.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                    && (entity.getMainHandStack().isOf(Items.TOTEM_OF_UNDYING) || entity.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING))) return true;
+
             if (info.getUsesLeft() > 0) {
                 return !info.tryStart(entity);
             }
@@ -198,6 +202,7 @@ public class RegenerationCore {
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            if (alive) return;
             if (!(newPlayer instanceof RegenerationCapable regen)) return;
             RegenerationCore info = RegenerationCore.get(newPlayer);
             if (info != null) {
@@ -448,12 +453,7 @@ public class RegenerationCore {
         }
 
         if (delay.isRunning()) {
-            if (this.getUsesLeft() <= 0) {
-                delay.stop();
-                this.markDirty();
-                return;
-            }
-            Delay.Result result = delay.tick(entity.age);
+            Delay.Result result = delay.tick(worldTime);
             switch (result) {
                 case REGENERATE -> {
                     this.setRegenQueued(true);
@@ -595,9 +595,10 @@ public class RegenerationCore {
         if (this.isActive() || this.isInvulnerable() || this.usesLeft <= 0) return false;
         if (entity.isRemoved()) return false;
         if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
-        this.delay.start(entity.age);
+        this.delay.start(entity.getWorld().getTime());
         this.markDirty();
         entity.setHealth(entity.getMaxHealth());
+        this.decrement();
         if (entity instanceof AnimatedEntity animated) {
             animated.playAnimation(BedrockAnimationReference.parse(Identifier.of("start", RegenerationMod.RANDOM.nextBoolean() ? "right" : "left")));
         }
@@ -606,12 +607,11 @@ public class RegenerationCore {
     }
 
     private boolean start(LivingEntity entity) {
-        if (this.isRegenerating() || this.isInvulnerable() || this.usesLeft <= 0) return false;
+        if (this.isRegenerating() || this.isInvulnerable()) return false;
         if (!entity.isAlive()) return false;
         if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
 
         this.setRegenQueued(false);
-        this.decrement();
         this.setRegenerating(true);
         entity.setHealth(entity.getMaxHealth());
 
@@ -809,18 +809,18 @@ public class RegenerationCore {
 
     public static class Delay {
         public static final Codec<Delay> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.INT.fieldOf("start").forGetter(delay -> delay.start),
-                Codec.INT.fieldOf("lastEvent").forGetter(delay -> delay.lastEvent)
+                Codec.LONG.fieldOf("start").forGetter(delay -> delay.start),
+                Codec.LONG.fieldOf("lastEvent").forGetter(delay -> delay.lastEvent)
         ).apply(instance, Delay::new));
 
         private static final int MAX_DURATION = 6000;
         private static final int TIME_TO_STOP = 300;
         private static final float EVENT_CHANCE = 0.05f;
 
-        private int start;
-        private int lastEvent;
+        private long start;
+        private long lastEvent;
 
-        public Delay(int start, int lastEvent) {
+        public Delay(long start, long lastEvent) {
             this.start = start;
             this.lastEvent = lastEvent;
         }
@@ -837,7 +837,7 @@ public class RegenerationCore {
             return this.lastEvent >= 0;
         }
 
-        public float getProgress(float current) {
+        public float getProgress(long current) {
             if (this.start < 0) return 0;
             float duration = current - this.start;
             if (duration <= 0) return 0;
@@ -854,11 +854,11 @@ public class RegenerationCore {
             this.lastEvent = -1;
         }
 
-        public void start(int current) {
+        public void start(long current) {
             this.start = current;
         }
 
-        public Result tick(int current) {
+        public Result tick(long current) {
             if (this.start < 0) return Result.NONE;
             if (current < this.start) {
                 this.stop();
