@@ -21,15 +21,15 @@ import dev.drtheo.scheduler.api.common.Scheduler;
 import dev.drtheo.scheduler.api.common.TaskStage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTypes;
@@ -69,7 +69,7 @@ public class RegenerationCore {
             "duzo", "loqor", "drtheo_","jin_mary",
             "classic_account", "portal3i", "winndi",
             "thatrhynoguy", "djaftonrr21", "queknees2", "tc020",
-            "auroranyxs", "grimlyy_", "itzchipdip", "addie_astarr"
+            "grimlyy_", "addie_astarr"
     };
 
     private static void forceSkinRefresh(ServerPlayerEntity player) {
@@ -79,8 +79,7 @@ public class RegenerationCore {
             if (other == player) continue;
 
             other.networkHandler.sendPacket(new PlayerRemoveS2CPacket(List.of(player.getUuid())));
-            other.networkHandler.sendPacket(new PlayerListS2CPacket(
-                    PlayerListS2CPacket.Action.ADD_PLAYER, player));
+            other.networkHandler.sendPacket(PlayerListS2CPacket.entryFromPlayer(List.of(player)));
         }
     }
 
@@ -165,13 +164,6 @@ public class RegenerationCore {
             return ActionResult.PASS;
         });
 
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
-            RegenerationCore info = RegenerationCore.get(player);
-            if (info != null) {
-                info.applySkin(player);
-            }
-        });
-
         ServerPlayNetworking.registerGlobalReceiver(UPDATE_SKIN_PACKET, (server, player, handler, buf, responseSender) -> {
             boolean changeSkin = buf.readBoolean();
             server.execute(() -> {
@@ -209,6 +201,14 @@ public class RegenerationCore {
                 info.stopRegeneration(newPlayer);
                 info.sync(newPlayer, newPlayer.getUuid());
             }
+        });
+
+        EntityTrackingEvents.START_TRACKING.register((tracked, viewer) -> {
+            if (!(tracked instanceof LivingEntity living) || RegenerationCore.get(living) == null) return;
+            Scheduler.get().runTaskLater(() -> {
+                RegenerationCore info = RegenerationCore.get(living);
+                if (info != null && !living.isRemoved() && !viewer.isDisconnected()) info.sync(viewer, living.getUuid());
+            }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 1);
         });
     }
 
@@ -276,6 +276,7 @@ public class RegenerationCore {
     private boolean baseSkinCaptured = false;
     @Nullable private String overlaySkinId = null;
     private boolean useOverlay = false;
+    @Nullable private String pendingSkin;
 
     private int tardisInteriorMode = TARDIS_MODE_ENABLED;
 
@@ -399,7 +400,8 @@ public class RegenerationCore {
         UUID uuid = player.getUuid();
 
         if (this.useOverlay && this.overlaySkinId != null) {
-            SkinData.usernameUpload(this.overlaySkinId, uuid);
+            SkinData current = SkinTracker.getInstance().get(uuid);
+            if (current == null || !this.overlaySkinId.equals(current.key())) SkinData.usernameUpload(this.overlaySkinId, uuid);
             RegenerationMod.LOGGER.info("Applied overlay skin {} for {}", this.overlaySkinId, uuid);
         } else {
             SkinTracker.getInstance().removeSynced(uuid);
@@ -410,17 +412,17 @@ public class RegenerationCore {
     }
 
     public void onTransitionApplySkin(ServerPlayerEntity player, String username) {
+        this.pendingSkin = null;
         this.setOverlaySkin(username);
         this.activateOverlay();
         this.applySkin(player);
     }
 
     public void resetSkinToBase(ServerPlayerEntity player) {
+        if (!this.useOverlay) return;
         this.deactivateOverlay();
         this.applySkin(player);
-        for (ServerPlayerEntity target : player.getServer().getPlayerManager().getPlayerList()) {
-            this.sync(target, player.getUuid());
-        }
+        this.syncTracking(player);
     }
 
     public void tick(LivingEntity entity) {
@@ -432,9 +434,7 @@ public class RegenerationCore {
 
         if (this.isDirty()) {
             this.setDirty(false);
-            for (ServerPlayerEntity player : entity.getWorld().getServer().getPlayerManager().getPlayerList()) {
-                this.sync(player, entity.getUuid());
-            }
+            this.syncTracking(entity);
         }
 
         if (this.channel != null && entity instanceof ServerPlayerEntity sp && !this.channel.tick(sp, this)) this.channel = null;
@@ -635,6 +635,7 @@ public class RegenerationCore {
             AnimationTemplate template = RegenAnimRegistry.getInstance().getRandom();
             AnimationSet set = template.instantiate(changeSkin, targetSkin);
             this.currentAnimationSet = set;
+            if (template.getTransitionPoint().isPresent()) this.pendingSkin = targetSkin;
 
             set.finish(() -> {
                 RegenerationMod.LOGGER.info("Animation finish callback for {}", entity.getUuid());
@@ -662,7 +663,9 @@ public class RegenerationCore {
     private void finish(LivingEntity entity) {
         RegenerationMod.LOGGER.info("finish() called for {}", entity.getUuid());
 
+        String skin = this.pendingSkin;
         this.stopRegeneration(entity);
+        if (skin != null && entity instanceof ServerPlayerEntity player) this.onTransitionApplySkin(player, skin);
 
         long worldTime = entity.getWorld().getTime();
         this.invulnerableUntil = worldTime + INVULNERABLE_DURATION;
@@ -712,6 +715,7 @@ public class RegenerationCore {
     public void stopRegeneration(@Nullable LivingEntity entity) {
         if (entity instanceof ServerPlayerEntity sp) RegenEnergy.stop(sp, this, false);
 
+        this.pendingSkin = null;
         if (this.currentAnimationSet != null) {
             this.currentAnimationSet.cancel();
             this.currentAnimationSet = null;
@@ -753,53 +757,18 @@ public class RegenerationCore {
         this.setDirty(true);
     }
 
+    private void syncTracking(LivingEntity entity) {
+        if (entity instanceof ServerPlayerEntity player) this.sync(player, entity.getUuid());
+        for (ServerPlayerEntity target : PlayerLookup.tracking(entity)) {
+            this.sync(target, entity.getUuid());
+        }
+    }
+
     private void sync(ServerPlayerEntity target, UUID sourceId) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(sourceId);
         buf.encodeAsJson(CODEC, this);
         ServerPlayNetworking.send(target, SYNC_PACKET, buf);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static void receive(PacketByteBuf buf) {
-        UUID playerId = buf.readUuid();
-        RegenerationCore newInfo = buf.decodeAsJson(CODEC);
-        if (newInfo == null) {
-            RegenerationMod.LOGGER.warn("Received null RegenerationInfo from server for player {}", playerId);
-            return;
-        }
-
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        if (client.world == null) {
-            client.execute(() -> applySync(playerId, newInfo));
-            return;
-        }
-
-        applySync(playerId, newInfo);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void applySync(UUID playerId, RegenerationCore info) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null) {
-            RegenerationMod.LOGGER.warn("Sync delayed but world still null for {}", playerId);
-            return;
-        }
-        PlayerEntity entity = client.world.getPlayerByUuid(playerId);
-        if (entity == null) {
-            RegenerationMod.LOGGER.warn("Received RegenerationInfo from server for player {}, but could not find player in client world", playerId);
-            return;
-        }
-        if (!(entity instanceof RegenerationCapable)) {
-            RegenerationMod.LOGGER.warn("Received RegenerationInfo from server for player {}, but player is not RegenerationCapable", playerId);
-            return;
-        }
-
-        entity.setAttached(Attachments.REGENERATION, info);
-        entity.setAttached(Attachments.IS_TIMELORD, true);
-
-        RegenerationMod.LOGGER.debug("RegenerationInfo synced to client for {}", playerId);
     }
 
     public static RegenerationCore get(LivingEntity entity) {
@@ -892,9 +861,17 @@ public class RegenerationCore {
 
     public static final Identifier CLEAR_TIMELORD_PACKET = RegenerationMod.id("clear_timelord");
 
+    public static void sendClear(ServerPlayerEntity player) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeUuid(player.getUuid());
+        ServerPlayNetworking.send(player, CLEAR_TIMELORD_PACKET, buf);
+        for (ServerPlayerEntity target : PlayerLookup.tracking(player)) {
+            ServerPlayNetworking.send(target, CLEAR_TIMELORD_PACKET, PacketByteBufs.copy(buf));
+        }
+    }
+
     @Environment(EnvType.CLIENT)
-    public static void receiveClear(PacketByteBuf buf) {
-        UUID playerId = buf.readUuid();
+    public static void receiveClear(UUID playerId) {
         if (net.minecraft.client.MinecraftClient.getInstance().world == null) return;
         PlayerEntity entity = net.minecraft.client.MinecraftClient.getInstance().world.getPlayerByUuid(playerId);
         if (entity == null) return;

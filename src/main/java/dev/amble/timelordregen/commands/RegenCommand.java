@@ -7,11 +7,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.amble.timelordregen.api.RegenerationCapable;
 import dev.amble.timelordregen.core.RegenerationCore;
 import dev.amble.timelordregen.data.Attachments;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -139,9 +136,7 @@ public class RegenCommand {
 
         player.setAttached(Attachments.IS_TIMELORD, false);
 
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeUuid(player.getUuid());
-        ServerPlayNetworking.send(player, RegenerationCore.CLEAR_TIMELORD_PACKET, buf);
+        RegenerationCore.sendClear(player);
 
         ctx.getSource().sendFeedback(() ->
                 Text.translatable("command.regen.detimelord.success", player.getName().getString()), true);

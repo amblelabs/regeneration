@@ -56,6 +56,7 @@ public class OriginCompat {
 
             capable.setTimelord(false);
             player.setAttached(Attachments.IS_TIMELORD, false);
+            RegenerationCore.sendClear(serverPlayer);
 
             RegenerationMod.LOGGER.debug("Origins: revoked timelord from {}", player.getName().getString());
         }
