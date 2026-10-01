@@ -405,7 +405,7 @@ public class RegenerationCore {
             RegenerationMod.LOGGER.info("Applied overlay skin {} for {}", this.overlaySkinId, uuid);
         } else {
             SkinTracker.getInstance().removeSynced(uuid);
-            RegenerationMod.LOGGER.info("Removed overlay skin, restored base skin for {}", uuid);
+            RegenerationMod.LOGGER.debug("Removed overlay skin, restored base skin for {}", uuid);
         }
 
         forceSkinRefresh(player);
@@ -483,7 +483,7 @@ public class RegenerationCore {
         if (worldTime >= this.invulnerableUntil) {
             this.invulnerableUntil = -1;
             this.markDirty();
-            RegenerationMod.LOGGER.info("Invulnerability ended for {}", entity.getUuid());
+            RegenerationMod.LOGGER.debug("Invulnerability ended for {}", entity.getUuid());
             return;
         }
 
@@ -528,7 +528,7 @@ public class RegenerationCore {
             this.confusedUntil = -1;
             this.confusionEffectTimer = 0;
             this.markDirty();
-            RegenerationMod.LOGGER.info("Confusion ended for {}", entity.getUuid());
+            RegenerationMod.LOGGER.debug("Confusion ended for {}", entity.getUuid());
             return;
         }
 
@@ -602,7 +602,7 @@ public class RegenerationCore {
         if (entity instanceof AnimatedEntity animated) {
             animated.playAnimation(BedrockAnimationReference.parse(Identifier.of("start", RegenerationMod.RANDOM.nextBoolean() ? "right" : "left")));
         }
-        RegenerationMod.LOGGER.info("Delay started for {}, will regenerate after {} ticks", entity.getUuid(), Delay.MAX_DURATION);
+        RegenerationMod.LOGGER.debug("Delay started for {}, will regenerate after {} ticks", entity.getUuid(), Delay.MAX_DURATION);
         return true;
     }
 
@@ -638,7 +638,7 @@ public class RegenerationCore {
             if (template.getTransitionPoint().isPresent()) this.pendingSkin = targetSkin;
 
             set.finish(() -> {
-                RegenerationMod.LOGGER.info("Animation finish callback for {}", entity.getUuid());
+                RegenerationMod.LOGGER.debug("Animation finish callback for {}", entity.getUuid());
                 this.finish(entity);
             });
             set.start(animated);
@@ -650,7 +650,7 @@ public class RegenerationCore {
             RegenerationMod.LOGGER.info("Started regeneration animation for {}", entity.getUuid());
         } else {
             Scheduler.get().runTaskLater(() -> {
-                RegenerationMod.LOGGER.info("Non-animated entity regeneration finish for {}", entity.getUuid());
+                RegenerationMod.LOGGER.debug("Non-animated entity regeneration finish for {}", entity.getUuid());
                 this.finish(entity);
             }, TaskStage.END_SERVER_TICK, TimeUnit.SECONDS, 5);
         }
@@ -661,7 +661,7 @@ public class RegenerationCore {
     }
 
     private void finish(LivingEntity entity) {
-        RegenerationMod.LOGGER.info("finish() called for {}", entity.getUuid());
+        RegenerationMod.LOGGER.debug("finish() called for {}", entity.getUuid());
 
         String skin = this.pendingSkin;
         this.stopRegeneration(entity);
@@ -683,7 +683,7 @@ public class RegenerationCore {
         entity.setVelocity(entity.getVelocity().multiply(0.5));
         entity.updatePosition(entity.getX(), entity.getY(), entity.getZ());
 
-        RegenerationMod.LOGGER.info(
+        RegenerationMod.LOGGER.debug(
                 "Regeneration finished for {}. Dynamic damage reduction + boosted regen active for {} ticks, confused for {} ticks",
                 entity.getUuid(), INVULNERABLE_DURATION, confusionDuration
         );
@@ -691,7 +691,7 @@ public class RegenerationCore {
 
     public void forceFinish(LivingEntity entity) {
         finish(entity);
-        RegenerationMod.LOGGER.info("Forced regeneration finish for {} due to disconnect", entity.getUuid());
+        RegenerationMod.LOGGER.debug("Forced regeneration finish for {} due to disconnect", entity.getUuid());
     }
 
     private void resetAnimationState(LivingEntity entity) {

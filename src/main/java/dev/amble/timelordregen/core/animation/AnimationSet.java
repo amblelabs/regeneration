@@ -142,7 +142,7 @@ public class AnimationSet {
             }
         }
 
-        RegenerationMod.LOGGER.info("AnimationSet finishing with {} callbacks", finishCallbacks.size());
+        RegenerationMod.LOGGER.debug("AnimationSet finishing with {} callbacks", finishCallbacks.size());
         for (Runnable cb : new ArrayList<>(this.finishCallbacks)) {
             try {
                 cb.run();
