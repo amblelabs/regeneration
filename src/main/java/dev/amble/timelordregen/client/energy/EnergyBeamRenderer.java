@@ -22,6 +22,7 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -29,6 +30,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -99,7 +101,7 @@ public final class EnergyBeamRenderer {
         if (py > 0.01f) fovk = MathHelper.clamp(1.428148f / py, 0.5f, 3.0f); // 1/tan(35deg), fp hand is drawn at fov 70
         EnergyClient.ChannelView lv = EnergyClient.local();
         PlayerEntity me = MinecraftClient.getInstance().player;
-        if (lv != null && lv.ability == EnergyAbility.HEAL && me != null && firstPerson(me) && RegenerationClientConfig.get().handGlow) palms(me, w.getTime() + ctx.tickDelta(), ctx.tickDelta());
+        if (lv != null && lv.ability == EnergyAbility.HEAL && me != null && me.getWorld() == w && firstPerson(me) && RegenerationClientConfig.get().handGlow) palms(me, me.age + ctx.tickDelta(), ctx.tickDelta());
         EnergyMotes.render(ctx);
         long now = w.getTime();
         if (EnergyClient.CHANNELS.isEmpty() && now > quiet) return;
@@ -129,7 +131,7 @@ public final class EnergyBeamRenderer {
             }
         }
         for (Chain ch : CHAINS) arcs(vcp, imm, m, w, ch, now, delta);
-        pulses(vcp.getBuffer(GLOW), m, now, delta);
+        pulses(vcp.getBuffer(GLOW), m, w, now, delta);
         if (imm != null) imm.draw(GLOW);
 
         for (int i = 0; i < beams; i++) {
@@ -265,6 +267,7 @@ public final class EnergyBeamRenderer {
     }
 
     private static void arcs(VertexConsumerProvider vcp, VertexConsumerProvider.Immediate imm, Matrix4f m, ClientWorld w, Chain c, long now, float delta) {
+        if (c.dim != w.getRegistryKey()) return;
         Entity src = w.getEntityById(c.caster);
         float scale = RegenerationClientConfig.get().beamScale;
         for (int k = 0; k < c.ids.length; k++) {
@@ -341,7 +344,7 @@ public final class EnergyBeamRenderer {
         tube(vc, m, n, fp ? 0.04f : 0.1f, 0.1f, HOT, 0.8f);
     }
 
-    private static void pulses(VertexConsumer vc, Matrix4f m, long now, float delta) {
+    private static void pulses(VertexConsumer vc, Matrix4f m, ClientWorld w, long now, float delta) {
         if (now > quiet) return;
         boolean live = false;
         for (Pulse q : PULSES) {
@@ -352,6 +355,7 @@ public final class EnergyBeamRenderer {
                 continue;
             }
             live = true;
+            if (q.dim != w.getRegistryKey()) continue;
             float k = age / q.life, f = 1.0f - k;
             float x = (float) (q.x - cx), y = (float) (q.y - cy), z = (float) (q.z - cz);
             if (q.kind == RING) {
@@ -656,7 +660,7 @@ public final class EnergyBeamRenderer {
     }
 
     static void chain(int caster, int hop, int[] ids, double[] pos, long now) {
-        CHAINS.add(new Chain(caster, hop, ids, pos, now));
+        CHAINS.add(new Chain(MinecraftClient.getInstance().world.getRegistryKey(), caster, hop, ids, pos, now));
         quiet = Math.max(quiet, now + (long) ids.length * hop + ARC_LIFE + 2);
     }
 
@@ -679,17 +683,20 @@ public final class EnergyBeamRenderer {
         q.size = size;
         q.born = now;
         q.life = life;
+        q.dim = MinecraftClient.getInstance().world.getRegistryKey();
         quiet = Math.max(quiet, now + life + 1);
     }
 
     static final class Chain {
+        final RegistryKey<World> dim;
         final int caster;
         final int hop;
         final int[] ids;
         final double[] pos;
         final long born;
 
-        Chain(int caster, int hop, int[] ids, double[] pos, long born) {
+        Chain(RegistryKey<World> dim, int caster, int hop, int[] ids, double[] pos, long born) {
+            this.dim = dim;
             this.caster = caster;
             this.hop = hop;
             this.ids = ids;
@@ -720,5 +727,6 @@ public final class EnergyBeamRenderer {
         float size;
         long born;
         int life;
+        RegistryKey<World> dim;
     }
 }

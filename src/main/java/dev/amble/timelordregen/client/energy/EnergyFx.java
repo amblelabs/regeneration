@@ -122,7 +122,7 @@ public final class EnergyFx {
                 it.remove();
                 continue;
             }
-            if (dt % c.hop != 0) continue;
+            if (dt % c.hop != 0 || c.dim != w.getRegistryKey()) continue;
             int k = (int) (dt / c.hop);
             if (k >= c.ids.length) continue;
             Random r = w.random;

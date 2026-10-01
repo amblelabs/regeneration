@@ -13,10 +13,12 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -46,6 +48,7 @@ public final class EnergyMotes {
     private static final int[] LIFE = new int[MAX];
     private static final int[] OFF = new int[MAX];
     private static final boolean[] GLOW = new boolean[MAX];
+    private static final RegistryKey<?>[] DIM = new RegistryKey<?>[MAX];
     private static final Sprite[] SPRITES = new Sprite[FRAMES];
     private static final Vector3f A = new Vector3f();
     private static final Vector3f B = new Vector3f();
@@ -83,6 +86,7 @@ public final class EnergyMotes {
         RISE[i] = rise;
         GLOW[i] = glow;
         OFF[i] = r.nextInt(FRAMES);
+        DIM[i] = MinecraftClient.getInstance().world.getRegistryKey();
     }
 
     static void flash(double x, double y, double z, float size, int frame, float alpha) {
@@ -137,6 +141,7 @@ public final class EnergyMotes {
         LIFE[to] = LIFE[from];
         OFF[to] = OFF[from];
         GLOW[to] = GLOW[from];
+        DIM[to] = DIM[from];
     }
 
     static void render(WorldRenderContext ctx) {
@@ -156,12 +161,12 @@ public final class EnergyMotes {
         C.set(1.0f, 1.0f, 0.0f).rotate(rot);
         D.set(1.0f, -1.0f, 0.0f).rotate(rot);
         Matrix4f m = ctx.matrixStack().peek().getPositionMatrix();
-        pass(imm, SOFT, false, m, cam.getPos(), ctx.tickDelta());
-        pass(imm, HOT, true, m, cam.getPos(), ctx.tickDelta());
+        pass(imm, SOFT, false, m, cam.getPos(), ctx.tickDelta(), ctx.world().getRegistryKey());
+        pass(imm, HOT, true, m, cam.getPos(), ctx.tickDelta(), ctx.world().getRegistryKey());
         tn = 0;
     }
 
-    private static void pass(VertexConsumerProvider.Immediate imm, RenderLayer layer, boolean glow, Matrix4f m, Vec3d c, float delta) {
+    private static void pass(VertexConsumerProvider.Immediate imm, RenderLayer layer, boolean glow, Matrix4f m, Vec3d c, float delta, RegistryKey<World> dim) {
         VertexConsumer vc = imm.getBuffer(layer);
         int batch = 0;
         for (int i = 0; i < tn && !glow; i++) {
@@ -174,7 +179,7 @@ public final class EnergyMotes {
             vtx(vc, m, x + D.x * s, y + D.y * s, z + D.z * s, 1.0f, 0.9f, 0.9f, TA[i], u0, v1);
         }
         for (int i = 0; i < n; i++) {
-            if (GLOW[i] != glow) continue;
+            if (GLOW[i] != glow || DIM[i] != dim) continue;
             float k = (AGE[i] + delta) / LIFE[i];
             if (k >= 1.0f) continue;
             float x = (float) (MathHelper.lerp(delta, PX[i], X[i]) - c.x);

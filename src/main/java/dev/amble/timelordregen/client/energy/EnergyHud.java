@@ -37,14 +37,14 @@ final class EnergyHud {
         EnergyClient.ChannelView local = EnergyClient.local();
         float time = p.age + tickDelta;
 
-        float now = mc.world.getTime() + tickDelta;
+        long now = mc.world.getTime();
         if (mc.options.getPerspective() == Perspective.FIRST_PERSON) {
             if (local != null && local.ability == EnergyAbility.BLAST && RegenerationClientConfig.get().vignette) {
                 fade = vignette(local, now, time, tickDelta);
-                fadeAt = now;
+                fadeAt = time;
                 overlay(ctx, fade);
-            } else if (now >= fadeAt && now - fadeAt < 8.0f) {
-                overlay(ctx, fade * (1.0f - (now - fadeAt) / 8.0f));
+            } else if (time >= fadeAt && time - fadeAt < 8.0f) {
+                overlay(ctx, fade * (1.0f - (time - fadeAt) / 8.0f));
             }
             float g = EnergyFx.glare(tickDelta);
             if (g > 0.0f) ctx.fill(0, 0, ctx.getScaledWindowWidth(), ctx.getScaledWindowHeight(), ((int) (g * 255.0f) << 24) | 0xFFF5C0);
@@ -62,7 +62,7 @@ final class EnergyHud {
             int rows = MathHelper.ceil((hp + MathHelper.ceil(p.getAbsorptionAmount())) / 2.0f / 10.0f);
             int rh = Math.max(10 - (rows - 2), 3);
             int top = sh - 39 - (rows - 1) * rh - (p.getArmor() > 0 ? 10 : 0);
-            y = Math.min(top, sh - 49) - 8;
+            y = Math.min(top, sh - 84) - 8;
         } else {
             y = sh - 31;
         }
@@ -89,9 +89,9 @@ final class EnergyHud {
         ctx.drawTextWithShadow(mc.textRenderer, label, x + WIDTH + 4, y - 2, GOLD);
     }
 
-    private static float vignette(EnergyClient.ChannelView v, float now, float time, float tickDelta) {
+    private static float vignette(EnergyClient.ChannelView v, long now, float time, float tickDelta) {
         if (v.phase == EnergyFxType.CHARGE)
-            return 0.35f * MathHelper.clamp((now - v.phaseTick) / EnergyClient.chargeTicks, 0.0f, 1.0f);
+            return 0.35f * MathHelper.clamp((now - v.phaseTick + tickDelta) / EnergyClient.chargeTicks, 0.0f, 1.0f);
         return 0.22f + 0.08f * MathHelper.sin(time * 0.25f) + 0.45f * EnergyFx.kick(tickDelta);
     }
 

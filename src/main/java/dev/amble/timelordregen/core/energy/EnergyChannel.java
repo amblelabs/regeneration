@@ -10,6 +10,7 @@ import dev.amble.lib.client.bedrock.BedrockAnimationReference;
 import dev.drtheo.scheduler.api.TimeUnit;
 import dev.drtheo.scheduler.api.common.Scheduler;
 import dev.drtheo.scheduler.api.common.TaskStage;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.AbstractFireBlock;
@@ -58,6 +59,7 @@ public class EnergyChannel {
     private static final String ANIM = "regen_energy";
     private static final int MAX_FX = 6;
     private static final Object2LongOpenHashMap<UUID> CHAIN_READY = new Object2LongOpenHashMap<>();
+    private static final Object2IntOpenHashMap<UUID> RELEASES = new Object2IntOpenHashMap<>();
 
     final EnergyAbility ability;
     private final Map<BlockPos, Crack> cracks = new HashMap<>();
@@ -78,6 +80,7 @@ public class EnergyChannel {
 
     public static void forget(ServerPlayerEntity player) {
         CHAIN_READY.removeLong(player.getUuid());
+        RELEASES.removeInt(player.getUuid());
     }
 
     public boolean tick(ServerPlayerEntity caster, RegenerationCore info) {
@@ -435,8 +438,7 @@ public class EnergyChannel {
 
         w.playSound(null, at.x, at.y, at.z, SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 1.0f, 1.0f);
         w.playSound(null, at.x, at.y, at.z, RegenerationSounds.ELEVEN_REGEN_END, SoundCategory.PLAYERS, 0.9f, 1.25f);
-        play(caster, "energy_release");
-        Scheduler.get().runTaskLater(() -> halt(caster, "energy_release"), TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 20);
+        release(caster);
     }
 
     private boolean chain(ServerPlayerEntity caster) {
@@ -495,8 +497,7 @@ public class EnergyChannel {
 
         w.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.PLAYERS, 0.7f, 1.5f);
         w.playSound(null, caster.getX(), caster.getY(), caster.getZ(), RegenerationSounds.ELEVEN_REGEN_END, SoundCategory.PLAYERS, 0.9f, 1.4f);
-        play(caster, "energy_release");
-        Scheduler.get().runTaskLater(() -> halt(caster, "energy_release"), TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 20);
+        release(caster);
         return true;
     }
 
@@ -590,6 +591,14 @@ public class EnergyChannel {
         if (caster instanceof AnimatedEntity animated) {
             animated.playAnimation(BedrockAnimationReference.parse(new Identifier(ANIM, name)));
         }
+    }
+
+    private static void release(ServerPlayerEntity caster) {
+        int id = RELEASES.addTo(caster.getUuid(), 1) + 1;
+        play(caster, "energy_release");
+        Scheduler.get().runTaskLater(() -> {
+            if (RELEASES.getInt(caster.getUuid()) == id) halt(caster, "energy_release");
+        }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 20);
     }
 
     private static void halt(ServerPlayerEntity caster, String only) {
