@@ -34,7 +34,7 @@ public class GallifreySkyProperties extends DimensionEffects {
     @Override
     public float @Nullable [] getFogColorOverride(float timeOfDay, float tickDelta) {
         float cosVal = MathHelper.cos(timeOfDay * ((float) Math.PI * 2));
-        if (cosVal >= -0.5f && cosVal <= 0.5f) {
+        if (cosVal >= -0.7f && cosVal <= 0.7f) {
             float i = (cosVal / 0.7f) * 0.5f + 0.5f;
             float j = 1.0f - (1.0f - MathHelper.sin(i * (float) Math.PI)) * 0.99f;
             j *= j;

@@ -8,7 +8,8 @@
     "PlayerEntityMixin",
     "compat.origin.PlayerOriginComponentMixin",
     "TimelordAbilities.PhantomSpawnerMixin",
-    "TimelordAbilities.PlayerEntityAbilitiesMixin"
+    "TimelordAbilities.PlayerEntityAbilitiesMixin",
+    "ServerWorldMixin"
   ],
   "client": [
     "compat.ait.ControlEntityRendererMixin",
