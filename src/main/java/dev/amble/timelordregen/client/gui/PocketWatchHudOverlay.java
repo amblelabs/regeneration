@@ -35,7 +35,7 @@ public class PocketWatchHudOverlay implements HudRenderCallback {
         int screenWidth = client.getWindow().getScaledWidth();
         int screenHeight = client.getWindow().getScaledHeight();
         int x = screenWidth / 2;
-        int y = screenHeight - 56;
+        int y = screenHeight - 84;
 
         Text displayText = Text.literal("☀ " + formattedTime + " · ")
                 .append(Text.translatable(getTimeOfDayKey(timeOfDay)))

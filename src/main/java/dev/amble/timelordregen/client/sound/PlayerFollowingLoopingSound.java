@@ -26,6 +26,11 @@ public class PlayerFollowingLoopingSound extends LoopingSound {
     }
 
     @Override
+    public boolean shouldAlwaysPlay() {
+        return true;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         this.setCoordsToPlayerCoords();

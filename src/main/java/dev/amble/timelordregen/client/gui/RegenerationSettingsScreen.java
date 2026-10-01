@@ -24,7 +24,7 @@ import net.minecraft.util.math.RotationAxis;
 public class RegenerationSettingsScreen extends Screen {
 
     private final PlayerEntity player;
-    private final RegenerationCore info;
+    private RegenerationCore info;
 
     private static final Identifier GALLIFREYAN = RegenerationMod.id("textures/gui/regen_gallifreyan.png");
 
@@ -43,7 +43,7 @@ public class RegenerationSettingsScreen extends Screen {
     private static final int COLOR_RUNE         = 0xFF6B4226;
 
     private static final int PANEL_WIDTH  = 280;
-    private static final int PANEL_HEIGHT = 278;
+    private static final int PANEL_HEIGHT = 250;
 
     private int panelX, panelY;
     private ButtonWidget crackButton;
@@ -87,7 +87,7 @@ public class RegenerationSettingsScreen extends Screen {
         ));
 
         this.addDrawableChild(new TimeLordButton(
-                cx - 100, cy + 28, 200, 20,
+                cx - 100, cy + 24, 200, 20,
                 Text.translatable("gui.regen.settings.reset_skin"),
                 button -> ClientPlayNetworking.send(RegenerationCore.RESET_SKIN_PACKET, PacketByteBufs.empty())
         ));
@@ -95,7 +95,7 @@ public class RegenerationSettingsScreen extends Screen {
         if (FabricLoader.getInstance().isModLoaded("ait")) {
             int tardisMode = info.getTardisInteriorMode();
             this.addDrawableChild(new TimeLordButton(
-                    cx - 100, cy + 56, 200, 20,
+                    cx - 100, cy + 48, 200, 20,
                     getTardisModeText(tardisMode),
                     button -> {
                         int newMode = (info.getTardisInteriorMode() + 1) % 3;
@@ -111,22 +111,28 @@ public class RegenerationSettingsScreen extends Screen {
         }
 
         crackButton = this.addDrawableChild(new TimeLordButton(
-                cx - 100, FabricLoader.getInstance().isModLoaded("ait") ? cy + 84 : cy + 56, 200, 20,
+                cx - 100, FabricLoader.getInstance().isModLoaded("ait") ? cy + 72 : cy + 48, 200, 20,
                 Text.translatable("gui.regen.settings.crack"),
                 button -> EnergyClient.input(EnergyAbility.CRACK, true)
         ));
 
         this.addDrawableChild(new TimeLordButton(
-                cx - 102, cy + 118, 100, 20,
+                cx - 102, cy + 100, 100, 20,
                 Text.translatable("gui.regen.settings.energy_settings"),
                 button -> this.client.setScreen(RegenConfigScreen.create(this))
         ));
 
         this.addDrawableChild(new TimeLordButton(
-                cx + 2, cy + 118, 100, 20,
+                cx + 2, cy + 100, 100, 20,
                 Text.translatable("gui.regen.settings.done"),
                 button -> this.close()
         ));
+    }
+
+    @Override
+    public void tick() {
+        this.info = RegenerationCore.get(player);
+        if (this.info == null) this.close();
     }
 
     @Override
@@ -184,9 +190,7 @@ public class RegenerationSettingsScreen extends Screen {
         ctx.fill(cardX, cardY, cardX + cardW, cardY + cardH, COLOR_CARD_BG);
         ctx.drawBorder(cardX, cardY, cardW, cardH, COLOR_CARD_BORDER);
 
-        RegenerationCore live = RegenerationCore.get(player);
-        if (live == null) live = info;
-        int remaining = live.getUsesLeft();
+        int remaining = info.getUsesLeft();
         String remainingText = Text.translatable("gui.regen.settings.remaining", remaining).getString();
         ctx.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal(remainingText).formatted(Formatting.GOLD),
@@ -272,7 +276,7 @@ public class RegenerationSettingsScreen extends Screen {
         @Override
         public void renderButton(DrawContext ctx, int mx, int my, float delta) {
             int tx = getX(), ty = getY(), tw = getWidth(), th = getHeight();
-            boolean hovered = isHovered();
+            boolean hovered = isSelected();
 
             int bg = hovered ? COLOR_BTN_HOVER : COLOR_BTN_BG;
             ctx.fill(tx, ty, tx + tw, ty + th, bg);

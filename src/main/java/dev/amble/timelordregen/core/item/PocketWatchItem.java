@@ -6,7 +6,6 @@ import dev.amble.timelordregen.core.RegenerationCore;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
@@ -172,8 +171,8 @@ public class PocketWatchItem extends Item {
         if (!isOpen(stack)) return;
         if (!(entity instanceof PlayerEntity player)) return;
 
-        boolean inMainHand = slot == player.getInventory().selectedSlot;
-        boolean inOffHand = slot == PlayerInventory.OFF_HAND_SLOT;
+        boolean inMainHand = player.getMainHandStack() == stack;
+        boolean inOffHand = player.getOffHandStack() == stack;
         if (!inMainHand && !inOffHand) return;
 
         int charges = getCharges(stack);
