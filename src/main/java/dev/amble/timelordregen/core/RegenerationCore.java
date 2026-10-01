@@ -119,23 +119,6 @@ public class RegenerationCore {
             });
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            ServerPlayerEntity entity = handler.getPlayer();
-            if (!(entity instanceof RegenerationCapable regen)) return;
-            RegenerationCore info = regen.getRegenerationInfo();
-            if (info == null) return;
-
-            if (info.isRegenerating()) {
-
-                info.forceFinish(entity);
-            } else if (info.getDelay().isRunning()) {
-
-                info.stopRegeneration(entity);
-                info.setRegenQueued(true);
-                info.markDirty();
-            }
-        });
-
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
             RegenerationCore info = RegenerationCore.get(entity);
             if (info == null) return true;
@@ -212,6 +195,20 @@ public class RegenerationCore {
                 if (info != null && !living.isRemoved() && !viewer.isDisconnected()) info.sync(viewer, living.getUuid());
             }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, 1);
         });
+    }
+
+    public static void onDisconnect(ServerPlayerEntity entity) {
+        if (!(entity instanceof RegenerationCapable regen)) return;
+        RegenerationCore info = regen.getRegenerationInfo();
+        if (info == null) return;
+
+        if (info.isRegenerating()) {
+            info.forceFinish(entity);
+        } else if (info.getDelay().isRunning()) {
+            info.stopRegeneration(entity);
+            info.setRegenQueued(true);
+            info.markDirty();
+        }
     }
 
     public static String getRandomRegenerationSkin() {
@@ -644,12 +641,12 @@ public class RegenerationCore {
                 RegenerationMod.LOGGER.debug("Animation finish callback for {}", entity.getUuid());
                 this.finish(entity);
             });
-            set.start(animated);
             for (AnimationTemplate.Stage stage : AnimationTemplate.Stage.values()) {
                 set.callback(stage, s -> {
                     RegenerationEvents.CHANGE_STAGE.invoker().onStateChange(entity, this, s);
                 });
             }
+            set.start(animated);
             RegenerationMod.LOGGER.info("Started regeneration animation for {}", entity.getUuid());
         } else {
             Scheduler.get().runTaskLater(() -> {

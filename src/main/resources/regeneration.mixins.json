@@ -6,6 +6,7 @@
   "mixins": [
     "LivingEntityMixin",
     "PlayerEntityMixin",
+    "PlayerManagerMixin",
     "compat.origin.PlayerOriginComponentMixin",
     "TimelordAbilities.PhantomSpawnerMixin",
     "TimelordAbilities.PlayerEntityAbilitiesMixin",

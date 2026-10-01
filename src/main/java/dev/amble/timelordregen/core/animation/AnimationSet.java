@@ -3,6 +3,7 @@ package dev.amble.timelordregen.core.animation;
 import dev.amble.timelordregen.RegenerationMod;
 import dev.amble.lib.animation.AnimatedEntity;
 import dev.amble.lib.animation.AnimationTracker;
+import dev.drtheo.scheduler.api.TimeUnit;
 import dev.drtheo.scheduler.api.common.Scheduler;
 import dev.drtheo.scheduler.api.common.TaskStage;
 import lombok.Getter;
@@ -97,7 +98,7 @@ public class AnimationSet {
             return;
         }
 
-        long duration = wrapper.duration();
+        long duration = Math.round(wrapper.duration() * TimeUnit.TICKS.from(wrapper.unit(), 1));
         if (duration <= 0) {
             RegenerationMod.LOGGER.warn("Invalid duration {} for stage {}, skipping", duration, stage);
             AnimationTemplate.Stage next = this.nextStage(stage);
@@ -124,7 +125,7 @@ public class AnimationSet {
             } else {
                 this.finishAnimation();
             }
-        }, TaskStage.END_SERVER_TICK, wrapper.unit(), duration);
+        }, TaskStage.END_SERVER_TICK, TimeUnit.TICKS, duration);
     }
 
     private void finishAnimation() {
@@ -158,6 +159,7 @@ public class AnimationSet {
     public void cancel() {
         if (this.finished) return;
         RegenerationMod.LOGGER.debug("AnimationSet cancelled");
+        this.finishCallbacks.clear();
         this.finishAnimation();
     }
 }
