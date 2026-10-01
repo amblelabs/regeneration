@@ -4,6 +4,7 @@ import dev.amble.timelordregen.data.tree.CadonSaplingGenerator;
 import dev.amble.timelordregen.core.RegenerationModItemGroups;
 import dev.amble.lib.block.ABlockSettings;
 import dev.amble.lib.container.impl.BlockContainer;
+import dev.amble.lib.container.impl.NoBlockItem;
 import dev.amble.lib.datagen.util.NoBlockDrop;
 import dev.amble.lib.datagen.util.NoEnglish;
 import dev.amble.lib.datagen.util.ShovelMineable;
@@ -81,7 +82,7 @@ public class RegenerationModBlocks extends BlockContainer {
     public static final Block CADON_STAIRS = new StairsBlock(CADON_PLANKS.getDefaultState(), ABlockSettings.copyOf(Blocks.DARK_OAK_STAIRS));
 
     @NoEnglish
-    public static final Block CADON_BUTTON = new ButtonBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_BUTTON), BlockSetType.DARK_OAK, 10, true);
+    public static final Block CADON_BUTTON = new ButtonBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_BUTTON), BlockSetType.DARK_OAK, 30, true);
 
     @NoEnglish
     public static final Block CADON_DOOR = new DoorBlock(ABlockSettings.copyOf(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK);
@@ -115,6 +116,7 @@ public class RegenerationModBlocks extends BlockContainer {
 
 
     @NoBlockDrop
+    @NoBlockItem
     public static final Block POTTED_FLOWER_OF_REMEMBRANCE = new FlowerPotBlock(FLOWER_OF_REMEMBRANCE, FabricBlockSettings
             .copyOf(Blocks.POTTED_POPPY)
             .nonOpaque()
@@ -149,9 +151,6 @@ public class RegenerationModBlocks extends BlockContainer {
 
     @Override
     public Item.Settings createBlockItemSettings(Block block) {
-        if (block == RegenerationModBlocks.POTTED_FLOWER_OF_REMEMBRANCE) {
-            return new AItemSettings();
-        }
         return new AItemSettings().group(RegenerationModItemGroups.REGEN);
     }
 

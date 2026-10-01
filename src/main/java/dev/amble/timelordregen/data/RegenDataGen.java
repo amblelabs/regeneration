@@ -2,7 +2,6 @@ package dev.amble.timelordregen.data;
 
 import dev.amble.timelordregen.block.RegenerationModBlocks;
 import dev.amble.timelordregen.data.datagen.providers.*;
-import dev.amble.lib.datagen.loot.AmbleBlockLootTable;
 import dev.amble.lib.datagen.sound.AmbleSoundProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -34,7 +33,7 @@ public class RegenDataGen implements DataGeneratorEntrypoint {
     }
 
     private void genLoot(FabricDataGenerator.Pack pack) {
-        pack.addProvider((((output, registriesFuture) -> new AmbleBlockLootTable(output).withBlocks(RegenerationModBlocks.class))));
+        pack.addProvider((((output, registriesFuture) -> new RegenerationBlockLootTableProvider(output).withBlocks(RegenerationModBlocks.class))));
     }
 
     private void genModels(FabricDataGenerator.Pack pack) {
